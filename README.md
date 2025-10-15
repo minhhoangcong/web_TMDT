@@ -1,14 +1,18 @@
-# ZStyle Shop - Cửa hàng Thương mại Điện tử về Thời trang Áo
+# UTHshop - Cửa hàng Thương mại Điện tử về Thời trang Áo
 
 <p align="center">
-  <img src="screenshot/logo_zstyle_resized.png" alt="ZStyle Shop Logo" height="50px"/> <!-- Cập nhật đường dẫn logo của bạn tại đây -->
+  <img src="screenshot/logo_zstyle_resized.png" alt="UTHshop Logo" height="50px"/>
 </p>
 
-Chào mừng bạn đến với ZStyle Shop, một nền tảng thương mại điện tử được xây dựng để mang đến những sản phẩm áo thun và thời trang chất lượng cho mọi người. Dự án này là một ứng dụng web full-stack được xây dựng bằng PHP, được thiết kế để sử dụng với XAMPP, và có đầy đủ các chức năng cho cả khách hàng và quản trị viên.
+Chào mừng bạn đến với **UTHshop**, một nền tảng thương mại điện tử được xây dựng để mang đến những sản phẩm áo thun và thời trang chất lượng cho mọi người. Dự án này là một ứng dụng web full-stack được xây dựng bằng PHP, được thiết kế để sử dụng với XAMPP, và có đầy đủ các chức năng cho cả khách hàng và quản trị viên.
+
+**Dự án môn học:** Thương mại Điện tử  
+**Trường:** Đại học Giao thông Vận tải TP.HCM (UTH)  
+**Nhóm:** Nhóm 5
 
 README này có sẵn bằng tiếng Anh và tiếng Việt. Vui lòng mở rộng phần ngôn ngữ bạn muốn xem.
 
-**Project Link:** [https://github.com/TranHuuDat2004/zstyle](https://github.com/TranHuuDat2004/zstyle) <!-- Cập nhật link repo của bạn tại đây -->
+**Project Link:** [https://github.com/minhhoangcong/web_TMDT](https://github.com/minhhoangcong/web_TMDT)
 
 ---
 
@@ -17,7 +21,7 @@ README này có sẵn bằng tiếng Anh và tiếng Việt. Vui lòng mở rộ
 
 ## 🌟 Project Overview
 
-ZStyle Shop is designed to provide a seamless and modern online shopping experience for fashion enthusiasts. From browsing a curated collection of apparel to a secure checkout process and order tracking, ZStyle Shop aims to be a go-to destination for quality clothing. The platform also includes a robust administration system for efficient business management.
+UTHshop is designed to provide a seamless and modern online shopping experience for fashion enthusiasts. From browsing a curated collection of apparel to a secure checkout process and order tracking, UTHshop aims to be a go-to destination for quality clothing. The platform also includes a robust administration system for efficient business management.
 
 
 ## ✨ Key Features
@@ -79,17 +83,26 @@ ZStyle Shop is designed to provide a seamless and modern online shopping experie
 1.  **Start XAMPP:** Ensure Apache and MySQL services are running from the XAMPP Control Panel.
 2.  **Clone Repository into `htdocs`:**
     *   Navigate to your XAMPP `htdocs` directory (e.g., `C:\xampp\htdocs`).
-    *   Run: `git clone https://github.com/TranHuuDat2004/zstyle.git`
-    *   This will create a folder (e.g., `C:\xampp\htdocs\zstyle`).
+    *   Run: `git clone https://github.com/minhhoangcong/web_TMDT.git ZStyle-main`
+    *   This will create a folder (e.g., `C:\xampp\htdocs\ZStyle-main`).
 
 3.  **Database Setup:**
     *   Go to `http://localhost/phpmyadmin` in your web browser.
-    *   Create a new database. It's recommended to use a name like `Zstyle` (with collation `utf8mb4_general_ci`).
+    *   Create a new database. It's recommended to use a name like `Zstyle` or `uthshop` (with collation `utf8mb4_general_ci`).
     *   Select the newly created database, go to the "Import" tab, choose your project's `.sql` file (e.g., `Zstyle.sql`), and click "Go" to import the structure and data.
+
+4.  **Database Configuration (if needed):**
+    *   Open the file `model/connectdb.php` in your project.
+    *   Ensure the connection details match your XAMPP settings. Default settings are typically:
+        *   Host: `localhost`
+        *   User: `root`
+        *   Password: `(leave empty)`
+        *   Database name: `Zstyle` (or the name you set in the previous step).
 
 
 5.  **Accessing the Application:**
-    *   **Customer Site:** `http://localhost/zstyle/`
+    *   **Customer Site:** `http://localhost/ZStyle-main/`
+    *   **Admin Dashboard:** `http://localhost/ZStyle-main/view/admin/`
 
 ## 📝 License
 
@@ -98,11 +111,12 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 In
 
 ## 👤 Contributors
 
-*   **Team Engineering**
-    *   **Phan Trung Trực** - Team Leader | Project Visionary & Lead Ideator
-    *   **Trần Hữu Đạt** - Full-Stack Web Developer - [@TranHuuDat2004](https://github.com/TranHuuDat2004)
-    *   **Lê Nguyễn Minh Kha** - Member
-    *   **Dương Thị Thùy Linh** - Member
+*   **Nhóm 5 - Đại học Giao thông Vận tải TP.HCM**
+    *   **Hoàng Công Minh** - [@minhhoangcong](https://github.com/minhhoangcong)
+    *   **Nguyễn Đức Minh** - Member
+    *   **Hoàng Trọng Thịnh** - Member
+    *   **Châu Hồng Vũ** - Member
+    *   **Trần Phan Đình Huy** - Member
 
 </details>
 
@@ -113,7 +127,7 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 In
 
 ## 🌟 Tổng quan Dự án
 
-ZStyle Shop được thiết kế để cung cấp trải nghiệm mua sắm trực tuyến liền mạch và hiện đại cho những người yêu thích thời trang. Từ việc duyệt qua bộ sưu tập áo quần được tuyển chọn kỹ lưỡng đến quy trình thanh toán an toàn và theo dõi đơn hàng, ZStyle Shop đặt mục tiêu trở thành điểm đến tin cậy cho các sản phẩm thời trang chất lượng. Nền tảng này cũng bao gồm một hệ thống quản trị mạnh mẽ để quản lý kinh doanh hiệu quả.
+UTHshop được thiết kế để cung cấp trải nghiệm mua sắm trực tuyến liền mạch và hiện đại cho những người yêu thích thời trang. Từ việc duyệt qua bộ sưu tập áo quần được tuyển chọn kỹ lưỡng đến quy trình thanh toán an toàn và theo dõi đơn hàng, UTHshop đặt mục tiêu trở thành điểm đến tin cậy cho các sản phẩm thời trang chất lượng. Nền tảng này cũng bao gồm một hệ thống quản trị mạnh mẽ để quản lý kinh doanh hiệu quả.
 
 
 
@@ -176,16 +190,16 @@ ZStyle Shop được thiết kế để cung cấp trải nghiệm mua sắm tr�
 1.  **Khởi động XAMPP:** Mở XAMPP Control Panel và đảm bảo các dịch vụ **Apache** và **MySQL** đang chạy.
 2.  **Sao chép kho lưu trữ vào `htdocs`:**
     *   Điều hướng đến thư mục `htdocs` của XAMPP (ví dụ: `C:\xampp\htdocs`).
-    *   Chạy lệnh: `git clone https://github.com/TranHuuDat2004/zstyle.git`
-    *   Lệnh này sẽ tạo một thư mục dự án (ví dụ: `C:\xampp\htdocs\zstyle`).
+    *   Chạy lệnh: `git clone https://github.com/minhhoangcong/web_TMDT.git ZStyle-main`
+    *   Lệnh này sẽ tạo một thư mục dự án (ví dụ: `C:\xampp\htdocs\ZStyle-main`).
 
 3.  **Thiết lập Cơ sở dữ liệu:**
     *   Mở trình duyệt và truy cập `http://localhost/phpmyadmin`.
-    *   Tạo một cơ sở dữ liệu mới. Khuyến khích đặt tên là `Zstyle` (với đối chiếu là `utf8mb4_general_ci`).
+    *   Tạo một cơ sở dữ liệu mới. Khuyến khích đặt tên là `Zstyle` hoặc `uthshop` (với đối chiếu là `utf8mb4_general_ci`).
     *   Chọn cơ sở dữ liệu vừa tạo, chuyển đến tab "Import", chọn tệp `.sql` của dự án (ví dụ: `Zstyle.sql`), và nhấn "Go" để nhập cấu trúc và dữ liệu.
 
 4.  **Cấu hình Kết nối Cơ sở dữ liệu (nếu cần):**
-    *   Tìm tệp PHP trong dự án của bạn chịu trách nhiệm kết nối cơ sở dữ liệu (ví dụ: `config.php`, `db_connect.php`).
+    *   Mở tệp `model/connectdb.php` trong dự án.
     *   Đảm bảo các thông tin kết nối khớp với cài đặt XAMPP của bạn. Thông tin mặc định thường là:
         *   Host: `localhost`
         *   User: `root`
@@ -193,7 +207,8 @@ ZStyle Shop được thiết kế để cung cấp trải nghiệm mua sắm tr�
         *   Tên cơ sở dữ liệu: `Zstyle` (hoặc tên bạn đã đặt ở bước trước).
 
 5.  **Truy cập Ứng dụng:**
-    *   **Trang Khách hàng:** `http://localhost/zstyle/`
+    *   **Trang Khách hàng:** `http://localhost/ZStyle-main/`
+    *   **Trang Quản trị:** `http://localhost/ZStyle-main/view/admin/`
 
 
 ## 📝 Giấy phép
@@ -203,10 +218,11 @@ Công trình này được cấp phép theo [Giấy phép Quốc tế Creative C
 
 ## 👤 Thành viên Đóng góp
 
-*   **Nhóm Kỹ thuật**
-    *   **Phan Trung Trực** - Trưởng nhóm | Định hướng & Lên ý tưởng chính cho Dự án
-    *   **Trần Hữu Đạt** - Lập trình viên Web - [@TranHuuDat2004](https://github.com/TranHuuDat2004)
-    *   **Lê Nguyễn Minh Kha** - Thành viên
-    *   **Dương Thị Thùy Linh** - Thành viên
+*   **Nhóm 5 - Đại học Giao thông Vận tải TP.HCM**
+    *   **Hoàng Công Minh** - [@minhhoangcong](https://github.com/minhhoangcong)
+    *   **Nguyễn Đức Minh** - Thành viên
+    *   **Hoàng Trọng Thịnh** - Thành viên
+    *   **Châu Hồng Vũ** - Thành viên
+    *   **Trần Phan Đình Huy** - Thành viên
 
 </details>
