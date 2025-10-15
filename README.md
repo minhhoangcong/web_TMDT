@@ -23,86 +23,87 @@ README này có sẵn bằng tiếng Anh và tiếng Việt. Vui lòng mở rộ
 
 UTHshop is designed to provide a seamless and modern online shopping experience for fashion enthusiasts. From browsing a curated collection of apparel to a secure checkout process and order tracking, UTHshop aims to be a go-to destination for quality clothing. The platform also includes a robust administration system for efficient business management.
 
-
 ## ✨ Key Features
 
 ### For Customers:
-*   **Intuitive Product Browsing:** Homepage featuring new arrivals and featured items, product categories, and advanced search functionality.
-*   **Detailed Product Pages:** High-quality product images, detailed descriptions, size and color options, and customer reviews.
-*   **Shopping Cart:** A clear and simple cart for adding items, updating quantities, and applying discount vouchers.
-*   **Secure Checkout Process:** A multi-step, easy-to-follow checkout process for entering shipping information and completing the order.
-*   **User Accounts:** Easy registration and login, personal profile management, and access to order history.
-*   **Engagement & Information:** A news/blog section for updates, an "About Us" page, a contact form, and company policy information.
+
+- **Intuitive Product Browsing:** Homepage featuring new arrivals and featured items, product categories, and advanced search functionality.
+- **Detailed Product Pages:** High-quality product images, detailed descriptions, size and color options, and customer reviews.
+- **Shopping Cart:** A clear and simple cart for adding items, updating quantities, and applying discount vouchers.
+- **Secure Checkout Process:** A multi-step, easy-to-follow checkout process for entering shipping information and completing the order.
+- **User Accounts:** Easy registration and login, personal profile management, and access to order history.
+- **Engagement & Information:** A news/blog section for updates, an "About Us" page, a contact form, and company policy information.
 
 ### 🛍️ Customer Interface (Screenshots)
 
-
-|                 Home Page                 |                  Product Page                  |                Product Detail Page                |
-| :---------------------------------------: | :--------------------------------------------: | :-----------------------------------------------: |
-| ![Home Page](screenshot/home.png)         | ![Product Page](screenshot/product.png)        | ![Product Detail](screenshot/product-detail.png)  |
-|              **Shopping Cart**              |               **Checkout Process**               |                  **Order History**                  |
-| ![Shopping Cart](screenshot/cart.png)     | ![Checkout](screenshot/checkout.png)           | ![Order History](screenshot/history.png)          |
-|                **Login Page**                 |              **Registration Page**               |                  **User Profile**                   |
-| ![Login Page](screenshot/login.png)       | ![Sign-up Page](screenshot/sign-up.png)        | ![Profile Page](screenshot/profile.png)           |
-|                 **News Page**                 |                 **About Us Page**                |                  **Contact Page**                   |
-| ![News Page](screenshot/news.png)         | ![About Page](screenshot/about.png)            | ![Contact Page](screenshot/contact.png)           |
+|               Home Page               |              Product Page               |               Product Detail Page                |
+| :-----------------------------------: | :-------------------------------------: | :----------------------------------------------: |
+|   ![Home Page](screenshot/home.png)   | ![Product Page](screenshot/product.png) | ![Product Detail](screenshot/product-detail.png) |
+|           **Shopping Cart**           |          **Checkout Process**           |                **Order History**                 |
+| ![Shopping Cart](screenshot/cart.png) |  ![Checkout](screenshot/checkout.png)   |     ![Order History](screenshot/history.png)     |
+|            **Login Page**             |          **Registration Page**          |                 **User Profile**                 |
+|  ![Login Page](screenshot/login.png)  | ![Sign-up Page](screenshot/sign-up.png) |     ![Profile Page](screenshot/profile.png)      |
+|             **News Page**             |            **About Us Page**            |                 **Contact Page**                 |
+|   ![News Page](screenshot/news.png)   |   ![About Page](screenshot/about.png)   |     ![Contact Page](screenshot/contact.png)      |
 
 ### For Administrators (Admin Dashboard):
-*   **Dashboard Overview:** Key statistics on revenue, orders, and users at a glance.
-*   **Product Management:** Easily add, view, edit, and delete clothing products and manage their images.
-*   **Order Management:** View and manage all customer orders.
-*   **User Management:** View and manage registered customer accounts.
-*   **Voucher Management:** Create and manage promotional discount codes.
-*   **Content Management:** Manage news articles and user comments.
+
+- **Dashboard Overview:** Key statistics on revenue, orders, and users at a glance.
+- **Product Management:** Easily add, view, edit, and delete clothing products and manage their images.
+- **Order Management:** View and manage all customer orders.
+- **User Management:** View and manage registered customer accounts.
+- **Voucher Management:** Create and manage promotional discount codes.
+- **Content Management:** Manage news articles and user comments.
 
 ### ⚙️ Admin Interface (Screenshots)
 
-
-|               Admin Dashboard                |                   Manage Products                    |                     Manage Orders                     |
-| :------------------------------------------: | :--------------------------------------------------: | :---------------------------------------------------: |
-| ![Admin Dashboard](screenshot/admin-dashboard.png) | ![Manage Products](screenshot/manager-product.png) | ![Manage Orders](screenshot/manager-order.png)        |
-|                  **Manage Users**                  |                 **Manage Vouchers**                  |                  **Manage Comments**                  |
-| ![Manage Users](screenshot/manager-user.png)   | ![Manage Vouchers](screenshot/manager-voucher.png) | ![Manage Comments](screenshot/manager-comment.png)    |
+|                  Admin Dashboard                   |                  Manage Products                   |                   Manage Orders                    |
+| :------------------------------------------------: | :------------------------------------------------: | :------------------------------------------------: |
+| ![Admin Dashboard](screenshot/admin-dashboard.png) | ![Manage Products](screenshot/manager-product.png) |   ![Manage Orders](screenshot/manager-order.png)   |
+|                  **Manage Users**                  |                **Manage Vouchers**                 |                **Manage Comments**                 |
+|    ![Manage Users](screenshot/manager-user.png)    | ![Manage Vouchers](screenshot/manager-voucher.png) | ![Manage Comments](screenshot/manager-comment.png) |
 
 ## 🛠️ Technology Stack
 
-*   **Frontend:** HTML5, CSS3, JavaScript, Bootstrap
-*   **Backend:** PHP (Procedural or with a custom structure)
-*   **Database:** MySQL (Managed via phpMyAdmin in XAMPP)
-*   **Web Server:** Apache (via XAMPP)
+- **Frontend:** HTML5, CSS3, JavaScript, Bootstrap
+- **Backend:** PHP (Procedural or with a custom structure)
+- **Database:** MySQL (Managed via phpMyAdmin in XAMPP)
+- **Web Server:** Apache (via XAMPP)
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-*   **XAMPP:** Installed and running (Apache, PHP, MySQL).
-*   **Git:** For cloning the repository.
+- **XAMPP:** Installed and running (Apache, PHP, MySQL).
+- **Git:** For cloning the repository.
 
 ### Installation & Setup
 
 1.  **Start XAMPP:** Ensure Apache and MySQL services are running from the XAMPP Control Panel.
 2.  **Clone Repository into `htdocs`:**
-    *   Navigate to your XAMPP `htdocs` directory (e.g., `C:\xampp\htdocs`).
-    *   Run: `git clone https://github.com/minhhoangcong/web_TMDT.git ZStyle-main`
-    *   This will create a folder (e.g., `C:\xampp\htdocs\ZStyle-main`).
+
+    - Navigate to your XAMPP `htdocs` directory (e.g., `C:\xampp\htdocs`).
+    - Run: `git clone https://github.com/minhhoangcong/web_TMDT.git ZStyle-main`
+    - This will create a folder (e.g., `C:\xampp\htdocs\ZStyle-main`).
 
 3.  **Database Setup:**
-    *   Go to `http://localhost/phpmyadmin` in your web browser.
-    *   Create a new database. It's recommended to use a name like `Zstyle` or `uthshop` (with collation `utf8mb4_general_ci`).
-    *   Select the newly created database, go to the "Import" tab, choose your project's `.sql` file (e.g., `Zstyle.sql`), and click "Go" to import the structure and data.
+
+    - Go to `http://localhost/phpmyadmin` in your web browser.
+    - Create a new database. It's recommended to use a name like `Zstyle` or `uthshop` (with collation `utf8mb4_general_ci`).
+    - Select the newly created database, go to the "Import" tab, choose your project's `.sql` file (e.g., `Zstyle.sql`), and click "Go" to import the structure and data.
 
 4.  **Database Configuration (if needed):**
-    *   Open the file `model/connectdb.php` in your project.
-    *   Ensure the connection details match your XAMPP settings. Default settings are typically:
-        *   Host: `localhost`
-        *   User: `root`
-        *   Password: `(leave empty)`
-        *   Database name: `Zstyle` (or the name you set in the previous step).
 
+    - Open the file `model/connectdb.php` in your project.
+    - Ensure the connection details match your XAMPP settings. Default settings are typically:
+      - Host: `localhost`
+      - User: `root`
+      - Password: `(leave empty)`
+      - Database name: `Zstyle` (or the name you set in the previous step).
 
 5.  **Accessing the Application:**
-    *   **Customer Site:** `http://localhost/ZStyle-main/`
-    *   **Admin Dashboard:** `http://localhost/ZStyle-main/view/admin/`
+    - **Customer Site:** `http://localhost/ZStyle-main/`
+    - **Admin Dashboard:** `http://localhost/ZStyle-main/view/admin/`
 
 ## 📝 License
 
@@ -111,12 +112,12 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 In
 
 ## 👤 Contributors
 
-*   **Nhóm 5 - Đại học Giao thông Vận tải TP.HCM**
-    *   **Hoàng Công Minh** - [@minhhoangcong](https://github.com/minhhoangcong)
-    *   **Nguyễn Đức Minh** - Member
-    *   **Hoàng Trọng Thịnh** - Member
-    *   **Châu Hồng Vũ** - Member
-    *   **Trần Phan Đình Huy** - Member
+- **Nhóm 5 - Đại học Giao thông Vận tải TP.HCM**
+  - **Hoàng Công Minh** - [@minhhoangcong](https://github.com/minhhoangcong)
+  - **Nguyễn Đức Minh** - Member
+  - **Hoàng Trọng Thịnh** - Member
+  - **Châu Hồng Vũ** - Member
+  - **Trần Phan Đình Huy** - Member
 
 </details>
 
@@ -129,87 +130,87 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 In
 
 UTHshop được thiết kế để cung cấp trải nghiệm mua sắm trực tuyến liền mạch và hiện đại cho những người yêu thích thời trang. Từ việc duyệt qua bộ sưu tập áo quần được tuyển chọn kỹ lưỡng đến quy trình thanh toán an toàn và theo dõi đơn hàng, UTHshop đặt mục tiêu trở thành điểm đến tin cậy cho các sản phẩm thời trang chất lượng. Nền tảng này cũng bao gồm một hệ thống quản trị mạnh mẽ để quản lý kinh doanh hiệu quả.
 
-
-
 ## ✨ Các Tính năng Chính
 
 ### Dành cho Khách hàng:
-*   **Duyệt Sản phẩm Trực quan:** Trang chủ hiển thị các sản phẩm mới và nổi bật, danh mục sản phẩm và chức năng tìm kiếm nâng cao.
-*   **Trang Chi tiết Sản phẩm:** Hình ảnh sản phẩm chất lượng cao, mô tả chi tiết, tùy chọn kích cỡ và màu sắc, cùng với đánh giá của khách hàng.
-*   **Giỏ hàng:** Giỏ hàng đơn giản, rõ ràng để thêm sản phẩm, cập nhật số lượng và áp dụng mã giảm giá.
-*   **Quy trình Thanh toán An toàn:** Quy trình thanh toán gồm nhiều bước, dễ thực hiện để nhập thông tin vận chuyển và hoàn tất đơn hàng.
-*   **Tài khoản Người dùng:** Đăng ký và đăng nhập dễ dàng, quản lý hồ sơ cá nhân và truy cập lịch sử đơn hàng.
-*   **Tương tác & Thông tin:** Mục tin tức/blog để cập nhật thông tin, trang "Giới thiệu", biểu mẫu liên hệ và thông tin chính sách của công ty.
+
+- **Duyệt Sản phẩm Trực quan:** Trang chủ hiển thị các sản phẩm mới và nổi bật, danh mục sản phẩm và chức năng tìm kiếm nâng cao.
+- **Trang Chi tiết Sản phẩm:** Hình ảnh sản phẩm chất lượng cao, mô tả chi tiết, tùy chọn kích cỡ và màu sắc, cùng với đánh giá của khách hàng.
+- **Giỏ hàng:** Giỏ hàng đơn giản, rõ ràng để thêm sản phẩm, cập nhật số lượng và áp dụng mã giảm giá.
+- **Quy trình Thanh toán An toàn:** Quy trình thanh toán gồm nhiều bước, dễ thực hiện để nhập thông tin vận chuyển và hoàn tất đơn hàng.
+- **Tài khoản Người dùng:** Đăng ký và đăng nhập dễ dàng, quản lý hồ sơ cá nhân và truy cập lịch sử đơn hàng.
+- **Tương tác & Thông tin:** Mục tin tức/blog để cập nhật thông tin, trang "Giới thiệu", biểu mẫu liên hệ và thông tin chính sách của công ty.
 
 ### 🛍️ Giao diện Khách hàng (Ảnh chụp màn hình)
 
-
-|                 Trang Chủ                 |                Trang Sản Phẩm                 |              Trang Chi Tiết Sản Phẩm              |
-| :---------------------------------------: | :-------------------------------------------: | :-----------------------------------------------: |
-| ![Trang Chủ](screenshot/home.png)         | ![Trang Sản Phẩm](screenshot/product.png)     | ![Chi Tiết SP](screenshot/product-detail.png)     |
-|                **Giỏ hàng**                 |            **Quy trình Thanh toán**             |                **Lịch sử Đơn hàng**                 |
-| ![Giỏ hàng](screenshot/cart.png)          | ![Thanh toán](screenshot/checkout.png)        | ![Lịch sử Đơn hàng](screenshot/history.png)       |
-|              **Trang Đăng nhập**              |                **Trang Đăng ký**                |                **Hồ sơ Người dùng**                 |
-| ![Trang Đăng nhập](screenshot/login.png)   | ![Trang Đăng ký](screenshot/sign-up.png)      | ![Trang Hồ sơ](screenshot/profile.png)            |
-|               **Trang Tin tức**               |               **Trang Giới thiệu**               |                 **Trang Liên hệ**                   |
-| ![Trang Tin tức](screenshot/news.png)      | ![Trang Giới thiệu](screenshot/about.png)    | ![Trang Liên hệ](screenshot/contact.png)          |
+|                Trang Chủ                 |              Trang Sản Phẩm               |            Trang Chi Tiết Sản Phẩm            |
+| :--------------------------------------: | :---------------------------------------: | :-------------------------------------------: |
+|    ![Trang Chủ](screenshot/home.png)     | ![Trang Sản Phẩm](screenshot/product.png) | ![Chi Tiết SP](screenshot/product-detail.png) |
+|               **Giỏ hàng**               |         **Quy trình Thanh toán**          |             **Lịch sử Đơn hàng**              |
+|     ![Giỏ hàng](screenshot/cart.png)     |  ![Thanh toán](screenshot/checkout.png)   |  ![Lịch sử Đơn hàng](screenshot/history.png)  |
+|           **Trang Đăng nhập**            |             **Trang Đăng ký**             |             **Hồ sơ Người dùng**              |
+| ![Trang Đăng nhập](screenshot/login.png) | ![Trang Đăng ký](screenshot/sign-up.png)  |    ![Trang Hồ sơ](screenshot/profile.png)     |
+|            **Trang Tin tức**             |           **Trang Giới thiệu**            |               **Trang Liên hệ**               |
+|  ![Trang Tin tức](screenshot/news.png)   | ![Trang Giới thiệu](screenshot/about.png) |   ![Trang Liên hệ](screenshot/contact.png)    |
 
 ### Dành cho Quản trị viên (Bảng điều khiển Admin):
-*   **Tổng quan Dashboard:** Thống kê nhanh các chỉ số quan trọng về doanh thu, đơn hàng và người dùng.
-*   **Quản lý Sản phẩm:** Dễ dàng thêm, xem, sửa, xóa sản phẩm quần áo và quản lý hình ảnh của chúng.
-*   **Quản lý Đơn hàng:** Xem và quản lý tất cả các đơn hàng của khách.
-*   **Quản lý Người dùng:** Xem và quản lý tài khoản của khách hàng đã đăng ký.
-*   **Quản lý Voucher:** Tạo và quản lý các mã giảm giá khuyến mãi.
-*   **Quản lý Nội dung:** Quản lý các bài viết tin tức và bình luận của người dùng.
+
+- **Tổng quan Dashboard:** Thống kê nhanh các chỉ số quan trọng về doanh thu, đơn hàng và người dùng.
+- **Quản lý Sản phẩm:** Dễ dàng thêm, xem, sửa, xóa sản phẩm quần áo và quản lý hình ảnh của chúng.
+- **Quản lý Đơn hàng:** Xem và quản lý tất cả các đơn hàng của khách.
+- **Quản lý Người dùng:** Xem và quản lý tài khoản của khách hàng đã đăng ký.
+- **Quản lý Voucher:** Tạo và quản lý các mã giảm giá khuyến mãi.
+- **Quản lý Nội dung:** Quản lý các bài viết tin tức và bình luận của người dùng.
 
 ### ⚙️ Giao diện Quản trị (Ảnh chụp màn hình)
 
-
-|             Bảng điều khiển Admin             |                 Quản lý Sản phẩm                 |                   Quản lý Đơn hàng                    |
-| :------------------------------------------: | :-----------------------------------------------: | :---------------------------------------------------: |
-| ![Dashboard Admin](screenshot/admin-dashboard.png) | ![Quản lý SP](screenshot/manager-product.png) | ![Quản lý Đơn hàng](screenshot/manager-order.png)     |
-|               **Quản lý Người dùng**               |                 **Quản lý Voucher**                 |                  **Quản lý Bình luận**                  |
-| ![Quản lý User](screenshot/manager-user.png)   | ![Quản lý Voucher](screenshot/manager-voucher.png) | ![Quản lý Comment](screenshot/manager-comment.png)    |
+|               Bảng điều khiển Admin                |                  Quản lý Sản phẩm                  |                  Quản lý Đơn hàng                  |
+| :------------------------------------------------: | :------------------------------------------------: | :------------------------------------------------: |
+| ![Dashboard Admin](screenshot/admin-dashboard.png) |   ![Quản lý SP](screenshot/manager-product.png)    | ![Quản lý Đơn hàng](screenshot/manager-order.png)  |
+|               **Quản lý Người dùng**               |                **Quản lý Voucher**                 |               **Quản lý Bình luận**                |
+|    ![Quản lý User](screenshot/manager-user.png)    | ![Quản lý Voucher](screenshot/manager-voucher.png) | ![Quản lý Comment](screenshot/manager-comment.png) |
 
 ## 🛠️ Công nghệ sử dụng
 
-*   **Frontend:** HTML5, CSS3, JavaScript, Bootstrap
-*   **Backend:** PHP (Lập trình thủ tục hoặc theo cấu trúc tùy chỉnh)
-*   **Cơ sở dữ liệu:** MySQL (Quản lý qua phpMyAdmin trong XAMPP)
-*   **Web Server:** Apache (thông qua XAMPP)
+- **Frontend:** HTML5, CSS3, JavaScript, Bootstrap
+- **Backend:** PHP (Lập trình thủ tục hoặc theo cấu trúc tùy chỉnh)
+- **Cơ sở dữ liệu:** MySQL (Quản lý qua phpMyAdmin trong XAMPP)
+- **Web Server:** Apache (thông qua XAMPP)
 
 ## 🚀 Bắt đầu
 
 ### Điều kiện Tiên quyết
 
-*   **XAMPP:** Đã được cài đặt và đang chạy (Apache, PHP, MySQL).
-*   **Git:** Để sao chép kho lưu trữ.
+- **XAMPP:** Đã được cài đặt và đang chạy (Apache, PHP, MySQL).
+- **Git:** Để sao chép kho lưu trữ.
 
 ### Cài đặt & Thiết lập
 
 1.  **Khởi động XAMPP:** Mở XAMPP Control Panel và đảm bảo các dịch vụ **Apache** và **MySQL** đang chạy.
 2.  **Sao chép kho lưu trữ vào `htdocs`:**
-    *   Điều hướng đến thư mục `htdocs` của XAMPP (ví dụ: `C:\xampp\htdocs`).
-    *   Chạy lệnh: `git clone https://github.com/minhhoangcong/web_TMDT.git ZStyle-main`
-    *   Lệnh này sẽ tạo một thư mục dự án (ví dụ: `C:\xampp\htdocs\ZStyle-main`).
+
+    - Điều hướng đến thư mục `htdocs` của XAMPP (ví dụ: `C:\xampp\htdocs`).
+    - Chạy lệnh: `git clone https://github.com/minhhoangcong/web_TMDT.git ZStyle-main`
+    - Lệnh này sẽ tạo một thư mục dự án (ví dụ: `C:\xampp\htdocs\ZStyle-main`).
 
 3.  **Thiết lập Cơ sở dữ liệu:**
-    *   Mở trình duyệt và truy cập `http://localhost/phpmyadmin`.
-    *   Tạo một cơ sở dữ liệu mới. Khuyến khích đặt tên là `Zstyle` hoặc `uthshop` (với đối chiếu là `utf8mb4_general_ci`).
-    *   Chọn cơ sở dữ liệu vừa tạo, chuyển đến tab "Import", chọn tệp `.sql` của dự án (ví dụ: `Zstyle.sql`), và nhấn "Go" để nhập cấu trúc và dữ liệu.
+
+    - Mở trình duyệt và truy cập `http://localhost/phpmyadmin`.
+    - Tạo một cơ sở dữ liệu mới. Khuyến khích đặt tên là `Zstyle` hoặc `uthshop` (với đối chiếu là `utf8mb4_general_ci`).
+    - Chọn cơ sở dữ liệu vừa tạo, chuyển đến tab "Import", chọn tệp `.sql` của dự án (ví dụ: `Zstyle.sql`), và nhấn "Go" để nhập cấu trúc và dữ liệu.
 
 4.  **Cấu hình Kết nối Cơ sở dữ liệu (nếu cần):**
-    *   Mở tệp `model/connectdb.php` trong dự án.
-    *   Đảm bảo các thông tin kết nối khớp với cài đặt XAMPP của bạn. Thông tin mặc định thường là:
-        *   Host: `localhost`
-        *   User: `root`
-        *   Password: `(để trống)`
-        *   Tên cơ sở dữ liệu: `Zstyle` (hoặc tên bạn đã đặt ở bước trước).
+
+    - Mở tệp `model/connectdb.php` trong dự án.
+    - Đảm bảo các thông tin kết nối khớp với cài đặt XAMPP của bạn. Thông tin mặc định thường là:
+      - Host: `localhost`
+      - User: `root`
+      - Password: `(để trống)`
+      - Tên cơ sở dữ liệu: `Zstyle` (hoặc tên bạn đã đặt ở bước trước).
 
 5.  **Truy cập Ứng dụng:**
-    *   **Trang Khách hàng:** `http://localhost/ZStyle-main/`
-    *   **Trang Quản trị:** `http://localhost/ZStyle-main/view/admin/`
-
+    - **Trang Khách hàng:** `http://localhost/ZStyle-main/`
+    - **Trang Quản trị:** `http://localhost/ZStyle-main/view/admin/`
 
 ## 📝 Giấy phép
 
@@ -218,11 +219,11 @@ Công trình này được cấp phép theo [Giấy phép Quốc tế Creative C
 
 ## 👤 Thành viên Đóng góp
 
-*   **Nhóm 5 - Đại học Giao thông Vận tải TP.HCM**
-    *   **Hoàng Công Minh** - [@minhhoangcong](https://github.com/minhhoangcong)
-    *   **Nguyễn Đức Minh** - Thành viên
-    *   **Hoàng Trọng Thịnh** - Thành viên
-    *   **Châu Hồng Vũ** - Thành viên
-    *   **Trần Phan Đình Huy** - Thành viên
+- **Nhóm 5 - Đại học Giao thông Vận tải TP.HCM**
+  - **Hoàng Công Minh** - [@minhhoangcong](https://github.com/minhhoangcong)
+  - **Nguyễn Đức Minh** - Thành viên
+  - **Hoàng Trọng Thịnh** - Thành viên
+  - **Châu Hồng Vũ** - Thành viên
+  - **Trần Phan Đình Huy** - Thành viên
 
 </details>
