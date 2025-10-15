@@ -70,25 +70,15 @@
     foreach ($product_design as $item) {
       extract($item);
       
-      // DEBUG: Log tên file để kiểm tra
-      // echo "<!-- DEBUG: img_front=$img_front, img_back=$img_back -->";
-      
-      // Kiểm tra file có tồn tại không trước khi hiển thị
-      $front_path = 'upload/' . $img_front;
-      $back_path = 'upload/' . $img_back;
-      
-      // Chỉ hiển thị nếu file tồn tại và có kích thước > 100 bytes (không phải file rỗng)
-      if(is_file($front_path) && filesize($front_path) > 100){
-        // Tạo wrapper div với data attributes
-        $html_product_design.='<div class="design-history-wrapper" style="position: relative; cursor: pointer;" onclick="loadDesignHistory(this)">';
-        // Ảnh front (hiển thị) - dùng absolute path
-        $html_product_design.='<img class="design-history-img" data-type="front" src="/upload/'.$img_front.'" alt="Design Front">';
-        // Ảnh back (ẩn) - dùng absolute path
-        $html_product_design.='<img class="design-history-img" data-type="back" style="display:none;" src="/upload/'.$img_back.'" alt="Design Back">';
-        // ID thiết kế (ẩn)
-        $html_product_design.='<span class="design-id" style="display:none;">'.$id.'</span>';
-        $html_product_design.='</div>';
-      }
+      // Tạo wrapper div - LUÔN HIỂN THỊ, để trình duyệt tự xử lý ảnh lỗi
+      $html_product_design.='<div class="design-history-wrapper" onclick="loadDesignHistory(this)">';
+      // Ảnh front (hiển thị)
+      $html_product_design.='<img class="design-history-img" data-type="front" src="upload/'.$img_front.'" alt="Design Front">';
+      // Ảnh back (ẩn)
+      $html_product_design.='<img class="design-history-img" data-type="back" style="display:none;" src="upload/'.$img_back.'" alt="Design Back">';
+      // ID thiết kế (ẩn)
+      $html_product_design.='<span class="design-id" style="display:none;">'.$id.'</span>';
+      $html_product_design.='</div>';
     }
   }
   $html_login;
