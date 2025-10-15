@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="128" viewBox="0 0 512 128">
+  <defs>
+    <style>.white{fill:#fff}.accent{fill:#00A8FF}</style>
+  </defs>
+  <g transform="translate(20,20)">
+    <rect x="0" y="24" rx="8" ry="8" width="64" height="64" class="white"/>
+    <path d="M16,24 a16,16 0 0 1 32,0 v8 h-8 v-8 a8,8 0 0 0 -16,0 v8 h-8 z" class="white"/>
+    <path d="M22,44 v28 c0,10 6,16 18,16 s18,-6 18,-16 v-28 h-10 v28 c0,4 -3,7 -8,7 s-8,-3 -8,-7 v-28 z" fill="#0A0A0A"/>
+  </g>
+  <g transform="translate(104,86)">
+    <text x="0" y="0" font-family="Poppins, Arial, Helvetica, sans-serif" font-size="64" font-weight="700" class="white">UTH</text>
+    <text x="166" y="0" font-family="Poppins, Arial, Helvetica, sans-serif" font-size="64" font-weight="700" class="accent">shop</text>
+  </g>
+</svg>
