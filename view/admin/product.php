@@ -238,7 +238,7 @@
               <div class="header-avatar">
                 <img src="../layout/assets/images/avatar.png" alt="" />
               </div>
-              <div class="header-name">Chào, ZStyle</div>
+              <div class="header-name">Chào, UTHshop</div>
             </div>
           </div>
         </div>

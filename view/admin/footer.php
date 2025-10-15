@@ -6,7 +6,7 @@
             <div class="footer-logo">
               <img src="../layout/assets/images/logo-footer.svg" alt="" />
             </div>
-            <div class="footer-copy">@Copyright ZStyle.online since 2023</div>
+            <div class="footer-copy">@Copyright UTHshop.online since 2025 - Nhóm 5 - ĐH Giao thông Vận tải TP.HCM</div>
           </div>
         </footer>
       </div>
