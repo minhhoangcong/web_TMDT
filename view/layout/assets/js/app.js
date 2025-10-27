@@ -1,5 +1,22 @@
 $(document).ready(function () {
-  $(".hero-slider").slick({
+  // Init hero slider with defensive accessibility handling to avoid DevTools warnings
+  $(".hero-slider").on('init reInit afterChange', function (e, slick, currentSlide) {
+    var cur = typeof currentSlide === 'number' ? currentSlide : (slick.currentSlide || 0);
+    var $slides = $(slick.$slides);
+    // Make only the current slide focusable; hide others from a11y tools
+    $slides.each(function (i, el) {
+      var $el = $(el);
+      var isActive = i === cur;
+      $el.attr('aria-hidden', !isActive);
+      try { el.inert = !isActive; } catch (_) {}
+      var focusables = $el.find('a, button, input, textarea, select, [tabindex]');
+      focusables.attr('tabindex', isActive ? 0 : -1);
+    });
+    // Remove stray focus on hidden slides
+    if (document.activeElement && $(document.activeElement).closest('.slick-slide').attr('aria-hidden') === 'true') {
+      $(document.activeElement).blur();
+    }
+  }).slick({
     arrows: false,
     infinite: true,
     autoplay: true,
@@ -8,6 +25,7 @@ $(document).ready(function () {
 
     dots: true,
     cssEase: "linear",
+    accessibility: false, // prevent Slick from adding tabindex that conflicts with aria-hidden
     responsive: [
       {
         breakpoint: 480,

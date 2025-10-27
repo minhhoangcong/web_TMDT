@@ -45,21 +45,28 @@
    
 
    function check_img($img){
+      // Resolve absolute filesystem path for reliable existence checks,
+      // but always return relative URL paths for <img src>
+      $projectRoot = dirname(__DIR__); // .../web_TMDT
+      $urlBase = PATH_IMG;            // 'upload/'
+
       if(is_array($img)){
          $html_img='';
          foreach ($img as $item) {
-            $hinh=PATH_IMG.$item;
-            if(is_file($hinh)){
-               $html_img.= '<img src="'.$hinh.'">';
-            }else{
-               $html_img.= '';
+            $filename = str_replace(["\n","\r"],"", $item);
+            $fsPath = $projectRoot . DIRECTORY_SEPARATOR . 'upload' . DIRECTORY_SEPARATOR . $filename;
+            $url = $urlBase.$filename;
+            if(is_file($fsPath)){
+               $html_img.= '<img src="'.$url.'">';
             }
          }
          return $html_img;
       }else{
-         $hinh=PATH_IMG.$img;
-         if(is_file($hinh)){
-            return '<img src="'.$hinh.'">';
+         $filename = str_replace(["\n","\r"],"", $img);
+         $fsPath = $projectRoot . DIRECTORY_SEPARATOR . 'upload' . DIRECTORY_SEPARATOR . $filename;
+         $url = $urlBase.$filename;
+         if(is_file($fsPath)){
+            return '<img src="'.$url.'">';
          }else{
             return '';
          }
@@ -90,23 +97,27 @@
 
 
    function check_link_img($img){
+      // Return relative URL paths if file exists (using absolute fs check)
+      $projectRoot = dirname(__DIR__);
       if(is_array($img)){
-         $img=[];
+         $result = [];
          foreach ($img as $item) {
-            $item = str_replace(array("\n", "\r", " "), "", $item);
-            $hinh=PATH_IMG.$item;
-            if(is_file($hinh)){
-               $img[]=$hinh;
+            $item = str_replace(["\n", "\r", " "], "", $item);
+            $fsPath = $projectRoot . DIRECTORY_SEPARATOR . 'upload' . DIRECTORY_SEPARATOR . $item;
+            $url = PATH_IMG.$item;
+            if(is_file($fsPath)){
+               $result[] = $url;
             }else{
-               $img[]= '';
+               $result[] = '';
             }
          }
-         return $img;
+         return $result;
       }else{
-         $img = str_replace(array("\n", "\r", " "), "", $img);
-         $hinh=PATH_IMG.$img;
-         if(is_file($hinh)){
-            return $hinh;
+         $img = str_replace(["\n", "\r", " "], "", $img);
+         $fsPath = $projectRoot . DIRECTORY_SEPARATOR . 'upload' . DIRECTORY_SEPARATOR . $img;
+         $url = PATH_IMG.$img;
+         if(is_file($fsPath)){
+            return $url;
          }else{
             return '';
          }
@@ -129,7 +140,7 @@
                 </div>
               </div>
               <div class="deal-content">
-                <div class="deal-title">Áo Thun Regular Bear Cool</div>
+                <div class="deal-title">$name</div>
                 <div class="deal-price">'.number_format($product['price'],0,'',',').'đ
                 '.sale($product).'
                 </div>
@@ -324,44 +335,36 @@ function getidcatalog($idproduct){
 
       //------------------Thống kê-------------------
 
-      function thongke_product_catalog(){
-         $sql = "SELECT catalog.name,
-         count(products.id) AS soluong,
-         MIN(products.price) AS min_price,
-         MAX(products.price) AS max_price,
-         AVG(products.price) AS avg_price
-         FROM product JOIN catalog ON products.idcatalog = catalog.id
-         group by catalog.name";
-         return pdo_query($sql);
+   function thongke_product_catalog(){
+      $sql = "SELECT catalog.name,
+      COUNT(product.id) AS soluong,
+      MIN(product.price) AS min_price,
+      MAX(product.price) AS max_price,
+      AVG(product.price) AS avg_price
+      FROM product JOIN catalog ON product.idcatalog = catalog.id
+      GROUP BY catalog.name";
+      return pdo_query($sql);
      }
 
      function thongke_product_doanhthu(){
-      $sql = "SELECT products.name,
-      SUM(cart.soluong) AS soluongban,
-      cart.price_product_color,
-      cart.thanhtien
-      FROM
-            products
-      JOIN
-            cart
-      ON
-            products.id = cart.id_product
-      where cart.id_donhang<>0
-      GROUP BY cart.id_product";
-      return pdo_query($sql);
+   $sql = "SELECT product.name,
+   SUM(cart.soluong) AS soluongban,
+   SUM(cart.thanhtien) AS doanhthu,
+   AVG(cart.price) AS giaban_tb
+   FROM product
+   JOIN cart ON product.id = cart.id_product
+   WHERE cart.id_donhang<>1
+   GROUP BY cart.id_product, product.name";
+   return pdo_query($sql);
   }
   function thongke_product_binhluan(){
-   $sql = "SELECT products.name,
-   count(comment.id) AS sobinhluan,
-   max(comment.thoigian) as moinhat,
-   min(comment.thoigian) as cunhat
-   FROM
-         products
-   JOIN
-         comment
-   ON
-         products.id = comment.id_product
-   GROUP BY comment.id_product";
+   $sql = "SELECT product.name,
+   COUNT(comment.id) AS sobinhluan,
+   MAX(comment.thoigian) as moinhat,
+   MIN(comment.thoigian) as cunhat
+   FROM product
+   JOIN comment ON product.id = comment.id_product
+   GROUP BY comment.id_product, product.name";
    return pdo_query($sql);
 }
 

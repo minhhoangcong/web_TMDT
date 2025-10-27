@@ -473,7 +473,7 @@
         <div class="customer-main">
           <div class="customer-banner">
             <a href="#">
-              <img class="customer-image" src="https://source.unsplash.com/random" alt="" />
+              <img class="customer-image" src="view/layout/assets/images/slider-1.jpg" alt="Customer banner" />
             </a>
           </div>
           <div class="customer-content">

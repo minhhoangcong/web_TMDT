@@ -244,73 +244,101 @@ function plus() {
   }
 }
 
-var pick_size = document.getElementsByClassName("pick-size")[0];
-sizecart.value = pick_size.innerHTML;
+// Guarded size picker logic so this file can be loaded on pages without size UI
+var pick_size_el = document.getElementsByClassName("pick-size");
+var pick_size = pick_size_el && pick_size_el.length > 0 ? pick_size_el[0] : null;
+if (pick_size && typeof sizecart !== "undefined" && sizecart) {
+  sizecart.value = pick_size.innerHTML;
+}
+
 function change_size(a) {
+  if (!pick_size) return; // not on detail page
   for (let i = 0; i < sizeItems.length; i++) {
     sizeItems[i].classList.remove("active");
   }
   a.classList.add("active");
   pick_size.innerHTML = a.innerHTML;
-  sizecart.value = pick_size.innerHTML;
+  if (typeof sizecart !== "undefined" && sizecart) {
+    sizecart.value = pick_size.innerHTML;
+  }
 
   id_size = a.getAttribute("id_size");
-  for (let i = 0; i < soluongtonkho.length; i++) {
-    if (
-      soluongtonkho[i]["id_color"] == id_color &&
-      soluongtonkho[i]["id_size"] == id_size
-    ) {
-      soluongcon = soluongtonkho[i]["soluong"];
+  if (typeof soluongtonkho !== "undefined") {
+    for (let i = 0; i < soluongtonkho.length; i++) {
+      if (
+        soluongtonkho[i]["id_color"] == id_color &&
+        soluongtonkho[i]["id_size"] == id_size
+      ) {
+        soluongcon = soluongtonkho[i]["soluong"];
+      }
     }
   }
-  document.getElementById("slcon").innerHTML = soluongcon;
+  var slconEl = document.getElementById("slcon");
+  if (slconEl) slconEl.innerHTML = soluongcon;
   var alert = document.getElementsByClassName("detail-inventory")[0];
-  soluongmua =
-    document.getElementsByClassName("detail-input")[0].children[1].value;
+  var detailInput = document.getElementsByClassName("detail-input");
+  if (detailInput.length > 0 && detailInput[0].children[1]) {
+    soluongmua = detailInput[0].children[1].value;
+  }
   if (soluongmua <= soluongcon) {
-    cartdung.style.display = "block";
-    checkoutdung.style.display = "block";
-    cartsai.style.display = "none";
-    checkoutsai.style.display = "none";
-    document.getElementsByClassName(
-      "detail-btn"
-    )[0].children[0].children[0].value = soluong.value;
-    alert.innerHTML = "Còn hàng";
-    alert.style.color = "#46694f";
+    if (cartdung) cartdung.style.display = "block";
+    if (checkoutdung) checkoutdung.style.display = "block";
+    if (cartsai) cartsai.style.display = "none";
+    if (checkoutsai) checkoutsai.style.display = "none";
+    var btnWrap = document.getElementsByClassName("detail-btn");
+    if (btnWrap.length && btnWrap[0].children[0] && btnWrap[0].children[0].children[0]) {
+      btnWrap[0].children[0].children[0].value = soluong.value;
+    }
+    if (alert) {
+      alert.innerHTML = "Còn hàng";
+      alert.style.color = "#46694f";
+    }
   } else {
-    alert.innerHTML = "Hết hàng";
-    alert.style.color = "red";
-    cartdung.style.display = "none";
-    checkoutdung.style.display = "none";
-    cartsai.style.display = "block";
-    checkoutsai.style.display = "block";
+    if (alert) {
+      alert.innerHTML = "Hết hàng";
+      alert.style.color = "red";
+    }
+    if (cartdung) cartdung.style.display = "none";
+    if (checkoutdung) checkoutdung.style.display = "none";
+    if (cartsai) cartsai.style.display = "block";
+    if (checkoutsai) checkoutsai.style.display = "block";
   }
 }
 
-[...detailTab].forEach((item) =>
-  item.addEventListener("click", handleTabClick)
-);
+// Only wire up tab/policy/comment handlers if elements exist (detail page)
+if (detailTab && detailTab.length) {
+  [...detailTab].forEach((item) => item.addEventListener("click", handleTabClick));
+}
 function handleTabClick(event) {
-  // console.log(event.target);
+  if (!detailTab || !detailTab.length) return;
   [...detailTab].forEach((item) => item.classList.remove("active"));
   event.target.classList.add("active");
 }
-policy.addEventListener("click", showPolicy);
+if (policy && detailContent && detailContent2 && detailComment) {
+  policy.addEventListener("click", showPolicy);
+}
 function showPolicy() {
+  if (!detailContent || !detailContent2 || !detailComment) return;
   detailContent.style.display = "none";
   detailComment.style.display = "none";
   detailContent2.style.display = "block";
 }
 
-comment.addEventListener("click", showComment);
+if (comment && detailContent && detailContent2 && detailComment) {
+  comment.addEventListener("click", showComment);
+}
 function showComment() {
+  if (!detailContent || !detailContent2 || !detailComment) return;
   detailContent.style.display = "none";
   detailContent2.style.display = "none";
   detailComment.style.display = "block";
 }
 
-idDetail.addEventListener("click", showIdDetail);
+if (idDetail && detailContent && detailContent2 && detailComment) {
+  idDetail.addEventListener("click", showIdDetail);
+}
 function showIdDetail() {
+  if (!detailContent || !detailContent2 || !detailComment) return;
   detailComment.style.display = "none";
   detailContent2.style.display = "none";
   detailContent.style.display = "block";

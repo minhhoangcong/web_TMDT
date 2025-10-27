@@ -74,7 +74,7 @@
             <div class="header-auth">
               <div class="header-auth__item">
                 <i class="fa fa-heart" aria-hidden="true"></i>
-                <a href="#" class="header-link">Yêu thích</a>
+                <a href="index.php?pg=wishlist" class="header-link">Yêu thích</a>
               </div>
               <div class="header-auth__item">
               <?php

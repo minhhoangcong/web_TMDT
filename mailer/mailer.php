@@ -38,7 +38,8 @@ if (isset($_POST["sendmail"]) && isset($_SESSION['giohang'])) {
     //Content
     $mail->isHTML(true);               //Set email format to HTML
     $mail->Subject = 'Cảm ơn bạn đã mua hàng cùng chúng tôi!';  // email subject headings
-    $mail->AddEmbeddedImage('view/layout/assets/images/logo-form.png', 'logo', 'logo-form.png');
+    // Use correct relative path from mailer/ to view/ assets
+    $mail->AddEmbeddedImage('../view/layout/assets/images/logo-form.png', 'logo', 'logo-form.png');
     $i=0;
     $tongtien=0;
     $html_donhang='';

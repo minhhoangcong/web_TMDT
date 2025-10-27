@@ -65,7 +65,8 @@
             $html_comment.='<div class="comment-card mb-20">
             <div class="comment-avatar">';
             if($user['img']==''){
-              $html_comment.=check_img('avatar.png');
+              // Fallback to static assets avatar path rather than upload/
+              $html_comment.='<img src="view/layout/assets/images/avatar.png" alt="avatar" />';
             }else{
               $html_comment.=check_img($user['img']);
             }

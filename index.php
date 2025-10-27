@@ -938,6 +938,10 @@
             }
             include_once "view/checkout.php";
             break;
+         case 'wishlist':
+            // Placeholder page for Wishlist feature
+            include_once "view/wishlist.php";
+            break;
          case 'login':
             if(!isset($_SESSION['usernamelogin']) || !isset($_SESSION['passwordlogin'])){
                $_SESSION['usernamelogin']='';
@@ -1187,9 +1191,6 @@
             break;
          case 'contact':
             include_once "view/contact.php";
-            break;
-         case 'news':
-            include_once "view/news.php";
             break;
          case 'account':
             $erruser='';
