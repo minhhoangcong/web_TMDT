@@ -246,7 +246,8 @@ function plus() {
 
 // Guarded size picker logic so this file can be loaded on pages without size UI
 var pick_size_el = document.getElementsByClassName("pick-size");
-var pick_size = pick_size_el && pick_size_el.length > 0 ? pick_size_el[0] : null;
+var pick_size =
+  pick_size_el && pick_size_el.length > 0 ? pick_size_el[0] : null;
 if (pick_size && typeof sizecart !== "undefined" && sizecart) {
   sizecart.value = pick_size.innerHTML;
 }
@@ -286,7 +287,11 @@ function change_size(a) {
     if (cartsai) cartsai.style.display = "none";
     if (checkoutsai) checkoutsai.style.display = "none";
     var btnWrap = document.getElementsByClassName("detail-btn");
-    if (btnWrap.length && btnWrap[0].children[0] && btnWrap[0].children[0].children[0]) {
+    if (
+      btnWrap.length &&
+      btnWrap[0].children[0] &&
+      btnWrap[0].children[0].children[0]
+    ) {
       btnWrap[0].children[0].children[0].value = soluong.value;
     }
     if (alert) {
@@ -307,7 +312,9 @@ function change_size(a) {
 
 // Only wire up tab/policy/comment handlers if elements exist (detail page)
 if (detailTab && detailTab.length) {
-  [...detailTab].forEach((item) => item.addEventListener("click", handleTabClick));
+  [...detailTab].forEach((item) =>
+    item.addEventListener("click", handleTabClick)
+  );
 }
 function handleTabClick(event) {
   if (!detailTab || !detailTab.length) return;

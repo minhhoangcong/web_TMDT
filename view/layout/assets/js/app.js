@@ -1,47 +1,61 @@
 $(document).ready(function () {
   // Init hero slider with defensive accessibility handling to avoid DevTools warnings
-  $(".hero-slider").on('init reInit afterChange', function (e, slick, currentSlide) {
-    var cur = typeof currentSlide === 'number' ? currentSlide : (slick.currentSlide || 0);
-    var $slides = $(slick.$slides);
-    // Make only the current slide focusable; hide others from a11y tools
-    $slides.each(function (i, el) {
-      var $el = $(el);
-      var isActive = i === cur;
-      $el.attr('aria-hidden', !isActive);
-      try { el.inert = !isActive; } catch (_) {}
-      var focusables = $el.find('a, button, input, textarea, select, [tabindex]');
-      focusables.attr('tabindex', isActive ? 0 : -1);
-    });
-    // Remove stray focus on hidden slides
-    if (document.activeElement && $(document.activeElement).closest('.slick-slide').attr('aria-hidden') === 'true') {
-      $(document.activeElement).blur();
-    }
-  }).slick({
-    arrows: false,
-    infinite: true,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    infinite: true,
+  $(".hero-slider")
+    .on("init reInit afterChange", function (e, slick, currentSlide) {
+      var cur =
+        typeof currentSlide === "number"
+          ? currentSlide
+          : slick.currentSlide || 0;
+      var $slides = $(slick.$slides);
+      // Make only the current slide focusable; hide others from a11y tools
+      $slides.each(function (i, el) {
+        var $el = $(el);
+        var isActive = i === cur;
+        $el.attr("aria-hidden", !isActive);
+        try {
+          el.inert = !isActive;
+        } catch (_) {}
+        var focusables = $el.find(
+          "a, button, input, textarea, select, [tabindex]"
+        );
+        focusables.attr("tabindex", isActive ? 0 : -1);
+      });
+      // Remove stray focus on hidden slides
+      if (
+        document.activeElement &&
+        $(document.activeElement)
+          .closest(".slick-slide")
+          .attr("aria-hidden") === "true"
+      ) {
+        $(document.activeElement).blur();
+      }
+    })
+    .slick({
+      arrows: false,
+      infinite: true,
+      autoplay: true,
+      autoplaySpeed: 2000,
+      infinite: true,
 
-    dots: true,
-    cssEase: "linear",
-    accessibility: false, // prevent Slick from adding tabindex that conflicts with aria-hidden
-    responsive: [
-      {
-        breakpoint: 480,
-        settings: {
-          dots: false,
-          slidesToShow: 1,
-          slidesToScroll: 1,
+      dots: true,
+      cssEase: "linear",
+      accessibility: false, // prevent Slick from adding tabindex that conflicts with aria-hidden
+      responsive: [
+        {
+          breakpoint: 480,
+          settings: {
+            dots: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+          },
         },
-      },
-      // You can unslick at a given breakpoint now by adding:
-      // settings: "unslick"
-      // instead of a settings object
-    ],
-    // prevArrow: `<button type='button' class='slick-prev slick-arrow'><i class='fa fa-angle-left' aria-hidden='true'></i></button>`,
-    // nextArrow: `<button type='button' class='slick-next slick-arrow'><i class='fa fa-angle-right' aria-hidden='true'></i></button>`,
-  });
+        // You can unslick at a given breakpoint now by adding:
+        // settings: "unslick"
+        // instead of a settings object
+      ],
+      // prevArrow: `<button type='button' class='slick-prev slick-arrow'><i class='fa fa-angle-left' aria-hidden='true'></i></button>`,
+      // nextArrow: `<button type='button' class='slick-next slick-arrow'><i class='fa fa-angle-right' aria-hidden='true'></i></button>`,
+    });
 });
 
 const tabItems = document.querySelectorAll(".account-link");
