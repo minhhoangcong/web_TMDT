@@ -653,22 +653,26 @@ body {
   line-height: 1;
   border: 1px solid transparent;
 }
-.badge.pending { /* Chưa thanh toán */
+.badge.pending {
+  /* Chưa thanh toán */
   background: #fff8e1;
   color: #8d6e00;
   border-color: #ffecb3;
 }
-.badge.paid { /* Đã thanh toán */
+.badge.paid {
+  /* Đã thanh toán */
   background: #e8f5e9;
   color: #2e7d32;
   border-color: #c8e6c9;
 }
-.badge.shipping { /* Đang giao */
+.badge.shipping {
+  /* Đang giao */
   background: #e3f2fd;
   color: #1565c0;
   border-color: #bbdefb;
 }
-.badge.delivered { /* Đã giao */
+.badge.delivered {
+  /* Đã giao */
   background: #f3e5f5;
   color: #6a1b9a;
   border-color: #e1bee7;
@@ -676,9 +680,20 @@ body {
 
 /* Print helper: hide elements with .print-hide when printing */
 @media print {
-  .print-hide { display: none !important; }
-  .header, .header-bottom, .app-fixed, .menu-mobile, .footer, .link-mobile { display: none !important; }
-  body { background: #fff; }
+  .print-hide {
+    display: none !important;
+  }
+  .header,
+  .header-bottom,
+  .app-fixed,
+  .menu-mobile,
+  .footer,
+  .link-mobile {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
 }
 .product-images:hover > .icons {
   bottom: 0;
