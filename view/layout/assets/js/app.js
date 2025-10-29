@@ -59,75 +59,84 @@ $(document).ready(function () {
 });
 
 // Wishlist toggle handler (works on product cards and detail page)
-$(document).on('click', '.wishlist-toggle', function (e) {
+$(document).on("click", ".wishlist-toggle", function (e) {
   e.preventDefault();
   var $btn = $(this);
-  var pid = parseInt($btn.data('product-id'), 10);
+  var pid = parseInt($btn.data("product-id"), 10);
   if (!pid || isNaN(pid)) return;
 
   if (!window.AUTH_LOGGED_IN) {
-    window.location.href = 'index.php?pg=login';
+    window.location.href = "index.php?pg=login";
     return;
   }
 
-  var isActive = $btn.hasClass('active');
-  var url = isActive ? (window.WISHLIST_ENDPOINTS && window.WISHLIST_ENDPOINTS.remove) : (window.WISHLIST_ENDPOINTS && window.WISHLIST_ENDPOINTS.add);
+  var isActive = $btn.hasClass("active");
+  var url = isActive
+    ? window.WISHLIST_ENDPOINTS && window.WISHLIST_ENDPOINTS.remove
+    : window.WISHLIST_ENDPOINTS && window.WISHLIST_ENDPOINTS.add;
   if (!url) return;
 
   $.post(url, { product_id: pid })
     .done(function (res) {
       try {
         if (res && res.success) {
-          $btn.toggleClass('active', !isActive);
-          if (typeof res.count !== 'undefined') {
-            $('.wishlist-count').text(res.count);
-          } else if (window.WISHLIST_ENDPOINTS && window.WISHLIST_ENDPOINTS.count) {
+          $btn.toggleClass("active", !isActive);
+          if (typeof res.count !== "undefined") {
+            $(".wishlist-count").text(res.count);
+          } else if (
+            window.WISHLIST_ENDPOINTS &&
+            window.WISHLIST_ENDPOINTS.count
+          ) {
             $.getJSON(window.WISHLIST_ENDPOINTS.count, function (r) {
-              if (r && typeof r.count !== 'undefined') {
-                $('.wishlist-count').text(r.count);
+              if (r && typeof r.count !== "undefined") {
+                $(".wishlist-count").text(r.count);
               }
             });
           }
 
           // If we just removed on the wishlist page, remove the card from the DOM
-          if (isActive && $('.wishlist-content').length) {
-            var $card = $btn.closest('.product-item');
-            $card.fadeOut(150, function(){
+          if (isActive && $(".wishlist-content").length) {
+            var $card = $btn.closest(".product-item");
+            $card.fadeOut(150, function () {
               $(this).remove();
-              if ($('.wishlist-content .product-item').length === 0) {
-                $('.wishlist-content .container').append('<p>Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.</p>');
+              if ($(".wishlist-content .product-item").length === 0) {
+                $(".wishlist-content .container").append(
+                  "<p>Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.</p>"
+                );
               }
             });
           }
-        } else if (res && res.error === 'not_logged_in') {
-          window.location.href = 'index.php?pg=login';
+        } else if (res && res.error === "not_logged_in") {
+          window.location.href = "index.php?pg=login";
         }
       } catch (err) {
-        console.warn('Wishlist response parse error', err);
+        console.warn("Wishlist response parse error", err);
       }
     })
     .fail(function () {
-      console.warn('Wishlist request failed');
+      console.warn("Wishlist request failed");
     });
 });
 
 // Add to cart from wishlist without leaving the page
-$(document).on('click', '.wishlist-addtocart', function (e) {
+$(document).on("click", ".wishlist-addtocart", function (e) {
   e.preventDefault();
   var $btn = $(this);
-  var pid = parseInt($btn.data('product-id'), 10);
+  var pid = parseInt($btn.data("product-id"), 10);
   if (!pid || isNaN(pid)) return;
-  $.post('wishlist_add_to_cart.php', { product_id: pid })
+  $.post("wishlist_add_to_cart.php", { product_id: pid })
     .done(function (res) {
       if (res && res.success) {
         var old = $btn.text();
-        $btn.prop('disabled', true).addClass('added').text('Đã thêm');
-        setTimeout(function(){
-          $btn.prop('disabled', false).removeClass('added').text(old);
+        $btn.prop("disabled", true).addClass("added").text("Đã thêm");
+        setTimeout(function () {
+          $btn.prop("disabled", false).removeClass("added").text(old);
         }, 1200);
       }
     })
-    .fail(function(){ console.warn('Add to cart failed'); });
+    .fail(function () {
+      console.warn("Add to cart failed");
+    });
 });
 
 const tabItems = document.querySelectorAll(".account-link");

@@ -137,7 +137,7 @@ body {
   min-width: 18px;
   height: 18px;
   font-size: 12px;
-  background: #FF6B35; /* accent */
+  background: #ff6b35; /* accent */
   color: #fff;
   border-radius: 20px;
   padding: 0 6px;
@@ -552,12 +552,12 @@ body {
   height: 34px;
   border-radius: 50%;
   background: #fff;
-  color: #004AAD; /* primary */
+  color: #004aad; /* primary */
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #e0e0e0;
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 .detail-title .wishlist-toggle {
   position: relative;
@@ -568,13 +568,13 @@ body {
   pointer-events: none;
 }
 .wishlist-toggle:hover {
-  color: #FF6B35;
-  border-color: #FF6B35;
+  color: #ff6b35;
+  border-color: #ff6b35;
 }
 .wishlist-toggle.active {
-  background: #FF6B35;
+  background: #ff6b35;
   color: #fff;
-  border-color: #FF6B35;
+  border-color: #ff6b35;
 }
 
 /* Wishlist page spacing and actions */
@@ -597,23 +597,39 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: .2s;
+  transition: 0.2s;
 }
-.btn i { font-size: 16px; }
+.btn i {
+  font-size: 16px;
+}
 .btn-primary {
-  background: #004AAD;
+  background: #004aad;
   color: #fff;
 }
-.btn-primary:hover { background: #00398b; color: #fff; }
+.btn-primary:hover {
+  background: #00398b;
+  color: #fff;
+}
 .btn-outline {
   border: 1px solid #e0e0e0;
   background: #fff;
   color: #333;
 }
-.btn-outline:hover { border-color: #FF6B35; color: #FF6B35; }
-.btn-remove { color: #FF6B35; border-color: #FF6B35; }
-.btn-remove:hover { background: #FF6B35; color: #fff; }
-.btn.added { opacity: .8; }
+.btn-outline:hover {
+  border-color: #ff6b35;
+  color: #ff6b35;
+}
+.btn-remove {
+  color: #ff6b35;
+  border-color: #ff6b35;
+}
+.btn-remove:hover {
+  background: #ff6b35;
+  color: #fff;
+}
+.btn.added {
+  opacity: 0.8;
+}
 .product-images:hover > .icons {
   bottom: 0;
 }
