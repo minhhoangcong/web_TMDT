@@ -72,9 +72,18 @@
               </div>
             </div>
             <div class="header-auth">
-              <div class="header-auth__item">
+              <div class="header-auth__item wishlist-header">
                 <i class="fa fa-heart" aria-hidden="true"></i>
                 <a href="index.php?pg=wishlist" class="header-link">Yêu thích</a>
+                <span class="wishlist-count" aria-label="Số lượng yêu thích">
+                  <?php
+                    $wlCount = 0;
+                    if (isset($_SESSION['loginuser']) && isset($_SESSION['iduser']) && isset($_SESSION['role']) && $_SESSION['role']==0) {
+                      $wlCount = wishlist_count($_SESSION['iduser']);
+                    }
+                    echo (int)$wlCount;
+                  ?>
+                </span>
               </div>
               <div class="header-auth__item">
               <?php
@@ -111,6 +120,14 @@
           </div>
         </div>
       </header>
+      <script>
+        window.AUTH_LOGGED_IN = <?php echo (isset($_SESSION['loginuser']) && isset($_SESSION['role']) && $_SESSION['role']==0) ? 'true' : 'false'; ?>;
+        window.WISHLIST_ENDPOINTS = {
+          add: 'wishlist_add.php',
+          remove: 'wishlist_remove.php',
+          count: 'wishlist_count.php'
+        };
+      </script>
       <ul class="menu-mobile">
         <li class="menu-mobile-item">
           <a href="#" class="menu-mobile-link icon-close"

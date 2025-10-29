@@ -15,6 +15,7 @@
     include_once "model/design.php";
     include_once "model/soluongtonkho.php";
     include_once "model/news.php";
+   include_once "model/wishlist.php";
  
 
    

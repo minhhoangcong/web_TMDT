@@ -108,7 +108,18 @@
             <?=showimgdetail($imgproduct);?>
 
             <div class="detail-content">
-              <h3 class="detail-title"><?=$name?></h3>
+              <h3 class="detail-title" style="display:flex;align-items:center;gap:10px;">
+                <?=$name?>
+                <?php 
+                  $isFav = false; 
+                  if (isset($_SESSION['iduser']) && isset($_SESSION['role']) && $_SESSION['role']==0 && function_exists('wishlist_exists')) { 
+                    try { $isFav = wishlist_exists($_SESSION['iduser'], $detail['id']); } catch (Exception $e) { $isFav = false; }
+                  }
+                ?>
+                <button class="wishlist-toggle<?= $isFav ? ' active' : '' ?>" data-product-id="<?=$detail['id']?>" title="Yêu thích" style="margin-left:6px;">
+                  <i class="fa fa-heart" aria-hidden="true"></i>
+                </button>
+              </h3>
               <div class="detail-code">Mã sản phẩm: <span><?=$ma_sanpham?></span></div>
               <div class="detail-price"><?=number_format($detail['price'],0,'',',')?>đ
                 <?=sale($detail)?>

@@ -12,11 +12,20 @@
          $img=getimg_product_main($id)['main_img'];
             $linkdetail='index.php?pg=detail&id='.$id;
             $strproduct='';
+            $isLoggedIn = (isset($_SESSION['loginuser']) && isset($_SESSION['role']) && $_SESSION['role']==0 && isset($_SESSION['iduser']));
+            $isFav = false;
+            if ($isLoggedIn && function_exists('wishlist_exists')) {
+               try { $isFav = wishlist_exists($_SESSION['iduser'], $id); } catch (Exception $e) { $isFav = false; }
+            }
+            $favClass = $isFav ? ' active' : '';
             $strproduct='<div class="product-item">
                               <div class="product-images">
                               <a href="'.$linkdetail.'">
                                  '.check_img($img).'
                               </a>
+                              <button class="wishlist-toggle'.$favClass.'" data-product-id="'.$id.'" title="Yêu thích">
+                                <i class="fa fa-heart" aria-hidden="true"></i>
+                              </button>
                               <div class="icons">
                                  <a href="'.$linkdetail.'" class="views">Xem chi tiết</a>
                                  <a href="index.php?pg=checkout&id='.$id.'" class="add">Mua ngay</a>
@@ -129,12 +138,21 @@
          $img=getimg_product_main($id);
             $linkdetail='index.php?pg=detail&id='.$id;
             $strproduct='';
-            $strproduct='<div class="deal-item">
+                  $isLoggedIn = (isset($_SESSION['loginuser']) && isset($_SESSION['role']) && $_SESSION['role']==0 && isset($_SESSION['iduser']));
+                  $isFav = false;
+                  if ($isLoggedIn && function_exists('wishlist_exists')) {
+                      try { $isFav = wishlist_exists($_SESSION['iduser'], $id); } catch (Exception $e) { $isFav = false; }
+                  }
+                  $favClass = $isFav ? ' active' : '';
+                  $strproduct='<div class="deal-item">
             <div class="deal-list">
               <div class="deal-item__image">
                 <a href="'.$linkdetail.'">
                   '.check_img($img['main_img']).'
                 </a>
+                        <button class="wishlist-toggle'.$favClass.'" data-product-id="'.$id.'" title="Yêu thích">
+                           <i class="fa fa-heart" aria-hidden="true"></i>
+                        </button>
                 <div class="deal-items">
                   '.check_img($img).'
                 </div>
