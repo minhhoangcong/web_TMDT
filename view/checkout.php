@@ -3,8 +3,14 @@
   $html_product_checkout='';
   $tongtien=0;
   $tongsoluong=0;
-  if(isset($_SESSION['giohang'])){
-    foreach ($_SESSION['giohang'] as $item) {
+  $checkoutItems = [];
+  if (isset($_SESSION['product_checkout']) && is_array($_SESSION['product_checkout']) && count($_SESSION['product_checkout'])>0) {
+    $checkoutItems = $_SESSION['product_checkout'];
+  } elseif (isset($_SESSION['giohang']) && is_array($_SESSION['giohang'])) {
+    $checkoutItems = $_SESSION['giohang'];
+  }
+  if(count($checkoutItems)>0){
+    foreach ($checkoutItems as $item) {
       extract($item);
       $tongsoluong+=$soluong;
       $tongtien+=$soluong*$price;

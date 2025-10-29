@@ -399,17 +399,10 @@
             include_once "view/detail.php";   
             break;
          case 'cart':  
-            if(isset($_SESSION['product_checkout']) && !isset($_SESSION['giohang'])){
-               $_SESSION['giohang']=[];
-               $_SESSION['giohang']=$_SESSION['product_checkout'];
+            // Do NOT overwrite the full cart with selected checkout items.
+            // If a temporary selection exists, clear it and keep the original cart intact.
+            if (isset($_SESSION['product_checkout'])) {
                unset($_SESSION['product_checkout']);
-            }else{
-               if(isset($_SESSION['product_checkout']) && isset($_SESSION['giohang'])){
-                  unset($_SESSION['giohang']);
-                  $_SESSION['giohang']=[];
-                  $_SESSION['giohang']=$_SESSION['product_checkout'];
-                  unset($_SESSION['product_checkout']);
-               }
             }
             if(!isset($_SESSION['giohang'])){
                $_SESSION['giohang']=[];
@@ -564,9 +557,16 @@
                            if(getvoucher($_POST['magiamgia'])['ngayketthuc']<date('Y-m-d')){
                               $errvoucher="*Mã giảm giá này đã kết thúc vào ngày ".getvoucher($_POST['magiamgia'])['ngayketthuc'];
                            }else{
-                              if(isset($_SESSION['giohang']) && count($_SESSION['giohang'])>0){
+                              // Prefer selected checkout items if present when validating voucher threshold
+                              $checkoutItems = [];
+                              if (isset($_SESSION['product_checkout']) && is_array($_SESSION['product_checkout']) && count($_SESSION['product_checkout'])>0) {
+                                 $checkoutItems = $_SESSION['product_checkout'];
+                              } elseif (isset($_SESSION['giohang']) && is_array($_SESSION['giohang'])) {
+                                 $checkoutItems = $_SESSION['giohang'];
+                              }
+                              if(count($checkoutItems)>0){
                                  $tongtien=0;
-                                 foreach ($_SESSION['giohang'] as $item) {
+                                 foreach ($checkoutItems as $item) {
                                     extract($item);
                                     $tongtien+=$soluong*$price;
                                  }
@@ -601,9 +601,16 @@
                   $user=getuser($_SESSION['iduser']);
                }
                if(isset($_POST['thanhtoan'])){
-                  if(isset($_SESSION['giohang']) && isset($_SESSION['iduser']) && count($_SESSION['giohang'])>0){
+                  // Prefer selected checkout items if present
+                  $checkoutItems = [];
+                  if (isset($_SESSION['product_checkout']) && is_array($_SESSION['product_checkout']) && count($_SESSION['product_checkout'])>0) {
+                     $checkoutItems = $_SESSION['product_checkout'];
+                  } elseif (isset($_SESSION['giohang']) && is_array($_SESSION['giohang'])) {
+                     $checkoutItems = $_SESSION['giohang'];
+                  }
+                  if(isset($_SESSION['iduser']) && count($checkoutItems)>0){
                      $tongtien=0;
-                     foreach ($_SESSION['giohang'] as $item) {
+                     foreach ($checkoutItems as $item) {
                         extract($item);
                         $tongtien+=$soluong*$price;
                      }
@@ -717,10 +724,17 @@
                      }
                      $idusercu=getidusercu($_SESSION['username'],$_SESSION['password']);
                      $user=getuser($idusercu);
-                     if(isset($_SESSION['giohang']) && isset($_SESSION['iduser']) && count($_SESSION['giohang'])>0){
+                     // Use checkout items for order creation
+                     $checkoutItems = [];
+                     if (isset($_SESSION['product_checkout']) && is_array($_SESSION['product_checkout']) && count($_SESSION['product_checkout'])>0) {
+                        $checkoutItems = $_SESSION['product_checkout'];
+                     } elseif (isset($_SESSION['giohang']) && is_array($_SESSION['giohang'])) {
+                        $checkoutItems = $_SESSION['giohang'];
+                     }
+                     if(isset($_SESSION['iduser']) && count($checkoutItems)>0){
                         $tongtien=0;
                         $_SESSION['id_cart']=[];
-                        foreach ($_SESSION['giohang'] as $item) {
+                        foreach ($checkoutItems as $item) {
                            extract($item);
                            $tongtien+=$soluong*$price;
                            $id=intval($id);
@@ -758,10 +772,17 @@
                
 
             }else{
-               if(isset($_POST['thanhtoan']) && isset($_SESSION['giohang']) && count($_SESSION['giohang'])>0){          
+               if(isset($_POST['thanhtoan'])){          
                   $tongtien=0;
-                  if(isset($_SESSION['giohang'])){
-                     foreach ($_SESSION['giohang'] as $item) {
+                  // Prefer selected checkout items if present
+                  $checkoutItems = [];
+                  if (isset($_SESSION['product_checkout']) && is_array($_SESSION['product_checkout']) && count($_SESSION['product_checkout'])>0) {
+                     $checkoutItems = $_SESSION['product_checkout'];
+                  } elseif (isset($_SESSION['giohang']) && is_array($_SESSION['giohang'])) {
+                     $checkoutItems = $_SESSION['giohang'];
+                  }
+                  if(count($checkoutItems)>0){
+                     foreach ($checkoutItems as $item) {
                         extract($item);
                         $tongtien+=$soluong*$price;
                      }
@@ -870,7 +891,7 @@
                         $_SESSION['loginuser']=0;
                         $_SESSION['role']=getrole($_SESSION['username'],$_SESSION['password']);
                         $tongtien=0;
-                        foreach ($_SESSION['giohang'] as $item) {
+                        foreach ($checkoutItems as $item) {
                            extract($item);
                            $tongtien+=$soluong*$price;
                         }
@@ -891,7 +912,7 @@
                         $_SESSION['loginuser']=0;
                         $_SESSION['role']=getrole($_SESSION['username'],$_SESSION['password']);
                         $tongtien=0;
-                        foreach ($_SESSION['giohang'] as $item) {
+                        foreach ($checkoutItems as $item) {
                            extract($item);
                            $tongtien+=$soluong*$price;
                         }
@@ -910,7 +931,7 @@
                   
                      $iddonhang=getiddonhang();
                      $tongtien=0;
-                     foreach ($_SESSION['giohang'] as $item) {
+                     foreach ($checkoutItems as $item) {
                         extract($item);
                         $tongtien+=$soluong*$price;
                         $id=intval($id);

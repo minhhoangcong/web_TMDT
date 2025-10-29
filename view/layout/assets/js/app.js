@@ -127,6 +127,16 @@ $(document).on("click", ".wishlist-addtocart", function (e) {
   $.post("wishlist_add_to_cart.php", { product_id: pid })
     .done(function (res) {
       if (res && res.success) {
+        // Update header cart badge if server returned a count; fallback to fetch
+        if (typeof res.cartCount !== "undefined") {
+          $(".cart-count").text(res.cartCount);
+        } else if (window.CART_COUNT_ENDPOINT) {
+          $.getJSON(window.CART_COUNT_ENDPOINT, function (r) {
+            if (r && typeof r.cartCount !== "undefined") {
+              $(".cart-count").text(r.cartCount);
+            }
+          });
+        }
         var old = $btn.text();
         $btn.prop("disabled", true).addClass("added").text("Đã thêm");
         setTimeout(function () {

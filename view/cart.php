@@ -70,9 +70,11 @@
                   </div>
                 </div>
               </div> -->
+              <form id="cart-select-form" action="cart_select_checkout.php" method="post">
               <table class="cart-table">
               <thead>
                   <tr>
+                    <th style="width:40px; text-align:center"><input type="checkbox" id="select-all"></th>
                     <th class="pro-info">Thông tin sản phẩm</th>
                     <th>Đơn giá</th>
                     <th>Số lượng</th>
@@ -90,6 +92,7 @@
                           extract($item);
                           if($product_design==0){
                             $html_cart.='<tr class="cart-product">
+                            <td style="text-align:center"><input type="checkbox" class="select-item" name="selected[]" value="'.$j.'"></td>
                             <td>
                               <div class="pro-main">
                                 <div class="pro-image">
@@ -128,6 +131,7 @@
                           }else{
                             if($product_design==1){
                               $html_cart.='<tr class="cart-product">
+                                <td style="text-align:center"><input type="checkbox" class="select-item" name="selected[]" value="'.$j.'"></td>
                                 <td>
                                   <div class="pro-main">
                                     <div class="pro-image">
@@ -173,6 +177,7 @@
                   ?>
                 </tbody>
               </table>  
+              </form>
               <?php
                 
                   if(!isset($_SESSION['giohang']) || count($_SESSION['giohang'])==0){
@@ -198,8 +203,13 @@
                   <div class="cart-content__price"><?=number_format($tongtien,0,'',',')?>đ</div>
                 </div>
                 <script>
-                $(document).ready(function () {
+        $(document).ready(function () {
             var tong=$('.tong').val();
+      // Select all handler
+      $('#select-all').on('change', function(){
+        var checked = $(this).is(':checked');
+        $('.select-item').prop('checked', checked);
+      });
             $(".tru").click(function (e) { 
                 e.preventDefault();
                 // alert("ok");
@@ -277,7 +287,15 @@
                 //     $('.layout-cart').find('article').html(str);
                 //     $('.layout-cart').find('aside').remove();
                 // }
-                $.post("index.php?pg=cart", {
+        // Update header cart badge after change
+        var totalCount = 0;
+        $(".soluong").each(function(){
+          var v = parseInt($(this).val(), 10);
+          if(!isNaN(v)) totalCount += v;
+        });
+        $(".cart-count").text(totalCount);
+
+        $.post("index.php?pg=cart", {
                     soluongmoi: soluong,
                     ind: ind
                 },
@@ -363,7 +381,15 @@
                 //     $('.layout-cart').find('article').html(str);
                 //     $('.layout-cart').find('aside').remove();
                 // }
-                $.post("index.php?pg=cart", {
+        // Update header cart badge after change
+        var totalCount = 0;
+        $(".soluong").each(function(){
+          var v = parseInt($(this).val(), 10);
+          if(!isNaN(v)) totalCount += v;
+        });
+        $(".cart-count").text(totalCount);
+
+        $.post("index.php?pg=cart", {
                     soluongmoi: soluong,
                     ind: ind
                 },
@@ -384,8 +410,11 @@
                 </div>
                 <div class="detail-btn">
                   <a href="index.php?pg=checkout">
-                    <button class="detail-button">Tiếp tục thanh toán</button>
+                    <button type="button" class="detail-button" title="Thanh toán tất cả">Thanh toán tất cả</button>
                   </a>
+                </div>
+                <div class="detail-btn" style="margin-top:8px">
+                  <button type="submit" form="cart-select-form" class="detail-button">Thanh toán đã chọn</button>
                 </div>
                 <div class="cart-checkout">
                   <p>Hỗ trợ thanh toán với</p>

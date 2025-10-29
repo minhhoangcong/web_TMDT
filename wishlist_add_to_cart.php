@@ -67,7 +67,15 @@ try {
         $_SESSION['giohang'][] = $sp;
     }
 
-    echo json_encode(['success' => true]);
+    // Calculate updated cart count (sum of quantities)
+    $cartCount = 0;
+    if (isset($_SESSION['giohang']) && is_array($_SESSION['giohang'])) {
+        foreach ($_SESSION['giohang'] as $ci) {
+            $cartCount += isset($ci['soluong']) ? intval($ci['soluong']) : 0;
+        }
+    }
+
+    echo json_encode(['success' => true, 'cartCount' => $cartCount]);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'error' => 'server_error']);
 }

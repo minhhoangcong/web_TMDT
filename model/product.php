@@ -150,9 +150,6 @@
                 <a href="'.$linkdetail.'">
                   '.check_img($img['main_img']).'
                 </a>
-                        <button class="wishlist-toggle'.$favClass.'" data-product-id="'.$id.'" title="Yêu thích">
-                           <i class="fa fa-heart" aria-hidden="true"></i>
-                        </button>
                 <div class="deal-items">
                   '.check_img($img).'
                 </div>

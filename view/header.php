@@ -115,6 +115,18 @@
               <div class="header-auth__item">
                 <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                 <a href="index.php?pg=cart" class="header-link">Giỏ hàng</a>
+                <span class="cart-count" aria-label="Số lượng giỏ hàng">
+                  <?php
+                    $cartCount = 0;
+                    if (isset($_SESSION['giohang']) && is_array($_SESSION['giohang'])) {
+                      foreach ($_SESSION['giohang'] as $ci) {
+                        $qty = isset($ci['soluong']) ? intval($ci['soluong']) : 0;
+                        $cartCount += max(0, $qty);
+                      }
+                    }
+                    echo (int)$cartCount;
+                  ?>
+                </span>
               </div>
             </div>
           </div>
@@ -127,6 +139,7 @@
           remove: 'wishlist_remove.php',
           count: 'wishlist_count.php'
         };
+        window.CART_COUNT_ENDPOINT = 'cart_count.php';
       </script>
       <ul class="menu-mobile">
         <li class="menu-mobile-item">
