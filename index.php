@@ -23,6 +23,37 @@
    if(isset($_GET['pg'])&&($_GET['pg']!="")){
       $pg=$_GET['pg'];
       switch ($pg) {
+         case 'orders':
+            // Require login to view user's orders
+            if (!isset($_SESSION['iduser'])) {
+               include_once "view/login.php";
+               break;
+            }
+            $orders = getdonhang($_SESSION['iduser']);
+            include_once "view/orders.php";
+            break;
+         case 'order_detail':
+            if (!isset($_GET['id']) || !intval($_GET['id'])) {
+               header('location: index.php?pg=account');
+               exit();
+            }
+            $orderId = intval($_GET['id']);
+            $order = getdonhangtoid($orderId);
+            if (!$order) {
+               header('location: index.php?pg=account');
+               exit();
+            }
+            // Only allow viewing if it's the logged-in user's order or it's the last created order in session
+            $allow = false;
+            if (isset($_SESSION['iduser']) && $order['iduser'] == $_SESSION['iduser']) $allow = true;
+            if (isset($_SESSION['donhang']['id']) && $_SESSION['donhang']['id'] == $orderId) $allow = true;
+            if (!$allow) {
+               header('location: index.php?pg=account');
+               exit();
+            }
+            $orderItems = getdonhangct($orderId);
+            include_once "view/order_detail.php";
+            break;
          case 'product':
             if(isset($_GET['tatca']) && $_GET['tatca']){
                unset($_SESSION['filterprice']);
@@ -483,31 +514,32 @@
                $_SESSION['diachi']='';
             }
             if(isset($_POST['btndetailcheckout'])){
-               $id=$_POST['id_checkout'];
-               $soluong=$_POST['soluong_checkout'];
-               if(!isset($_SESSION['giohang'])){
-                  $_SESSION['giohang']=[];
-               }
-               $_SESSION['product_checkout']=[];
-               $_SESSION['product_checkout']=$_SESSION['giohang'];
-               unset($_SESSION['giohang']);
+               // Buy-now: always replace the temporary checkout selection with the current product
+               $id=intval($_POST['id_checkout']);
+               $soluong=intval($_POST['soluong_checkout']);
+               if($soluong<=0) $soluong = 1;
+               $_SESSION['product_checkout'] = [];
                $spdetail=getproductdetail($id);
-               
-               $sp=["id"=>$id,"img"=> getlistimgcolor($id)[0]['main_img'],"name"=>$spdetail['name'] ,"price"=>$spdetail['price'] ,"color"=>getcolor(getlistimgcolor($id)[0]['id_color']),"size"=>getlistsize()[0]['ma_size'],"soluong"=>$soluong,"product_design"=>0,"id_product_design"=>1];
-               $_SESSION['giohang'][]=$sp;
+               $imgs = getlistimgcolor($id);
+               $img = is_array($imgs) && count($imgs)>0 ? $imgs[0]['main_img'] : '';
+               $color = is_array($imgs) && count($imgs)>0 ? getcolor($imgs[0]['id_color']) : '';
+               $sizes = getlistsize();
+               $size = is_array($sizes) && count($sizes)>0 ? $sizes[0]['ma_size'] : '';
+               $sp=["id"=>$id,"img"=>$img,"name"=>$spdetail['name'] ,"price"=>$spdetail['price'] ,"color"=>$color,"size"=>$size,"soluong"=>$soluong,"product_design"=>0,"id_product_design"=>1];
+               $_SESSION['product_checkout'][]=$sp;
             }
             if(isset($_GET['id']) && $_GET['id']){
-               if(!isset($_SESSION['giohang'])){
-                  $_SESSION['giohang']=[];
-               }
-               $id=$_GET['id'];
-               $_SESSION['product_checkout']=[];
-               $_SESSION['product_checkout']=$_SESSION['giohang'];
-               unset($_SESSION['giohang']);
+               // Buy-now from quick link: replace temporary checkout selection with the selected product
+               $id=intval($_GET['id']);
+               $_SESSION['product_checkout'] = [];
                $spdetail=getproductdetail($id);
-               
-               $sp=["id"=>$id,"img"=> getlistimgcolor($id)[0]['main_img'],"name"=>$spdetail['name'] ,"price"=>$spdetail['price'] ,"color"=>getcolor(getlistimgcolor($id)[0]['id_color']),"size"=>getlistsize()[0]['ma_size'],"soluong"=>1,"product_design"=>0,"id_product_design"=>1];
-               $_SESSION['giohang'][]=$sp;
+               $imgs = getlistimgcolor($id);
+               $img = is_array($imgs) && count($imgs)>0 ? $imgs[0]['main_img'] : '';
+               $color = is_array($imgs) && count($imgs)>0 ? getcolor($imgs[0]['id_color']) : '';
+               $sizes = getlistsize();
+               $size = is_array($sizes) && count($sizes)>0 ? $sizes[0]['ma_size'] : '';
+               $sp=["id"=>$id,"img"=>$img,"name"=>$spdetail['name'] ,"price"=>$spdetail['price'] ,"color"=>$color,"size"=>$size,"soluong"=>1,"product_design"=>0,"id_product_design"=>1];
+               $_SESSION['product_checkout'][]=$sp;
             }
             if(!isset($_SESSION['giamgia'])){
                $_SESSION['giamgia']=0;
@@ -763,7 +795,14 @@
                         
                      }
                      $_SESSION['donhang']=getdonhangtoid($iddonhang);
-                     $_SESSION['mail']=1;
+                     // If online payment selected, redirect to stub instead of showing success mail
+                     if (isset($_SESSION['phuongthuc']) && $_SESSION['phuongthuc'] != 'Thanh toán trực tiếp khi giao hàng') {
+                        $_SESSION['pending_payment_order_id'] = $iddonhang;
+                        header('Location: payment_stub.php?order='.$iddonhang);
+                        exit();
+                     } else {
+                        $_SESSION['mail']=1;
+                     }
                   }
                   
                   // unset($_SESSION['giohang']);
@@ -949,7 +988,14 @@
                         unset($_SESSION['id_voucher']);
                      }
                      
-                     $_SESSION['mail']=1;
+                     // If online payment selected, redirect to stub; else mark success now
+                     if (isset($_SESSION['phuongthuc']) && $_SESSION['phuongthuc'] != 'Thanh toán trực tiếp khi giao hàng') {
+                        $_SESSION['pending_payment_order_id'] = $iddonhang;
+                        header('Location: payment_stub.php?order='.$iddonhang);
+                        exit();
+                     } else {
+                        $_SESSION['mail']=1;
+                     }
                      
                   // unset($_SESSION['giohang']);
                   // header('location: index.php?pg=account');

@@ -59,4 +59,8 @@
       $sql="SELECT * FROM donhang WHERE  iduser LIKE ? or tendat LIKE ? or ma_donhang LIKE ? or diachidat LIKE ? or trangthai LIKE ?";
       return pdo_query($sql,'%'.$kw.'%', '%'.$kw.'%', '%'.$kw.'%', '%'.$kw.'%', '%'.$kw.'%');
      }
+   function update_trangthai_donhang($id, $trangthai){
+      $sql = "UPDATE donhang SET trangthai=? WHERE id=?";
+      pdo_execute($sql, $trangthai, $id);
+   }
 ?>

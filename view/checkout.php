@@ -132,6 +132,7 @@
         
   $html_mail="";
   if(isset($_SESSION['mail']) && $_SESSION['mail']==1){
+    $orderLink = isset($_SESSION['donhang']['id']) ? 'index.php?pg=order_detail&id='.$_SESSION['donhang']['id'] : 'index.php?pg=account';
     $html_mail='<div class="modal active">
     <div class="modal-overlay"></div>
     <div class="modal-content">
@@ -139,11 +140,7 @@
       <img src="view/layout/assets/images/thanhcong.png" alt="">
         <h3>Bạn đã đặt hàng thành công</h3>
         <div class="modal__succesfully">
-          <form action="mailer.php" method="post">
-            <input type="hidden" name="emaildat" value="'.$_SESSION['email'].'">
-            <input type="hidden" name="tendat" value="'.$_SESSION['name'].'">
-            <button name="sendmail" class="monal__succesfully-btn">Xem đơn hàng</button>
-          </form>
+          <a href="'.$orderLink.'" class="monal__succesfully-btn">Xem đơn hàng</a>
         </div>
       </div>
     </div>
@@ -220,6 +217,11 @@
             <div class="checkout-center-text">Thanh toán</div>
             <p>Vui lòng kiểm tra thông tin khách hàng, đơn hàng trước khi thanh toán.</p>
           </div>
+          <?php if (isset($_SESSION['payment_error']) && $_SESSION['payment_error']) { ?>
+          <div style="max-width: 960px; margin: 0 auto 12px; color: #b71c1c; background: #ffebee; border: 1px solid #ffcdd2; padding: 10px 12px; border-radius: 6px;">
+            <?php echo htmlspecialchars($_SESSION['payment_error']); unset($_SESSION['payment_error']); ?>
+          </div>
+          <?php } ?>
           <div class="checkout-main">
             <div class="checkout-left">
               <div class="order">
