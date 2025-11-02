@@ -4,15 +4,18 @@
   box-sizing: border-box;
 }
 :root {
-  --primary-color: #47694f;
+  --primary-color: #2563eb;
   --white: #ffffff;
-  --bg: #799881;
+  --bg: #3b82f6;
   --font: "Poppins", sans-serif;
   --black: #000;
-  --text-heading: #46694f;
-  --bg-footer: #222222;
-  --red: #f00;
-  --hover: #80b885;
+  --text-heading: #1e40af;
+  --bg-footer: #1e293b;
+  --red: #ef4444;
+  --hover: #60a5fa;
+  --secondary: #8b5cf6;
+  --accent: #06b6d4;
+  --success: #10b981;
 }
 * {
   margin: 0;
@@ -137,7 +140,7 @@ body {
   min-width: 18px;
   height: 18px;
   font-size: 12px;
-  background: #ff6b35; /* accent */
+  background: #ef4444; /* accent */
   color: #fff;
   border-radius: 20px;
   padding: 0 6px;
@@ -150,7 +153,7 @@ body {
   min-width: 18px;
   height: 18px;
   font-size: 12px;
-  background: #ff6b35;
+  background: #ef4444;
   color: #fff;
   border-radius: 20px;
   padding: 0 6px;
@@ -168,7 +171,7 @@ body {
   display: none;
 }
 .header-bottom {
-  background-color: var(--black);
+  background-color: #000000 !important;
   padding: 20px 0;
   position: sticky;
   top: 0;
@@ -233,11 +236,14 @@ body {
 }
 .header-menu-link {
   font-weight: 600;
-  color: var(--white);
+  color: #ffffff;
+  font-size: 15px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   transition: all 0.25s;
 }
 .header-menu-link:hover {
-  color: var(--hover);
+  color: #60a5fa;
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
 }
 
 .hero img {
@@ -581,13 +587,13 @@ body {
   pointer-events: none;
 }
 .wishlist-toggle:hover {
-  color: #ff6b35;
-  border-color: #ff6b35;
+  color: #ef4444;
+  border-color: #ef4444;
 }
 .wishlist-toggle.active {
-  background: #ff6b35;
+  background: #ef4444;
   color: #fff;
-  border-color: #ff6b35;
+  border-color: #ef4444;
 }
 
 /* Wishlist page spacing and actions */
@@ -616,11 +622,11 @@ body {
   font-size: 16px;
 }
 .btn-primary {
-  background: #004aad;
+  background: #2563eb;
   color: #fff;
 }
 .btn-primary:hover {
-  background: #00398b;
+  background: #1d4ed8;
   color: #fff;
 }
 .btn-outline {
@@ -629,15 +635,15 @@ body {
   color: #333;
 }
 .btn-outline:hover {
-  border-color: #ff6b35;
-  color: #ff6b35;
+  border-color: #2563eb;
+  color: #2563eb;
 }
 .btn-remove {
-  color: #ff6b35;
-  border-color: #ff6b35;
+  color: #ef4444;
+  border-color: #ef4444;
 }
 .btn-remove:hover {
-  background: #ff6b35;
+  background: #ef4444;
   color: #fff;
 }
 .btn.added {
@@ -655,27 +661,27 @@ body {
 }
 .badge.pending {
   /* Chưa thanh toán */
-  background: #fff8e1;
-  color: #8d6e00;
-  border-color: #ffecb3;
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
 }
 .badge.paid {
   /* Đã thanh toán */
-  background: #e8f5e9;
-  color: #2e7d32;
-  border-color: #c8e6c9;
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0;
 }
 .badge.shipping {
   /* Đang giao */
-  background: #e3f2fd;
-  color: #1565c0;
-  border-color: #bbdefb;
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #bfdbfe;
 }
 .badge.delivered {
   /* Đã giao */
-  background: #f3e5f5;
-  color: #6a1b9a;
-  border-color: #e1bee7;
+  background: #e9d5ff;
+  color: #6b21a8;
+  border-color: #d8b4fe;
 }
 
 /* Print helper: hide elements with .print-hide when printing */
@@ -1407,7 +1413,7 @@ body {
 
 .detail-tab__link {
   border-radius: 5px;
-  background: #eff6f1;
+  background: #eff6ff;
   padding: 15px 30px;
   color: var(--black);
   display: inline-flex;
@@ -1547,7 +1553,7 @@ body {
 .list-product__box {
   padding: 16px;
   border-radius: 5px;
-  background: #f8f9f8;
+  background: #f8fafc;
 }
 .list-product-title {
   font-weight: 600;
@@ -3244,4 +3250,69 @@ input[type="radio"] {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ========== Modern Gradient & Shadow Effects ========== */
+.header {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--bg) 100%);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+  transform: translateY(-2px);
+}
+
+.product-item {
+  transition: all 0.3s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Modern card styling */
+.product-item,
+.design-item,
+.news-item {
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Smooth transitions for links */
+.header-link,
+.header-menu-link,
+.footer-link {
+  transition: all 0.3s ease;
+}
+
+.header-link:hover {
+  color: var(--hover) !important;
+  text-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+}
+
+/* Badge glow effect */
+.cart-count,
+.wishlist-count {
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+  }
 }
