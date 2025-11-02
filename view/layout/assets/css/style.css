@@ -87,6 +87,19 @@ body {
 .header-form-mobile {
   display: none;
 }
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+.header-logo img {
+  height: 60px;
+  width: auto;
+  background: transparent;
+  padding: 0;
+  border: none;
+  mix-blend-mode: normal;
+  object-fit: contain;
+}
 .header-logo-mobile {
   display: none;
 }

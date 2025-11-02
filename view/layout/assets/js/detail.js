@@ -156,12 +156,15 @@ function change_img(a) {
   }
   main_img[ind].src = a.src;
 
-  // Update gallery navigation state
+  // Update gallery navigation state - tìm index của ảnh được click
   if (typeof allImages !== "undefined" && allImages.length > 0) {
-    const index = allImages.findIndex((img) => img.src === a.src);
-    if (index !== -1) {
-      currentImageIndex = index;
-      updateActiveThumb();
+    // Tìm ảnh trong mảng allImages dựa trên element được click
+    for (let i = 0; i < allImages.length; i++) {
+      if (allImages[i] === a || allImages[i].src === a.src) {
+        currentImageIndex = i;
+        updateActiveThumb();
+        break;
+      }
     }
   }
 }
@@ -397,11 +400,25 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function initImageGallery() {
+  // Check if detail_image exists
+  if (typeof detail_image === "undefined" || !detail_image || detail_image.length === 0) {
+    return;
+  }
+
   // Get all thumbnail images from currently visible detail-image
-  const activeDetailImage = Array.from(detail_image).find(
+  let activeDetailImage = Array.from(detail_image).find(
     (img) => img.style.display !== "none"
   );
-  if (!activeDetailImage) return;
+  
+  if (!activeDetailImage && detail_image.length > 0) {
+    // If no active found, use first one
+    detail_image[0].style.display = "flex";
+    activeDetailImage = detail_image[0];
+  }
+  
+  if (!activeDetailImage) {
+    return; // Still no active image, exit
+  }
 
   const thumbnails = activeDetailImage.querySelectorAll(".detail-image__item");
   allImages = Array.from(thumbnails);
@@ -429,12 +446,23 @@ function nextImage() {
   if (allImages.length === 0) {
     initImageGallery();
   }
+  
+  if (allImages.length === 0) return; // No images to navigate
 
   currentImageIndex = (currentImageIndex + 1) % allImages.length;
-
-  // Use original change_img function for compatibility
-  if (allImages[currentImageIndex]) {
-    change_img(allImages[currentImageIndex]);
+  
+  // Cập nhật ảnh lớn trực tiếp
+  var ind = 0;
+  for (let i = 0; i < detail_image.length; i++) {
+    if (detail_image[i].style.display != "none") {
+      ind = i;
+      break;
+    }
+  }
+  
+  if (main_img[ind] && allImages[currentImageIndex]) {
+    main_img[ind].src = allImages[currentImageIndex].src;
+    updateActiveThumb();
   }
 }
 
@@ -442,21 +470,35 @@ function prevImage() {
   if (allImages.length === 0) {
     initImageGallery();
   }
+  
+  if (allImages.length === 0) return; // No images to navigate
 
-  currentImageIndex =
-    (currentImageIndex - 1 + allImages.length) % allImages.length;
-
-  // Use original change_img function for compatibility
-  if (allImages[currentImageIndex]) {
-    change_img(allImages[currentImageIndex]);
+  currentImageIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+  
+  // Cập nhật ảnh lớn trực tiếp
+  var ind = 0;
+  for (let i = 0; i < detail_image.length; i++) {
+    if (detail_image[i].style.display != "none") {
+      ind = i;
+      break;
+    }
+  }
+  
+  if (main_img[ind] && allImages[currentImageIndex]) {
+    main_img[ind].src = allImages[currentImageIndex].src;
+    updateActiveThumb();
   }
 }
 
-// Re-initialize when color changes
-const originalChangeColor = change_color;
-change_color = function (a) {
-  originalChangeColor(a);
-  setTimeout(() => {
-    initImageGallery();
-  }, 100);
-};
+// Reinitialize gallery when color changes (wrap existing function)
+(function() {
+  const originalChangeColor = window.change_color;
+  window.change_color = function(a) {
+    if (originalChangeColor) {
+      originalChangeColor.call(this, a);
+    }
+    setTimeout(() => {
+      initImageGallery();
+    }, 100);
+  };
+})();
