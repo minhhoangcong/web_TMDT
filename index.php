@@ -546,10 +546,14 @@
                $spdetail=getproductdetail($id);
                $imgs = getlistimgcolor($id);
                $img = is_array($imgs) && count($imgs)>0 ? $imgs[0]['main_img'] : '';
-               $color = is_array($imgs) && count($imgs)>0 ? getcolor($imgs[0]['id_color']) : '';
+               $colorResult = '';
+               if (is_array($imgs) && count($imgs)>0) {
+                  $colorData = getcolor($imgs[0]['id_color']);
+                  $colorResult = is_string($colorData) ? $colorData : (is_array($colorData) && isset($colorData['color']) ? $colorData['color'] : '');
+               }
                $sizes = getlistsize();
                $size = is_array($sizes) && count($sizes)>0 ? $sizes[0]['ma_size'] : '';
-               $sp=["id"=>$id,"img"=>$img,"name"=>$spdetail['name'] ,"price"=>$spdetail['price'] ,"color"=>$color,"size"=>$size,"soluong"=>$soluong,"product_design"=>0,"id_product_design"=>1];
+               $sp=["id"=>$id,"img"=>$img,"name"=>$spdetail['name'] ,"price"=>$spdetail['price'] ,"color"=>$colorResult,"size"=>$size,"soluong"=>$soluong,"product_design"=>0,"id_product_design"=>1];
                $_SESSION['product_checkout'][]=$sp;
             }
             if(isset($_GET['id']) && $_GET['id']){
@@ -559,10 +563,14 @@
                $spdetail=getproductdetail($id);
                $imgs = getlistimgcolor($id);
                $img = is_array($imgs) && count($imgs)>0 ? $imgs[0]['main_img'] : '';
-               $color = is_array($imgs) && count($imgs)>0 ? getcolor($imgs[0]['id_color']) : '';
+               $colorResult = '';
+               if (is_array($imgs) && count($imgs)>0) {
+                  $colorData = getcolor($imgs[0]['id_color']);
+                  $colorResult = is_string($colorData) ? $colorData : (is_array($colorData) && isset($colorData['color']) ? $colorData['color'] : '');
+               }
                $sizes = getlistsize();
                $size = is_array($sizes) && count($sizes)>0 ? $sizes[0]['ma_size'] : '';
-               $sp=["id"=>$id,"img"=>$img,"name"=>$spdetail['name'] ,"price"=>$spdetail['price'] ,"color"=>$color,"size"=>$size,"soluong"=>1,"product_design"=>0,"id_product_design"=>1];
+               $sp=["id"=>$id,"img"=>$img,"name"=>$spdetail['name'] ,"price"=>$spdetail['price'] ,"color"=>$colorResult,"size"=>$size,"soluong"=>1,"product_design"=>0,"id_product_design"=>1];
                $_SESSION['product_checkout'][]=$sp;
             }
             if(!isset($_SESSION['giamgia'])){
