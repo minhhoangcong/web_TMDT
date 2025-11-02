@@ -383,30 +383,32 @@ let allImages = [];
 let mainImageElement = null;
 
 // Initialize image gallery on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   initImageGallery();
 });
 
 function initImageGallery() {
   // Get all thumbnail images from currently visible detail-image
-  const activeDetailImage = Array.from(detail_image).find(img => img.style.display !== 'none');
+  const activeDetailImage = Array.from(detail_image).find(
+    (img) => img.style.display !== "none"
+  );
   if (!activeDetailImage) return;
-  
-  const thumbnails = activeDetailImage.querySelectorAll('.detail-image__item');
+
+  const thumbnails = activeDetailImage.querySelectorAll(".detail-image__item");
   allImages = Array.from(thumbnails);
-  
+
   // Get main image element
-  mainImageElement = activeDetailImage.querySelector('.detail-img');
-  
+  mainImageElement = activeDetailImage.querySelector(".detail-img");
+
   // Set first image as active
   if (allImages.length > 0) {
-    allImages[0].classList.add('active');
+    allImages[0].classList.add("active");
     currentImageIndex = 0;
   }
-  
+
   // Add enhanced click handlers to thumbnails
   allImages.forEach((thumb, index) => {
-    thumb.addEventListener('click', function() {
+    thumb.addEventListener("click", function () {
       currentImageIndex = index;
       changeMainImage(this.src);
       updateActiveThumb();
@@ -417,18 +419,18 @@ function initImageGallery() {
 function changeMainImage(newSrc) {
   if (mainImageElement) {
     // Smooth transition effect
-    mainImageElement.style.opacity = '0.5';
+    mainImageElement.style.opacity = "0.5";
     setTimeout(() => {
       mainImageElement.src = newSrc;
-      mainImageElement.style.opacity = '1';
+      mainImageElement.style.opacity = "1";
     }, 150);
   }
 }
 
 function updateActiveThumb() {
-  allImages.forEach(img => img.classList.remove('active'));
+  allImages.forEach((img) => img.classList.remove("active"));
   if (allImages[currentImageIndex]) {
-    allImages[currentImageIndex].classList.add('active');
+    allImages[currentImageIndex].classList.add("active");
   }
 }
 
@@ -436,14 +438,14 @@ function nextImage() {
   if (allImages.length === 0) {
     initImageGallery();
   }
-  
+
   currentImageIndex = (currentImageIndex + 1) % allImages.length;
-  
+
   // Change main image to next thumbnail
   if (allImages[currentImageIndex]) {
     changeMainImage(allImages[currentImageIndex].src);
   }
-  
+
   updateActiveThumb();
 }
 
@@ -451,20 +453,21 @@ function prevImage() {
   if (allImages.length === 0) {
     initImageGallery();
   }
-  
-  currentImageIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
-  
+
+  currentImageIndex =
+    (currentImageIndex - 1 + allImages.length) % allImages.length;
+
   // Change main image to previous thumbnail
   if (allImages[currentImageIndex]) {
     changeMainImage(allImages[currentImageIndex].src);
   }
-  
+
   updateActiveThumb();
 }
 
 // Re-initialize when color changes
 const originalChangeColor = change_color;
-change_color = function(a) {
+change_color = function (a) {
   originalChangeColor(a);
   setTimeout(() => {
     initImageGallery();
