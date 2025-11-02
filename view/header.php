@@ -50,7 +50,7 @@
             </div>
             <div class="header-logo">
               <a href="index.php">
-                <img src="view/layout/assets/images/header-logo.svg" alt="" />
+                <img src="D:\Lập trình mạng\web_TMDT\view\layout\assets\images\UTH (100 x 56 px).svg" alt="" />
               </a>
             </div>
             <div class="header-logo-mobile">
