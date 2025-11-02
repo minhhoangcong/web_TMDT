@@ -68,8 +68,9 @@
             <div class="login-form">
               <?php
               
-               if((isset($_SESSION['code']) && $_SESSION['code']) || (isset($_SESSION['codedung']) && $_SESSION['codedung'])){
-                    echo '<form action="index.php?pg=forgetpass" method="post" class="login-form">
+         if((isset($_SESSION['code']) && $_SESSION['code']) || (isset($_SESSION['codedung']) && $_SESSION['codedung'])){
+          echo '<form action="index.php?pg=forgetpass" method="post" class="login-form">
+          ' . (function_exists('csrf_get_token') ? '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(csrf_get_token()).'">' : '') . '
                     <input name="codexn" type="text" placeholder="Mã xác nhận" value="'.$_SESSION['code'].'">
                     <div class="errform mb-unset">'.$_SESSION['errcode'].'</div>
                     <div class="login-button">
@@ -78,7 +79,8 @@
                 </form>';
                }else{
                     if(isset($_SESSION['xacnhanemail']) && $_SESSION['xacnhanemail']==1){
-                        echo '<form action="index.php?pg=forgetpass" method="post" class="login-form">
+            echo '<form action="index.php?pg=forgetpass" method="post" class="login-form">
+                ' . (function_exists('csrf_get_token') ? '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(csrf_get_token()).'">' : '') . '
                                 <div class="login-password">
                                     <input name="pass" type="password" placeholder="Mật khẩu mới"  value="'.$_SESSION['passnew'].'">
                                     <i class="fa fa-eye hien"  onclick="anmatkhau()" aria-hidden="true"></i>
@@ -94,7 +96,8 @@
                             </div>
                             </form>';
                     }else{
-                        echo '<form action="mailer.php" method="post" class="login-form">
+            echo '<form action="mailer.php" method="post" class="login-form">
+            ' . (function_exists('csrf_get_token') ? '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(csrf_get_token()).'">' : '') . '
                         <input name="emailxn" type="text" placeholder="Email" value="'.$_SESSION['emailxn'].'">
                         <div class="errform mb-unset">'.$_SESSION['erremailxn'].'</div>
                         <div class="login-button">

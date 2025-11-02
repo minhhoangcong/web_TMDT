@@ -62,9 +62,32 @@ if ($_SESSION['mat'] == 1) {
 
 // Chuyển đổi base64 thành binary và lưu file
 $outputFile = $uploadDir . DIRECTORY_SEPARATOR . $name_img;
-$imageData = str_replace('data:image/png;base64,', '', $imageData);
+$imageData = preg_replace('#^data:image/[^;]+;base64,#', '', $imageData);
 $imageData = str_replace(' ', '+', $imageData);
-$imageData = base64_decode($imageData);
+$imageData = base64_decode($imageData, true);
+if ($imageData === false) {
+    echo json_encode(['success' => false, 'message' => 'Dữ liệu ảnh không hợp lệ']);
+    exit;
+}
+
+// Enforce max size (e.g., 5MB)
+if (strlen($imageData) > 5 * 1024 * 1024) {
+    echo json_encode(['success' => false, 'message' => 'Ảnh quá lớn (tối đa 5MB)']);
+    exit;
+}
+
+// MIME validation
+$finfo = new finfo(FILEINFO_MIME_TYPE);
+$mime = $finfo->buffer($imageData);
+if ($mime !== 'image/png' && $mime !== 'image/jpeg') {
+    echo json_encode(['success' => false, 'message' => 'Định dạng ảnh không được hỗ trợ']);
+    exit;
+}
+// If JPEG, adjust extension/name
+if ($mime === 'image/jpeg') {
+    $name_img = 'AT_DESIGN_' . generateRandomNumber() . '.jpg';
+    $outputFile = $uploadDir . DIRECTORY_SEPARATOR . $name_img;
+}
 
 $bytes = @file_put_contents($outputFile, $imageData);
 if ($bytes === false) {

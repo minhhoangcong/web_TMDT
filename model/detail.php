@@ -112,9 +112,11 @@
         return pdo_query_one($sql, $id_product, $color)['id'];
     }
     function getrelatedproduct($idproduct,$idcatalog){
-        $sql="SELECT * FROM product WHERE idcatalog=".$idcatalog." AND id<>".$idproduct." ORDER BY id DESC LIMIT 4";
-        return pdo_query($sql);
-     }
+      $idproduct = intval($idproduct);
+      $idcatalog = intval($idcatalog);
+      $sql = "SELECT * FROM product WHERE idcatalog=? AND id<>? ORDER BY id DESC LIMIT 4";
+      return pdo_query($sql, $idcatalog, $idproduct);
+    }
      function getdetailproductcolor($idproduct, $color){
         $sql = "SELECT * FROM product_color WHERE id_product=? and color=?";
         return pdo_query_one($sql, $idproduct, $color);

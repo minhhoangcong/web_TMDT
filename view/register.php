@@ -73,21 +73,31 @@
                   $_SESSION['emailsignup']='';
                   $_SESSION['repasswordsignup']='';
                }
-               echo '<input name="user" type="text" placeholder="Tên tài khoản" value='.$_SESSION['usernamesignup'].'> 
-               <div class="errform mb-unset">'.$errusername.'</div>
-               <input name="email" type="text" placeholder="Email "  value='.$_SESSION['emailsignup'].'> 
-               <div class="errform mb-unset">'.$erremail.'</div>
+               $u = htmlspecialchars($_SESSION['usernamesignup'], ENT_QUOTES, 'UTF-8');
+               $e = htmlspecialchars($_SESSION['emailsignup'], ENT_QUOTES, 'UTF-8');
+               $p = htmlspecialchars($_SESSION['passwordsignup'], ENT_QUOTES, 'UTF-8');
+               $rp = htmlspecialchars($_SESSION['repasswordsignup'], ENT_QUOTES, 'UTF-8');
+               $errU = htmlspecialchars($errusername, ENT_QUOTES, 'UTF-8');
+               $errE = htmlspecialchars($erremail, ENT_QUOTES, 'UTF-8');
+               $errP = htmlspecialchars($errpassword, ENT_QUOTES, 'UTF-8');
+               $errRP = htmlspecialchars($errrepassword, ENT_QUOTES, 'UTF-8');
+               $token = htmlspecialchars(csrf_get_token(), ENT_QUOTES, 'UTF-8');
+               echo '<input name="user" type="text" placeholder="Tên tài khoản" value="'.$u.'"> 
+               <div class="errform mb-unset">'.$errU.'</div>
+               <input name="email" type="text" placeholder="Email "  value="'.$e.'"> 
+               <div class="errform mb-unset">'.$errE.'</div>
                <div class="login-password">
-                 <input name="pass" type="password" placeholder="Mật khẩu "  value='.$_SESSION['passwordsignup'].'>
+                 <input name="pass" type="password" placeholder="Mật khẩu "  value="'.$p.'">
                  <i class="fa fa-eye hien"  onclick="anmatkhau()" aria-hidden="true"></i>
                </div>
-               <div class="errform mb-unset">'.$errpassword.'</div>
+               <div class="errform mb-unset">'.$errP.'</div>
                <div class="login-password">
-                 <input name="repass" type="password" placeholder="Nhập lại mật khẩu "  value='.$_SESSION['repasswordsignup'].'>
+                 <input name="repass" type="password" placeholder="Nhập lại mật khẩu "  value="'.$rp.'">
                  <i class="fa fa-eye hien"  onclick="anmatkhau1()" aria-hidden="true"></i>
                </div>
-               <div class="errform mb-unset">'.$errrepassword.'</div>';
+               <div class="errform mb-unset">'.$errRP.'</div>';
               ?>
+              <input type="hidden" name="csrf_token" value="<?=$token?>" />
               
               <div class="login-button">
                 <button name="btn_register" class="login-btn">Đăng ký</button>

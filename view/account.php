@@ -64,7 +64,8 @@
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
         <a href="#">Áo thun</a>
       </div>
-      <form action="index.php?pg=account" method="post" enctype="multipart/form-data">
+  <form action="index.php?pg=account" method="post" enctype="multipart/form-data">
+  <?php if (function_exists('csrf_get_token')) { echo '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(csrf_get_token()).'">'; } ?>
       <section class="account">
         <div class="container">
           <h2 class="title-mobile">Hồ sơ của tôi</h2>

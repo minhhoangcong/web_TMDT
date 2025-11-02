@@ -123,6 +123,30 @@ This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 In
 
 ---
 
+## SMTP configuration (email)
+
+To send emails (order confirmation, password reset), configure SMTP via environment variables instead of hardcoding credentials:
+
+- SMTP_HOST (default: smtp.gmail.com)
+- SMTP_USER
+- SMTP_PASS
+- SMTP_SECURE (ssl or tls; default: ssl)
+- SMTP_PORT (default: 465)
+
+On Windows (cmd):
+
+```
+setx SMTP_HOST smtp.gmail.com
+setx SMTP_USER your_email@example.com
+setx SMTP_PASS your_app_password
+setx SMTP_SECURE ssl
+setx SMTP_PORT 465
+```
+
+Restart Apache after setting variables. The app will warn if SMTP is not configured.
+
+---
+
 <details>
 <summary><strong>Phiên bản Tiếng Việt (Nhấn để Mở rộng)</strong></summary>
 

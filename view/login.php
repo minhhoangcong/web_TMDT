@@ -71,15 +71,20 @@
                   $_SESSION['usernamelogin']='';
                   $_SESSION['passwordlogin']='';
                }
-                echo '<input name="username" type="text" placeholder="Tên tài khoản" value='.$_SESSION['usernamelogin'].'> 
-                <div class="errform mb-unset">'.$errusername.'</div>
+                $valUser = htmlspecialchars($_SESSION['usernamelogin'], ENT_QUOTES, 'UTF-8');
+                $errU = htmlspecialchars($errusername, ENT_QUOTES, 'UTF-8');
+                $errP = htmlspecialchars($errpassword, ENT_QUOTES, 'UTF-8');
+                $token = htmlspecialchars(csrf_get_token(), ENT_QUOTES, 'UTF-8');
+                echo '<input name="username" type="text" placeholder="Tên tài khoản" value="'.$valUser.'"> 
+                <div class="errform mb-unset">'.$errU.'</div>
   
                 <div class="login-password">
-                  <input name="password" type="password" placeholder="Mật khẩu" value='.$_SESSION['passwordlogin'].' >
+                  <input name="password" type="password" placeholder="Mật khẩu" value="'.htmlspecialchars($_SESSION['passwordlogin'], ENT_QUOTES, 'UTF-8').'" >
                   <i class="fa fa-eye hien"  onclick="anmatkhau()" aria-hidden="true"></i>
                 </div>
-                <div class="errform mb-unset">'.$errpassword.'</div>';
+                <div class="errform mb-unset">'.$errP.'</div>';
               ?>
+              <input type="hidden" name="csrf_token" value="<?=$token?>" />
               
 
               <a href="index.php?pg=forgetpass"><div class="form-group-center">Quên mật khẩu</div></a>

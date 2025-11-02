@@ -1,4 +1,19 @@
 <?php
+   // Harden session cookies before starting the session
+   $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+   if (PHP_VERSION_ID >= 70300) {
+      @session_set_cookie_params([
+         'lifetime' => 0,
+         'path' => '/',
+         'domain' => '',
+         'secure' => $isSecure,
+         'httponly' => true,
+         'samesite' => 'Lax'
+      ]);
+   } else {
+      // Best-effort for older PHP: append samesite to path
+      @session_set_cookie_params(0, '/; samesite=Lax', '', $isSecure, true);
+   }
    session_start();
    ob_start();
 
@@ -131,8 +146,6 @@
                      $_SESSION['filterprice'].=$_GET['price'];
                   }
                }
-               
-               
                for($i=0;$i<strlen($_SESSION['filterprice']);$i++){
                   switch ($_SESSION['filterprice'][$i]) {
                      case '1':
@@ -141,7 +154,6 @@
                         foreach ($productprice1 as $item) {
                            if($item['price']>=300000){
                               unset($productprice1[$j]);
-                           
                            }
                            $j++;
                         }
@@ -180,10 +192,6 @@
                         }
                         $_SESSION['producttemp']=$_SESSION['producttemp']+$productprice4;
                         break;
-                     
-                     // default:
-                     //    # code...
-                     //    break;
                   }
                }
             }
@@ -458,6 +466,14 @@
             include_once "view/cart.php";
             break;
          case 'addtocart':
+            // CSRF protection for add-to-cart
+            if(isset($_POST['addtocart'])){
+               if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                  $_SESSION['payment_error'] = 'Yêu cầu không hợp lệ (CSRF)';
+                  header('location: index.php?pg=cart');
+                  exit();
+               }
+            }
             if(isset($_SESSION['product_checkout']) && !isset($_SESSION['giohang'])){
                $_SESSION['giohang']=[];
                $_SESSION['giohang']=$_SESSION['product_checkout'];
@@ -503,6 +519,14 @@
             }
             break;
          case 'checkout':
+            // CSRF guard for buy-now selection
+            if(isset($_POST['btndetailcheckout'])){
+               if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                  $_SESSION['payment_error'] = 'Yêu cầu không hợp lệ (CSRF)';
+                  header('location: index.php?pg=checkout');
+                  exit();
+               }
+            }
             if(!isset($_SESSION['name'])){
                $_SESSION['namenhan']='';
                $_SESSION['emailnhan']='';
@@ -557,6 +581,12 @@
                $_SESSION['magiamgia']='';
             }
             if(isset($_POST['btngiamgia'])){
+               // CSRF protection for applying voucher
+               if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                  $_SESSION['payment_error'] = 'Yêu cầu không hợp lệ (CSRF)';
+                  header('location: index.php?pg=checkout');
+                  exit();
+               }
                $_SESSION['magiamgia']=$_POST['magiamgia'];
                $_SESSION['btngiamgia']=1;
                
@@ -633,6 +663,12 @@
                   $user=getuser($_SESSION['iduser']);
                }
                if(isset($_POST['thanhtoan'])){
+                  // CSRF protection for checkout submission (logged-in)
+                  if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                     $_SESSION['payment_error'] = 'Yêu cầu không hợp lệ (CSRF)';
+                     header('location: index.php?pg=checkout');
+                     exit();
+                  }
                   // Prefer selected checkout items if present
                   $checkoutItems = [];
                   if (isset($_SESSION['product_checkout']) && is_array($_SESSION['product_checkout']) && count($_SESSION['product_checkout'])>0) {
@@ -811,7 +847,13 @@
                
 
             }else{
-               if(isset($_POST['thanhtoan'])){          
+               if(isset($_POST['thanhtoan'])){  
+                  // CSRF protection for checkout submission (guest)
+                  if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                     $_SESSION['payment_error'] = 'Yêu cầu không hợp lệ (CSRF)';
+                     header('location: index.php?pg=checkout');
+                     exit();
+                  }
                   $tongtien=0;
                   // Prefer selected checkout items if present
                   $checkoutItems = [];
@@ -1018,6 +1060,10 @@
             $errpassword='';
             $errusername='';
             if(isset($_POST['login'])){
+               // CSRF protection
+               if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                  $errusername='*Yêu cầu không hợp lệ (CSRF)';
+               } else {
                $_SESSION['usernamelogin']=$_POST['username'];
                $_SESSION['passwordlogin']=$_POST['password'];
                if($_POST['username']==''){
@@ -1038,20 +1084,19 @@
                if($_POST['password']==''){
                   $errpassword='*Bạn chưa nhập mật khẩu';
                }else{
-                  if(strlen($_POST['password'])<6){
-                     $errpassword='*Mật khẩu phải có ít nhất 6 ký tự';
-                  }else{
-                     if(is_array(getlogin($_SESSION['usernamelogin'],$_SESSION['passwordlogin'])) && getrole($_SESSION['usernamelogin'],$_SESSION['passwordlogin'])==0){
+                  // Cho phép đăng nhập với mật khẩu ngắn (tài khoản cũ), chỉ kiểm tra đúng/sai
+                  if(is_array(getlogin($_SESSION['usernamelogin'],$_SESSION['passwordlogin'])) && getrole($_SESSION['usernamelogin'],$_SESSION['passwordlogin'])==0){
    
-                     }else{
-                        $errpassword='*Mật khẩu không đúng';
-                     }
+                  }else{
+                     $errpassword='*Mật khẩu không đúng';
                   }
                }
                
                $username=$_POST['username'];
                $password=$_POST['password'];
                if(is_array(getlogin($username,$password)) && getrole($username,$password)==0){
+                  // Regenerate session id on successful login (prevent fixation)
+                  if (function_exists('session_regenerate_id')) { session_regenerate_id(true); }
                   unset($_SESSION['usernamelogin']);
                   unset($_SESSION['passwordlogin']);
                   $_SESSION['username']=$username;
@@ -1082,6 +1127,7 @@
                }else{
                   
                   if(getrole($username,$password)==1){
+                     if (function_exists('session_regenerate_id')) { session_regenerate_id(true); }
                      $_SESSION['role']=1;
                      $_SESSION['loginuser']=0;
                      header('location: view/admin/index.php');
@@ -1089,6 +1135,7 @@
                      $_SESSION['loginuser']=-1;
                   }
                   
+               }
                }
             }
             include_once "view/login.php";
@@ -1105,6 +1152,9 @@
             $erremail='';
             $errrepassword='';
             if(isset($_POST['btn_register'])){
+               if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                  $errusername='*Yêu cầu không hợp lệ (CSRF)';
+               } else {
                $_SESSION['usernamesignup']=$_POST['user'];
                $_SESSION['passwordsignup']=$_POST['pass'];
                $_SESSION['emailsignup']=$_POST['email'];
@@ -1157,6 +1207,7 @@
                   creatuser($user,$pass, '',$email,'','','','',0,'',1);
                   header('location: index.php?pg=login');
                }
+               }
             }
             include_once "view/register.php";
             break;
@@ -1186,8 +1237,11 @@
                $_SESSION['codedung']=$_SESSION['code'];
                $_SESSION['code']='';
             }
-
             if(isset($_POST['nhapcode'])){
+               // CSRF protection for code submission
+               if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                  $_SESSION['errcode']='*Yêu cầu không hợp lệ (CSRF)';
+               } else {
                $_SESSION['code']=$_POST['codexn'];
                if($_SESSION['code']==''){
                   $_SESSION['errcode']='*Bạn chưa nhập mã xác nhận email';
@@ -1200,8 +1254,13 @@
                      $_SESSION['xacnhanemail']=1;
                   }
                }
+               }
             }
             if(isset($_POST['nhappass'])){
+               // CSRF protection for new password submission
+               if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                  $_SESSION['errpassnew']='*Yêu cầu không hợp lệ (CSRF)';
+               } else {
                $_SESSION['passnew']=$_POST['pass'];
                if($_SESSION['passnew']==''){
                   $_SESSION['errpassnew']='*Bạn chưa nhập mặt khẩu mới';
@@ -1225,6 +1284,7 @@
                      }
                   }
                }
+               }
             }
             if($_SESSION['errcode']=='' && $_SESSION['errpassnew']=='' && $_SESSION['errrepassnew']=='' && isset($_SESSION['repassnew']) && $_SESSION['repassnew']){
                unset($_SESSION['passnew']);
@@ -1235,6 +1295,11 @@
             include_once "view/forgetpass.php";
             break;
          case 'comment':
+               if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                  $_SESSION['err_comment']=1; // treat as not logged in/invalid request
+                  header('location: index.php?pg=detail&id='.(int)($_POST['id_product'] ?? 0));
+                  exit();
+               }
             $_SESSION['err_comment']=0;
             if(isset($_POST['send'])){
                $id_product=$_POST['id_product'];
@@ -1266,70 +1331,75 @@
 
             if(isset($_SESSION['loginuser']) && isset($_SESSION['role']) && $_SESSION['loginuser']==0 && $_SESSION['role']==0){
                if(isset($_POST['update_account'])){
-                  $name=$_POST['name'];
-                  $user=$_POST['user'];
-                  $email=$_POST['email'];
-                  $pass=$_POST['pass'];
-                  $sdt=$_POST['sdt'];
-                  $ngaysinh=$_POST['ngaysinh'];
-                  $diachi=$_POST['diachi'];
-                  $img=$_FILES['img']['name'];
-                  $tableuser=getusertable();
-                  if($user==''){
-                     $erruser="*Tên đăng nhập không được để trống";
-                  }else{
-                     $kt=0;
-                     foreach ($tableuser as $item) {
-                        if($item['user']==$user && $user!=$_SESSION['username']){
-                           $kt=1;
-                           break;
-                        }
-                     }
-                     if($kt==1){
-                        $erruser="*Tên đăng nhập này đã tồn tại";
-                     }
-                  }
-                  if($email==''){
-                     $erremail="*Email không được để trống";
-                  }else{
-                     if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                        $erremail="*Email không hợp lệ";
+                  if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                     $erremail='*Yêu cầu không hợp lệ (CSRF)';
+                  } else {
+                     $name=$_POST['name'];
+                     $user=$_POST['user'];
+                     $email=$_POST['email'];
+                     $pass=$_POST['pass'];
+                     $sdt=$_POST['sdt'];
+                     $ngaysinh=$_POST['ngaysinh'];
+                     $diachi=$_POST['diachi'];
+                     $img=$_FILES['img']['name'];
+                     $tableuser=getusertable();
+                     if($user==''){
+                        $erruser="*Tên đăng nhập không được để trống";
                      }else{
                         $kt=0;
                         foreach ($tableuser as $item) {
-                           if($item['email']==$email && $email!=getlogin($_SESSION['username'], $_SESSION['password'])['email']){
+                           if($item['user']==$user && $user!=$_SESSION['username']){
                               $kt=1;
                               break;
                            }
                         }
                         if($kt==1){
-                           $erremail="*Email này đã tồn tại";
+                           $erruser="*Tên đăng nhập này đã tồn tại";
                         }
                      }
-                  }
-                  
-                  
-                  if($erremail=='' && $erruser==''){
-                     if($img!=''){
-                        $target_file = PATH_IMG . basename($img);
-                        move_uploaded_file($_FILES['img']["tmp_name"], $target_file);
-                        if($_POST['hinhcu']!=''){
-                           $hinhcu=PATH_IMG.$_POST['hinhcu'];
-                           delimghost($hinhcu);
-                        }
-                        update_user($_SESSION['iduser'],$user,$pass, $name,$email,$sdt,0,$ngaysinh,$diachi,0,$img,1);
+                     if($email==''){
+                        $erremail="*Email không được để trống";
                      }else{
-                        update_user($_SESSION['iduser'],$user,$pass, $name,$email,$sdt,0,$ngaysinh,$diachi,0,$_POST['hinhcu'],1);
-   
+                        if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+                           $erremail="*Email không hợp lệ";
+                        }else{
+                           $kt=0;
+                           foreach ($tableuser as $item) {
+                              if($item['email']==$email && $email!=getlogin($_SESSION['username'], $_SESSION['password'])['email']){
+                                 $kt=1;
+                                 break;
+                              }
+                           }
+                           if($kt==1){
+                              $erremail="*Email này đã tồn tại";
+                           }
+                        }
+                     }
+                     
+                     if($erremail=='' && $erruser==''){
+                        if($img!=''){
+                           $target_file = PATH_IMG . basename($img);
+                           move_uploaded_file($_FILES['img']["tmp_name"], $target_file);
+                           if($_POST['hinhcu']!=''){
+                              $hinhcu=PATH_IMG.$_POST['hinhcu'];
+                              delimghost($hinhcu);
+                           }
+                           update_user($_SESSION['iduser'],$user,$pass, $name,$email,$sdt,0,$ngaysinh,$diachi,0,$img,1);
+                        }else{
+                           update_user($_SESSION['iduser'],$user,$pass, $name,$email,$sdt,0,$ngaysinh,$diachi,0,$_POST['hinhcu'],1);
+                        }
                      }
                   }
-                  
                }
                if(isset($_POST['del_account'])){
-                  deluser($_SESSION['iduser']);
-                  if($_POST['hinhcu']!=''){
-                     $hinhcu=PATH_IMG.$_POST['hinhcu'];
-                     delimghost($hinhcu);
+                  if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+                     $erremail='*Yêu cầu không hợp lệ (CSRF)';
+                  } else {
+                     deluser($_SESSION['iduser']);
+                     if($_POST['hinhcu']!=''){
+                        $hinhcu=PATH_IMG.$_POST['hinhcu'];
+                        delimghost($hinhcu);
+                     }
                   }
                }
                if(isset($_GET['id']) && $_GET['id']){
@@ -1347,7 +1417,7 @@
             }
             
             break;
-         
+
          case 'logoutuser':
 
             

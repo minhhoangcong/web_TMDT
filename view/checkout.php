@@ -207,6 +207,7 @@
         <a href="#">Áo thun</a>
       </div>
     <form action="index.php?pg=checkout" method="post">
+      <?php if (function_exists('csrf_get_token')) { echo '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(csrf_get_token()).'">'; } ?>
       <section class="checkout">
        
         <div class="container">

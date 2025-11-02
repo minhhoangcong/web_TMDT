@@ -3,36 +3,24 @@
 
 
 
-    function getlogin($user,$pass){
-        $sql="SELECT * FROM users WHERE user=? AND pass=?";
-        $kq= pdo_query_one($sql, $user, $pass);
-        if(is_array($kq) && $kq['kichhoat']==1){
-            return $kq;
-        }else
-            return -1;
-            
-     }
-
-     function getrole($user,$pass){
-      $sql="SELECT * FROM users WHERE user=? AND pass=?";
-      $kq= pdo_query_one($sql, $user, $pass);
-      if(is_array($kq) && $kq['kichhoat']==1){
-          return $kq['role'];
-      }else
-          return -1;
-          
+  function getlogin($user,$pass){
+    $sql="SELECT * FROM users WHERE user=? AND pass=?";
+    return pdo_query_one($sql, $user, $pass);
    }
 
-     function getidusercu($user,$pass){
-      $sql="SELECT * FROM users WHERE user=? AND pass=?";
-      $kq= pdo_query_one($sql, $user, $pass);
-      if(is_array($kq)){
-          extract($kq);
-          return $id;
-      }else
-          return -1;
-          
-      }
+   function getrole($user,$pass){
+    $row = getlogin($user, $pass);
+    if (is_array($row)) return isset($row['role']) ? intval($row['role']) : -1;
+    return -1;
+   }
+
+   function getidusercu($user,$pass){
+    $row = getlogin($user, $pass);
+    if(is_array($row)){
+      return isset($row['id']) ? intval($row['id']) : -1;
+    }else
+      return -1;
+    }
 
 
 
@@ -56,10 +44,10 @@ function creatpass() {
    }
    return $username;
  }
- function creatuser($user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat){
-   $sql = "INSERT INTO users (user,pass, name,email,sdt,gioitinh,ngaysinh,diachi,role,img,kichhoat)
-   VALUES (?,?,?,?,?,?,?,?,?,?,?)";      
-   pdo_execute($sql, $user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat);
+function creatuser($user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat){
+  $sql = "INSERT INTO users (user,pass, name,email,sdt,gioitinh,ngaysinh,diachi,role,img,kichhoat)
+  VALUES (?,?,?,?,?,?,?,?,?,?,?)";      
+  pdo_execute($sql, $user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat);
 }
 
 function update_user($id,$user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat){

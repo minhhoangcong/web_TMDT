@@ -148,6 +148,7 @@
               </div>
               <div class="detail-btn">
                 <form id="checkoutdung" action="index.php?pg=checkout" method="post">
+                  <?php if (function_exists('csrf_get_token')) { echo '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(csrf_get_token()).'">'; } ?>
                   <input  type="hidden" name="soluong_checkout" value=1>
                   <input type="hidden" name="id_checkout" value=<?=$detail['id']?>>
                   <button name="btndetailcheckout" class="detail-button">Mua ngay</button>
@@ -156,6 +157,7 @@
               </div>
               <div class="detail-btn">
                 <form id="cartdung" class="addtocart" action="index.php?pg=addtocart" method="post">
+                  <?php if (function_exists('csrf_get_token')) { echo '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(csrf_get_token()).'">'; } ?>
                   <input type="hidden" name="id" value=<?=$detail['id']?>>
                   <input  type="hidden" name="img" value="">
                   <input type="hidden" name="name" value="<?=$name?>">
@@ -285,7 +287,8 @@
                 </form> -->
   
               </div>
-              <form class="div-comment" action="index.php?pg=comment" method="post">
+      <form class="div-comment" action="index.php?pg=comment" method="post">
+        <?php if (function_exists('csrf_get_token')) { echo '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(csrf_get_token()).'">'; } ?>
                     <input id="selectedRating" type="hidden" name="rate">
                     <input type="hidden" name="id_product" value=<?=$detail['id']?>>
                     <input type="text" name="comment" class="comment" placeholder="Bình luận...">

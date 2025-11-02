@@ -14,6 +14,10 @@ use PHPMailer\PHPMailer\Exception;
 require 'PHPMailer-master/src/Exception.php';
 require 'PHPMailer-master/src/PHPMailer.php';
 require 'PHPMailer-master/src/SMTP.php';
+// CSRF helpers
+if (file_exists(__DIR__ . '/model/global.php')) {
+    include_once __DIR__ . '/model/global.php';
+}
  
 //Create an instance; passing `true` enables exceptions
 if (isset($_POST["sendmail"]) && isset($_SESSION['giohang'])) {
@@ -21,15 +25,20 @@ if (isset($_POST["sendmail"]) && isset($_SESSION['giohang'])) {
  
     $mail = new PHPMailer(true);
  
-    //Server settings
+    //Server settings (read from environment variables, do not hardcode secrets)
     $mail->isSMTP();                              //Send using SMTP
     $mail->CharSet  = "utf-8";
-    $mail->Host       = 'smtp.gmail.com';       //Set the SMTP server to send through
+    $mail->Host       = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
     $mail->SMTPAuth   = true;             //Enable SMTP authentication
-    $mail->Username   = 'zstyleshopvn@gmail.com';   //SMTP write your email
-    $mail->Password   = 'sxdl zwmw frep mzwh';      //SMTP password
-    $mail->SMTPSecure = 'ssl';            //Enable implicit SSL encryption
-    $mail->Port       = 465;                                    
+    $mail->Username   = getenv('SMTP_USER') ?: '';
+    $mail->Password   = getenv('SMTP_PASS') ?: '';
+    $mail->SMTPSecure = getenv('SMTP_SECURE') ?: 'ssl';
+    $mail->Port       = intval(getenv('SMTP_PORT') ?: '465');                                    
+
+    if ($mail->Username === '' || $mail->Password === '') {
+        echo "<script>alert('Email chưa được cấu hình SMTP. Vui lòng đặt biến môi trường SMTP_USER/SMTP_PASS.');document.location.href='index.php?pg=account';</script>";
+        exit;
+    }
  
     //Recipients
     $mail->setFrom('zstyleshopvn@gmail.com', 'ZStyle' );  // Sender Email and name
@@ -88,14 +97,10 @@ if (isset($_POST["sendmail"]) && isset($_SESSION['giohang'])) {
     }
 
     $account='';
-    if(isset($_SESSION['username']) && $_SESSION['username'] && isset($_SESSION['password']) && $_SESSION['password']){
+    if(isset($_SESSION['username']) && $_SESSION['username']){
         $account='<tbody>
                     <td colspan="2" style="text-align:left"><strong>Username</strong> </td>
-                    <td colspan="6" style="text-align:left">'.$_SESSION['username'].'</td>
-                </tbody>
-                <tbody>
-                    <td colspan="2" style="text-align:left"><strong>Password</strong> </td>
-                    <td colspan="6" style="text-align:left"> '.$_SESSION['password'].'</td>
+                    <td colspan="6" style="text-align:left">'.htmlspecialchars($_SESSION['username'], ENT_QUOTES, 'UTF-8').'</td>
                 </tbody>';
     }
 
@@ -303,6 +308,12 @@ function creatcode() {
   }
 
 if (isset($_POST["guima"])) {
+    // CSRF guard for email verification request
+    if (!function_exists('csrf_validate') || !csrf_validate($_POST['csrf_token'] ?? '')) {
+        $_SESSION['erremailxn'] = '*Yêu cầu không hợp lệ (CSRF)';
+        echo "<script>document.location.href='index.php?pg=forgetpass';</script>";
+        exit;
+    }
     $_SESSION['erremailxn']='';
     $_SESSION['emailxn']=$_POST["emailxn"];
     if($_POST['emailxn']==''){
@@ -334,14 +345,18 @@ if (isset($_POST["guima"])) {
         $mail = new PHPMailer(true);
  
         //Server settings
-        $mail->isSMTP();                              //Send using SMTP
+        $mail->isSMTP();
         $mail->CharSet  = "utf-8";
-        $mail->Host       = 'smtp.gmail.com';       //Set the SMTP server to send through
-        $mail->SMTPAuth   = true;             //Enable SMTP authentication
-        $mail->Username   = 'myhong11a32004@gmail.com';   //SMTP write your email
-        $mail->Password   = 'zhuv uzbw gnrd ziop';      //SMTP password
-        $mail->SMTPSecure = 'ssl';            //Enable implicit SSL encryption
-        $mail->Port       = 465;                                    
+        $mail->Host       = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = getenv('SMTP_USER') ?: '';
+        $mail->Password   = getenv('SMTP_PASS') ?: '';
+        $mail->SMTPSecure = getenv('SMTP_SECURE') ?: 'ssl';
+        $mail->Port       = intval(getenv('SMTP_PORT') ?: '465');                                   
+        if ($mail->Username === '' || $mail->Password === '') {
+            echo "<script>alert('Email chưa được cấu hình SMTP. Vui lòng đặt biến môi trường SMTP_USER/SMTP_PASS.');document.location.href='index.php?pg=forgetpass';</script>";
+            exit;
+        }
      
         //Recipients
         $mail->setFrom('zstyleshopvn@gmail.com', 'ZStyle' );  // Sender Email and name
