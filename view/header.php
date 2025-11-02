@@ -50,7 +50,7 @@
             </div>
             <div class="header-logo">
               <a href="index.php">
-                <img src="D:\Lập trình mạng\web_TMDT\view\layout\assets\images\UTH (100 x 56 px).svg" alt="" />
+                <img src="view/layout/assets/images/header-logo.svg" alt="UTHshop logo - Thương hiệu thời trang sinh viên Đại học Giao thông Vận tải TPHCM" />
               </a>
             </div>
             <div class="header-logo-mobile">
