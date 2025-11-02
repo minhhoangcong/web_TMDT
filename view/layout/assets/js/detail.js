@@ -70,7 +70,9 @@ var cartdung = document.getElementById("cartdung");
 var cartsai = document.getElementById("cartsai");
 
 // Lấy input soluong_checkout by name
-var soluongCheckoutInput = checkoutdung ? checkoutdung.querySelector('input[name="soluong_checkout"]') : null;
+var soluongCheckoutInput = checkoutdung
+  ? checkoutdung.querySelector('input[name="soluong_checkout"]')
+  : null;
 
 // Helper function để update checkout input
 function updateCheckoutSoluong(value) {
@@ -153,10 +155,10 @@ function change_img(a) {
     }
   }
   main_img[ind].src = a.src;
-  
+
   // Update gallery navigation state
-  if (typeof allImages !== 'undefined' && allImages.length > 0) {
-    const index = allImages.findIndex(img => img.src === a.src);
+  if (typeof allImages !== "undefined" && allImages.length > 0) {
+    const index = allImages.findIndex((img) => img.src === a.src);
     if (index !== -1) {
       currentImageIndex = index;
       updateActiveThumb();
@@ -412,7 +414,7 @@ function initImageGallery() {
     allImages[0].classList.add("active");
     currentImageIndex = 0;
   }
-  
+
   // Don't add new event listeners - use existing onclick="change_img(this)"
 }
 
