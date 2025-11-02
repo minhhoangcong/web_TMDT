@@ -401,7 +401,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function initImageGallery() {
   // Check if detail_image exists
-  if (typeof detail_image === "undefined" || !detail_image || detail_image.length === 0) {
+  if (
+    typeof detail_image === "undefined" ||
+    !detail_image ||
+    detail_image.length === 0
+  ) {
     return;
   }
 
@@ -409,13 +413,13 @@ function initImageGallery() {
   let activeDetailImage = Array.from(detail_image).find(
     (img) => img.style.display !== "none"
   );
-  
+
   if (!activeDetailImage && detail_image.length > 0) {
     // If no active found, use first one
     detail_image[0].style.display = "flex";
     activeDetailImage = detail_image[0];
   }
-  
+
   if (!activeDetailImage) {
     return; // Still no active image, exit
   }
@@ -446,11 +450,11 @@ function nextImage() {
   if (allImages.length === 0) {
     initImageGallery();
   }
-  
+
   if (allImages.length === 0) return; // No images to navigate
 
   currentImageIndex = (currentImageIndex + 1) % allImages.length;
-  
+
   // Cập nhật ảnh lớn trực tiếp
   var ind = 0;
   for (let i = 0; i < detail_image.length; i++) {
@@ -459,7 +463,7 @@ function nextImage() {
       break;
     }
   }
-  
+
   if (main_img[ind] && allImages[currentImageIndex]) {
     main_img[ind].src = allImages[currentImageIndex].src;
     updateActiveThumb();
@@ -470,11 +474,12 @@ function prevImage() {
   if (allImages.length === 0) {
     initImageGallery();
   }
-  
+
   if (allImages.length === 0) return; // No images to navigate
 
-  currentImageIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
-  
+  currentImageIndex =
+    (currentImageIndex - 1 + allImages.length) % allImages.length;
+
   // Cập nhật ảnh lớn trực tiếp
   var ind = 0;
   for (let i = 0; i < detail_image.length; i++) {
@@ -483,7 +488,7 @@ function prevImage() {
       break;
     }
   }
-  
+
   if (main_img[ind] && allImages[currentImageIndex]) {
     main_img[ind].src = allImages[currentImageIndex].src;
     updateActiveThumb();
@@ -491,9 +496,9 @@ function prevImage() {
 }
 
 // Reinitialize gallery when color changes (wrap existing function)
-(function() {
+(function () {
   const originalChangeColor = window.change_color;
-  window.change_color = function(a) {
+  window.change_color = function (a) {
     if (originalChangeColor) {
       originalChangeColor.call(this, a);
     }
