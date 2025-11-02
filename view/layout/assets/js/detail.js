@@ -12,15 +12,18 @@ var detail_image = document.getElementsByClassName("detail-image");
 var detail_color = document.getElementsByClassName("detail-circle");
 var addtocart_elements = document.getElementsByClassName("addtocart");
 
-// Kiểm tra elements tồn tại trước khi sử dụng
-if (
-  addtocart_elements.length > 0 &&
-  addtocart_elements[0].children.length > 5
-) {
-  var imgcart = addtocart_elements[0].children[1];
-  var colorcart = addtocart_elements[0].children[3];
-  var sizecart = addtocart_elements[0].children[4];
-  var soluongcart = addtocart_elements[0].children[5];
+// Lấy form elements by name thay vì by index để tránh lỗi
+var imgcart = null;
+var colorcart = null;
+var sizecart = null;
+var soluongcart = null;
+
+if (addtocart_elements.length > 0) {
+  var form = addtocart_elements[0];
+  imgcart = form.querySelector('input[name="img"]');
+  colorcart = form.querySelector('input[name="color"]');
+  sizecart = form.querySelector('input[name="size"]');
+  soluongcart = form.querySelector('input[name="soluong"]');
 }
 
 if (detail_color.length > 0) {
@@ -65,6 +68,16 @@ var checkoutdung = document.getElementById("checkoutdung");
 var checkoutsai = document.getElementById("checkoutsai");
 var cartdung = document.getElementById("cartdung");
 var cartsai = document.getElementById("cartsai");
+
+// Lấy input soluong_checkout by name
+var soluongCheckoutInput = checkoutdung ? checkoutdung.querySelector('input[name="soluong_checkout"]') : null;
+
+// Helper function để update checkout input
+function updateCheckoutSoluong(value) {
+  if (soluongCheckoutInput) {
+    soluongCheckoutInput.value = value;
+  }
+}
 
 function change_color(a) {
   if (!detail_color || !detail_image || !colorcart || !imgcart) return;
@@ -112,9 +125,7 @@ function change_color(a) {
     checkoutdung.style.display = "block";
     cartsai.style.display = "none";
     checkoutsai.style.display = "none";
-    document.getElementsByClassName(
-      "detail-btn"
-    )[0].children[0].children[0].value = soluong.value;
+    updateCheckoutSoluong(soluong.value);
     alert.innerHTML = "Còn hàng";
     alert.style.color = "#46694f";
   } else {
@@ -142,6 +153,15 @@ function change_img(a) {
     }
   }
   main_img[ind].src = a.src;
+  
+  // Update gallery navigation state
+  if (typeof allImages !== 'undefined' && allImages.length > 0) {
+    const index = allImages.findIndex(img => img.src === a.src);
+    if (index !== -1) {
+      currentImageIndex = index;
+      updateActiveThumb();
+    }
+  }
 }
 
 var detailInputElements = document.getElementsByClassName("detail-input");
@@ -177,9 +197,7 @@ function update_soluong() {
     checkoutdung.style.display = "block";
     cartsai.style.display = "none";
     checkoutsai.style.display = "none";
-    document.getElementsByClassName(
-      "detail-btn"
-    )[0].children[0].children[0].value = soluong.value;
+    updateCheckoutSoluong(soluong.value);
     alert.innerHTML = "Còn hàng";
     alert.style.color = "#46694f";
   } else {
@@ -204,9 +222,7 @@ function minus() {
     checkoutdung.style.display = "block";
     cartsai.style.display = "none";
     checkoutsai.style.display = "none";
-    document.getElementsByClassName(
-      "detail-btn"
-    )[0].children[0].children[0].value = soluong.value;
+    updateCheckoutSoluong(soluong.value);
     alert.innerHTML = "Còn hàng";
     alert.style.color = "#46694f";
   } else {
@@ -229,9 +245,7 @@ function plus() {
     checkoutdung.style.display = "block";
     cartsai.style.display = "none";
     checkoutsai.style.display = "none";
-    document.getElementsByClassName(
-      "detail-btn"
-    )[0].children[0].children[0].value = soluong.value;
+    updateCheckoutSoluong(soluong.value);
     alert.innerHTML = "Còn hàng";
     alert.style.color = "#46694f";
   } else {
@@ -286,14 +300,7 @@ function change_size(a) {
     if (checkoutdung) checkoutdung.style.display = "block";
     if (cartsai) cartsai.style.display = "none";
     if (checkoutsai) checkoutsai.style.display = "none";
-    var btnWrap = document.getElementsByClassName("detail-btn");
-    if (
-      btnWrap.length &&
-      btnWrap[0].children[0] &&
-      btnWrap[0].children[0].children[0]
-    ) {
-      btnWrap[0].children[0].children[0].value = soluong.value;
-    }
+    updateCheckoutSoluong(soluong.value);
     if (alert) {
       alert.innerHTML = "Còn hàng";
       alert.style.color = "#46694f";
@@ -405,26 +412,8 @@ function initImageGallery() {
     allImages[0].classList.add("active");
     currentImageIndex = 0;
   }
-
-  // Add enhanced click handlers to thumbnails
-  allImages.forEach((thumb, index) => {
-    thumb.addEventListener("click", function () {
-      currentImageIndex = index;
-      changeMainImage(this.src);
-      updateActiveThumb();
-    });
-  });
-}
-
-function changeMainImage(newSrc) {
-  if (mainImageElement) {
-    // Smooth transition effect
-    mainImageElement.style.opacity = "0.5";
-    setTimeout(() => {
-      mainImageElement.src = newSrc;
-      mainImageElement.style.opacity = "1";
-    }, 150);
-  }
+  
+  // Don't add new event listeners - use existing onclick="change_img(this)"
 }
 
 function updateActiveThumb() {
@@ -441,12 +430,10 @@ function nextImage() {
 
   currentImageIndex = (currentImageIndex + 1) % allImages.length;
 
-  // Change main image to next thumbnail
+  // Use original change_img function for compatibility
   if (allImages[currentImageIndex]) {
-    changeMainImage(allImages[currentImageIndex].src);
+    change_img(allImages[currentImageIndex]);
   }
-
-  updateActiveThumb();
 }
 
 function prevImage() {
@@ -457,12 +444,10 @@ function prevImage() {
   currentImageIndex =
     (currentImageIndex - 1 + allImages.length) % allImages.length;
 
-  // Change main image to previous thumbnail
+  // Use original change_img function for compatibility
   if (allImages[currentImageIndex]) {
-    changeMainImage(allImages[currentImageIndex].src);
+    change_img(allImages[currentImageIndex]);
   }
-
-  updateActiveThumb();
 }
 
 // Re-initialize when color changes

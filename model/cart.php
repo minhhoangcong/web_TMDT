@@ -28,12 +28,14 @@
 
     function getcolor($id_color){
         $sql="SELECT * FROM color where id=?";
-        return pdo_query_one($sql, $id_color)['color'];
+        $result = pdo_query_one($sql, $id_color);
+        return $result && isset($result['color']) ? $result['color'] : '';
     }
 
     function getsize($id_size){
         $sql="SELECT * FROM size where id=?";
-        return pdo_query_one($sql, $id_size)['ma_size'];
+        $result = pdo_query_one($sql, $id_size);
+        return $result && isset($result['ma_size']) ? $result['ma_size'] : '';
     }
 
     function getidcolor($color){
