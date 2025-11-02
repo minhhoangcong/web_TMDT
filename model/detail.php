@@ -34,7 +34,11 @@
     
             if($i==1){
                 $html_img.='<div class="detail-image">
-                '.$img.'
+                <div class="detail-img-wrapper">
+                  '.$img.'
+                  <button class="detail-img-prev" onclick="prevImage()"><i class="fa fa-chevron-left"></i></button>
+                  <button class="detail-img-next" onclick="nextImage()"><i class="fa fa-chevron-right"></i></button>
+                </div>
                 <div style="display:none;">'.$item['main_img'].'</div>
                 <div class="detail-image__list">
                   '.$sub_img.'
@@ -42,7 +46,11 @@
               </div>';
             }else{
                 $html_img.='<div class="detail-image" style="display: none;">
-                '.$img.'
+                <div class="detail-img-wrapper">
+                  '.$img.'
+                  <button class="detail-img-prev" onclick="prevImage()"><i class="fa fa-chevron-left"></i></button>
+                  <button class="detail-img-next" onclick="nextImage()"><i class="fa fa-chevron-right"></i></button>
+                </div>
                 <div style="display:none;">'.$item['main_img'].'</div>
                 <div class="detail-image__list">
                   '.$sub_img.'
