@@ -3255,7 +3255,8 @@ input[type="radio"] {
 /* ========== Modern Gradient & Shadow Effects ========== */
 .header {
   background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15),
+    0 2px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
@@ -3276,7 +3277,8 @@ input[type="radio"] {
 
 .product-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Modern card styling */
@@ -3309,7 +3311,8 @@ input[type="radio"] {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
   }
   50% {
