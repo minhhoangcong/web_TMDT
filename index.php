@@ -447,13 +447,22 @@
                $_SESSION['giohang']=[];
             }   
             if(isset($_POST['soluongmoi'])){
-               $soluong=$_POST['soluongmoi'];
-               $ind=$_POST['ind'];
-               if($soluong==0)
-                  array_splice($_SESSION['giohang'],$ind,1);
-               else
-                  $_SESSION['giohang'][$ind]['soluong']=$soluong;
-               header('location: index.php?pg=cart');
+               $soluong=intval($_POST['soluongmoi']);
+               $ind=intval($_POST['ind']);
+               
+               // Kiểm tra index hợp lệ
+               if($ind >= 0 && isset($_SESSION['giohang'][$ind])){
+                  if($soluong==0) {
+                     array_splice($_SESSION['giohang'],$ind,1);
+                  } else {
+                     $_SESSION['giohang'][$ind]['soluong']=$soluong;
+                  }
+               }
+               
+               // Trả về JSON thay vì redirect để tránh reload trang
+               header('Content-Type: application/json');
+               echo json_encode(['success' => true, 'message' => 'Cập nhật thành công']);
+               exit();
             }
             if(isset($_GET['delcart']) && ($_GET['delcart']==true)){
                unset($_SESSION['giohang']);

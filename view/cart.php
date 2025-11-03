@@ -91,7 +91,7 @@
                       foreach ($_SESSION['giohang'] as $item) {
                           extract($item);
                           if($product_design==0){
-                            $html_cart.='<tr class="cart-product">
+                            $html_cart.='<tr class="cart-product" data-cart-index="'.$j.'">
                             <td style="text-align:center"><input type="checkbox" class="select-item" name="selected[]" value="'.$j.'"></td>
                             <td>
                               <div class="pro-main">
@@ -102,9 +102,9 @@
                                   <div class="cart-body-title">'.$name.'</div>
                                   <div class="cart-body-size">'.$color.'/'.$size.'</div>
                                   <div class="detail-input pro-quantity-mobile">
-                                    <button class="detail-input__minus tru">-</button>
-                                    <input class="soluong" type="text" value='.$soluong.' />
-                                    <button class="detail-input__plus cong">+</button>
+                                    <button class="detail-input__minus tru" type="button">-</button>
+                                    <input class="soluong" type="text" value='.$soluong.' data-index="'.$j.'" />
+                                    <button class="detail-input__plus cong" type="button">+</button>
                                     <input class="index" type="hidden" value="'.$j.'">
                                 <input class="price" type="hidden" value="'.$price.'">
                                   </div>
@@ -117,9 +117,9 @@
                             <td class="pro-price">'.number_format($price,0,'',',').'đ</td>
                             <td class="pro-td-quantity">
                               <div class="detail-input pro-quantity">
-                                <button class="detail-input__minus tru">-</button>
-                                <input class="soluong" type="text" value='.$soluong.' />
-                                <button class="detail-input__plus cong">+</button>
+                                <button class="detail-input__minus tru" type="button">-</button>
+                                <input class="soluong" type="text" value='.$soluong.' data-index="'.$j.'" />
+                                <button class="detail-input__plus cong" type="button">+</button>
                                 <input class="index" type="hidden" value="'.$j.'">
                                 <input class="price" type="hidden" value="'.$price.'">
                               </div>
@@ -130,7 +130,7 @@
                           $j++;
                           }else{
                             if($product_design==1){
-                              $html_cart.='<tr class="cart-product">
+                              $html_cart.='<tr class="cart-product" data-cart-index="'.$j.'">
                                 <td style="text-align:center"><input type="checkbox" class="select-item" name="selected[]" value="'.$j.'"></td>
                                 <td>
                                   <div class="pro-main">
@@ -142,9 +142,9 @@
                                       <div class="cart-body-title">'.$name.'</div>
                                       <div class="cart-body-size">'.$color.'/'.$size.'</div>
                                       <div class="detail-input pro-quantity-mobile">
-                                        <button class="detail-input__minus tru">-</button>
-                                        <input class="soluong" type="text" value='.$soluong.' />
-                                        <button class="detail-input__plus cong">+</button>
+                                        <button class="detail-input__minus tru" type="button">-</button>
+                                        <input class="soluong" type="text" value='.$soluong.' data-index="'.$j.'" />
+                                        <button class="detail-input__plus cong" type="button">+</button>
                                         <input class="index" type="hidden" value="'.$j.'">
                                     <input class="price" type="hidden" value="'.$price.'">
                                       </div>
@@ -157,9 +157,9 @@
                                 <td class="pro-price">'.number_format($price,0,'',',').'đ</td>
                                 <td class="pro-td-quantity">
                                   <div class="detail-input pro-quantity">
-                                    <button class="detail-input__minus tru">-</button>
-                                    <input class="soluong" type="text" value='.$soluong.' />
-                                    <button class="detail-input__plus cong">+</button>
+                                    <button class="detail-input__minus tru" type="button">-</button>
+                                    <input class="soluong" type="text" value='.$soluong.' data-index="'.$j.'" />
+                                    <button class="detail-input__plus cong" type="button">+</button>
                                     <input class="index" type="hidden" value="'.$j.'">
                                     <input class="price" type="hidden" value="'.$price.'">
                                   </div>
@@ -212,19 +212,22 @@
       });
             $(".tru").click(function (e) { 
                 e.preventDefault();
-                // alert("ok");
-                var soluong=$(this).parent().find('.soluong').val();
-                soluongdau=soluong;
+                var $btn = $(this);
+                var $row = $btn.closest('.cart-product');
+                var soluong = parseInt($btn.parent().find('.soluong').val());
+                var soluongdau = soluong;
                 soluong--;
-                $(this).parent().find('.soluong').val(soluong);
-                // alert(txt);
-                // alert(mycart.length);
-        
-                // alert(tong);
-                var ind=$(this).parent().find('.index').val();
-                var price=$(this).parent().find('.price').val();
+                
+                if(soluong < 0) soluong = 0;
+                
+                $btn.parent().find('.soluong').val(soluong);
+                
+                var ind = parseInt($btn.parent().find('.index').val());
+                var price = parseInt($btn.parent().find('.price').val());
+                
                 if(soluong==0){
-                    $(".cart-product:eq("+ind+")").remove();
+                    // Xóa row này
+                    $row.remove();
                     // $(".fee-cart").find("h1:eq("+(ind*2)+")").remove();
                     // $(".fee-cart").find("h1:eq("+(ind*2)+")").remove();
                 }else{
@@ -254,7 +257,7 @@
                         }
                     }
                        
-                    $(".cart-product:eq("+ind+")").find('.pro-price-quantity').html(thanhtien);
+                    $row.find('.pro-price-quantity').html(thanhtien);
                 }
                 tong=parseInt(tong)-parseInt((soluongdau-soluong)*price);
                 tong1=tong;
@@ -295,30 +298,29 @@
         });
         $(".cart-count").text(totalCount);
 
+        // Gửi request cập nhật lên server (không reload trang)
         $.post("index.php?pg=cart", {
                     soluongmoi: soluong,
                     ind: ind
-                },
-                    function (data, textStatus, jqXHR) {
-                        $("#msg").html(data);
-                    }
-                );
+                }).fail(function() {
+                    console.error("Lỗi cập nhật giỏ hàng");
+                });
             });
             $(".cong").click(function (e) { 
                 e.preventDefault();
-                // alert("ok");
-                var soluong=$(this).parent().find('.soluong').val();
-                soluongdau=soluong;
+                var $btn = $(this);
+                var $row = $btn.closest('.cart-product');
+                var soluong = parseInt($btn.parent().find('.soluong').val());
+                var soluongdau = soluong;
                 soluong++;
-                $(this).parent().find('.soluong').val(soluong);
-                // alert(txt);
-                // alert(mycart.length);
-        
-                // alert(tong);
-                var ind=$(this).parent().find('.index').val();
-                var price=$(this).parent().find('.price').val();
+                
+                $btn.parent().find('.soluong').val(soluong);
+                
+                var ind = parseInt($btn.parent().find('.index').val());
+                var price = parseInt($btn.parent().find('.price').val());
+                
                 if(soluong==0){
-                    $(".cart-product:eq("+ind+")").remove();
+                    $row.remove();
                     // $(".fee-cart").find("h1:eq("+(ind*2)+")").remove();
                     // $(".fee-cart").find("h1:eq("+(ind*2)+")").remove();
                 }else{
@@ -348,7 +350,7 @@
                         }
                     }
                        
-                    $(".cart-product:eq("+ind+")").find('.pro-price-quantity').html(thanhtien);
+                    $row.find('.pro-price-quantity').html(thanhtien);
                 }
                 tong=parseInt(tong)+parseInt((soluong-soluongdau)*price);
                 tong1=tong;
@@ -389,14 +391,139 @@
         });
         $(".cart-count").text(totalCount);
 
+        // Gửi request cập nhật lên server (không reload trang)
         $.post("index.php?pg=cart", {
                     soluongmoi: soluong,
                     ind: ind
-                },
-                    function (data, textStatus, jqXHR) {
-                        $("#msg").html(data);
+                }).fail(function() {
+                    console.error("Lỗi cập nhật giỏ hàng");
+                });
+            });
+
+            // XỬ LÝ KHI NGƯỜI DÙNG ĐIỀN TRỰC TIẾP SỐ LƯỢNG
+            $(".soluong").on('blur change', function(e) {
+                var $input = $(this);
+                var $row = $input.closest('.cart-product');
+                var soluongmoi = parseInt($input.val());
+                var soluongcu = parseInt($input.data('prev-value') || $input.attr('value'));
+                
+                // Validate số lượng
+                if(isNaN(soluongmoi) || soluongmoi < 0) {
+                    soluongmoi = 1;
+                    $input.val(1);
+                }
+                
+                // Nếu không thay đổi thì không làm gì
+                if(soluongmoi === soluongcu) return;
+                
+                var ind = parseInt($input.attr('data-index'));
+                var price = parseInt($input.parent().find('.price').val());
+                
+                console.log('Thay đổi số lượng:', {soluongcu: soluongcu, soluongmoi: soluongmoi, ind: ind, price: price});
+                
+                // Nếu số lượng = 0 thì xóa sản phẩm
+                if(soluongmoi == 0) {
+                    if(confirm('Bạn có muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+                        $row.remove();
+                        tong = parseInt(tong) - parseInt(soluongcu * price);
+                    } else {
+                        $input.val(soluongcu);
+                        return;
                     }
-                );
+                } else {
+                    // Cập nhật thành tiền
+                    var thanhtienso = soluongmoi * price;
+                    var thanhtien = '';
+                    if(thanhtienso == 0) {
+                        thanhtien = '0đ';
+                    } else {
+                        var temp = thanhtienso;
+                        while(temp > 0) {
+                            if(temp >= 1000000) {
+                                thanhtien += Math.floor(temp/1000000) + ',';
+                                temp = temp - Math.floor(temp/1000000) * 1000000;
+                            } else if(temp >= 1000) {
+                                thanhtien += Math.floor(temp/1000) + ',';
+                                temp = temp - Math.floor(temp/1000) * 1000;
+                            } else if(temp < 1000) {
+                                if(temp > 0) {
+                                    thanhtien += temp + 'đ';
+                                } else {
+                                    thanhtien += '000đ';
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    $row.find('.pro-price-quantity').html(thanhtien);
+                    
+                    // Cập nhật tổng tiền
+                    tong = parseInt(tong) + parseInt((soluongmoi - soluongcu) * price);
+                }
+                
+                // Cập nhật tổng tiền hiển thị
+                var tong1 = tong;
+                var tongchuoi = '';
+                if(tong1 == 0) {
+                    tongchuoi = '0đ';
+                } else {
+                    while(tong1 > 0) {
+                        if(tong1 >= 1000000) {
+                            tongchuoi += Math.floor(tong1/1000000) + ',';
+                            tong1 = tong1 - Math.floor(tong1/1000000) * 1000000;
+                        } else if(tong1 >= 1000) {
+                            tongchuoi += Math.floor(tong1/1000) + ',';
+                            tong1 = tong1 - Math.floor(tong1/1000) * 1000;
+                        } else if(tong1 < 1000) {
+                            if(tong1 > 0) {
+                                tongchuoi += tong1 + 'đ';
+                            } else {
+                                tongchuoi += '000đ';
+                            }
+                            break;
+                        }
+                    }
+                }
+                $(".cart-content__price").html(tongchuoi);
+                
+                // Cập nhật cart count ở header
+                var totalCount = 0;
+                $(".soluong").each(function(){
+                    var v = parseInt($(this).val(), 10);
+                    if(!isNaN(v)) totalCount += v;
+                });
+                $(".cart-count").text(totalCount);
+                
+                // Lưu giá trị mới
+                $input.data('prev-value', soluongmoi);
+                
+                // Gửi lên server (không reload trang)
+                $.post("index.php?pg=cart", {
+                    soluongmoi: soluongmoi,
+                    ind: ind
+                }).done(function(response) {
+                    console.log("Cập nhật thành công:", response);
+                }).fail(function() {
+                    console.error("Lỗi cập nhật giỏ hàng");
+                    // Nếu lỗi, reload trang để đồng bộ lại
+                    location.reload();
+                });
+            });
+            
+            // Lưu giá trị ban đầu của mỗi input và đồng bộ 2 input (mobile + desktop)
+            $(".soluong").each(function() {
+                var val = parseInt($(this).val());
+                $(this).data('prev-value', val);
+            });
+            
+            // Đồng bộ 2 input số lượng (mobile và desktop) khi thay đổi
+            $(".soluong").on('input', function() {
+                var $this = $(this);
+                var newVal = $this.val();
+                var cartIndex = $this.attr('data-index');
+                
+                // Cập nhật input khác cùng sản phẩm
+                $('.soluong[data-index="'+cartIndex+'"]').not($this).val(newVal);
             });
         });
     </script>
