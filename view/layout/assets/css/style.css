@@ -944,7 +944,7 @@ body {
 }
 .service {
   padding: 60px 0;
-  background-color: #b5c3b9;
+  background-color: #dbeafe;
 }
 .service-list {
   display: grid;
@@ -979,16 +979,16 @@ body {
   line-height: 22px;
 }
 .service-box.item-1 {
-  background-color: #6b8772;
+  background-color: #60a5fa;
 }
 .service-box.item-2 {
-  background-color: #46694f;
+  background-color: #3b82f6;
 }
 .service-box.item-3 {
-  background-color: #38543f;
+  background-color: #2563eb;
 }
 .service-box.item-4 {
-  background-color: #38543f;
+  background-color: #1d4ed8;
 }
 .seller {
   padding: 60px 0;
