@@ -99,6 +99,20 @@ function change_color(a) {
     imgcart.value = detail_image[ind].children[1].innerHTML;
   }
 
+  // Reset gallery state for the newly visible color block
+  try {
+    var thumbs = detail_image[ind].querySelectorAll(".detail-image__item");
+    if (thumbs && thumbs.length > 0) {
+      currentImageIndex = 0;
+      // clear active in this block
+      for (let t = 0; t < thumbs.length; t++) thumbs[t].classList.remove("active");
+      thumbs[0].classList.add("active");
+      if (main_img && main_img[ind]) {
+        main_img[ind].src = thumbs[0].src;
+      }
+    }
+  } catch (e) {}
+
   id_color = a.getAttribute("id_color");
   if (typeof soluongtonkho !== "undefined" && soluongtonkho.length > 0) {
     for (let i = 0; i < soluongtonkho.length; i++) {
@@ -147,26 +161,52 @@ function hethang() {
 }
 var sub_img = document.getElementsByClassName("detail-image__item");
 var main_img = document.getElementsByClassName("detail-img");
-function change_img(a) {
-  var ind = 0;
-  for (let i = 0; i < detail_image.length; i++) {
-    if (detail_image[i].style.display != "none") {
-      ind = i;
-    }
-  }
-  main_img[ind].src = a.src;
 
-  // Update gallery navigation state - tìm index của ảnh được click
-  if (typeof allImages !== "undefined" && allImages.length > 0) {
-    // Tìm ảnh trong mảng allImages dựa trên element được click
-    for (let i = 0; i < allImages.length; i++) {
-      if (allImages[i] === a || allImages[i].src === a.src) {
-        currentImageIndex = i;
-        updateActiveThumb();
-        break;
-      }
+function change_img(a) {
+  // Kiểm tra đầu vào
+  if (!a || !a.src) return;
+  
+  // Tìm khung ảnh lớn nhất (tất cả detail-image)
+  var allDetailImages = document.getElementsByClassName("detail-image");
+  
+  // Tìm block đang hiển thị
+  var activeBlock = null;
+  var mainImageElement = null;
+  
+  for (let i = 0; i < allDetailImages.length; i++) {
+    var blockStyle = window.getComputedStyle(allDetailImages[i]);
+    if (blockStyle.display !== "none") {
+      activeBlock = allDetailImages[i];
+      // Tìm ảnh lớn trong block này
+      mainImageElement = activeBlock.querySelector(".detail-img");
+      break;
     }
   }
+  
+  // ĐỔI ẢNH LỚN - ĐÂY LÀ PHẦN QUAN TRỌNG NHẤT
+  if (mainImageElement) {
+    mainImageElement.src = a.src;
+    console.log("✅ Đã đổi ảnh lớn thành:", a.src);
+  } else {
+    console.error("❌ Không tìm thấy ảnh lớn (.detail-img)!");
+    return;
+  }
+  
+  // Lấy tất cả ảnh nhỏ trong block đang hiển thị
+  if (!activeBlock) return;
+  
+  var thumbnails = activeBlock.querySelectorAll(".detail-image__item");
+  
+  // Xóa active khỏi tất cả ảnh nhỏ và tìm index của ảnh được click
+  for (let i = 0; i < thumbnails.length; i++) {
+    thumbnails[i].classList.remove("active");
+    if (thumbnails[i] === a) {
+      currentImageIndex = i;
+    }
+  }
+  
+  // Thêm active cho ảnh được click
+  a.classList.add("active");
 }
 
 var detailInputElements = document.getElementsByClassName("detail-input");
@@ -391,119 +431,66 @@ function anmatkhau() {
 
 // ========== Image Gallery Navigation ==========
 let currentImageIndex = 0;
-let allImages = [];
-let mainImageElement = null;
 
 // Initialize image gallery on page load
 document.addEventListener("DOMContentLoaded", function () {
-  initImageGallery();
+  // Sau khi DOM sẵn sàng, set ảnh đầu của block đang hiển thị làm active
+  setTimeout(function () {
+    if (!detail_image || detail_image.length === 0) return;
+    var idx = 0;
+    for (let i = 0; i < detail_image.length; i++) {
+      if (detail_image[i].style.display !== "none") {
+        idx = i;
+        break;
+      }
+    }
+    var thumbs = detail_image[idx].querySelectorAll(".detail-image__item");
+    if (thumbs && thumbs.length > 0) {
+      for (let t = 0; t < thumbs.length; t++) thumbs[t].classList.remove("active");
+      thumbs[0].classList.add("active");
+      currentImageIndex = 0;
+    }
+  }, 100);
 });
 
-function initImageGallery() {
-  // Check if detail_image exists
-  if (
-    typeof detail_image === "undefined" ||
-    !detail_image ||
-    detail_image.length === 0
-  ) {
-    return;
-  }
-
-  // Get all thumbnail images from currently visible detail-image
-  let activeDetailImage = Array.from(detail_image).find(
-    (img) => img.style.display !== "none"
-  );
-
-  if (!activeDetailImage && detail_image.length > 0) {
-    // If no active found, use first one
-    detail_image[0].style.display = "flex";
-    activeDetailImage = detail_image[0];
-  }
-
-  if (!activeDetailImage) {
-    return; // Still no active image, exit
-  }
-
-  const thumbnails = activeDetailImage.querySelectorAll(".detail-image__item");
-  allImages = Array.from(thumbnails);
-
-  // Get main image element
-  mainImageElement = activeDetailImage.querySelector(".detail-img");
-
-  // Set first image as active
-  if (allImages.length > 0) {
-    allImages[0].classList.add("active");
-    currentImageIndex = 0;
-  }
-
-  // Don't add new event listeners - use existing onclick="change_img(this)"
-}
-
-function updateActiveThumb() {
-  allImages.forEach((img) => img.classList.remove("active"));
-  if (allImages[currentImageIndex]) {
-    allImages[currentImageIndex].classList.add("active");
-  }
-}
-
 function nextImage() {
-  if (allImages.length === 0) {
-    initImageGallery();
-  }
-
-  if (allImages.length === 0) return; // No images to navigate
-
-  currentImageIndex = (currentImageIndex + 1) % allImages.length;
-
-  // Cập nhật ảnh lớn trực tiếp
-  var ind = 0;
-  for (let i = 0; i < detail_image.length; i++) {
-    if (detail_image[i].style.display != "none") {
-      ind = i;
-      break;
+  // Lấy tất cả ảnh nhỏ từ detail-image đang hiển thị
+  var currentImages = [];
+  if (detail_image && detail_image.length > 0) {
+    for (let i = 0; i < detail_image.length; i++) {
+      if (detail_image[i].style.display != "none") {
+        currentImages = detail_image[i].querySelectorAll(".detail-image__item");
+        break;
+      }
     }
   }
-
-  if (main_img[ind] && allImages[currentImageIndex]) {
-    main_img[ind].src = allImages[currentImageIndex].src;
-    updateActiveThumb();
-  }
+  
+  if (currentImages.length === 0) return;
+  
+  // Tăng index lên 1, quay về 0 nếu vượt quá
+  currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+  
+  // Gọi change_img với ảnh tiếp theo
+  change_img(currentImages[currentImageIndex]);
 }
 
 function prevImage() {
-  if (allImages.length === 0) {
-    initImageGallery();
-  }
-
-  if (allImages.length === 0) return; // No images to navigate
-
-  currentImageIndex =
-    (currentImageIndex - 1 + allImages.length) % allImages.length;
-
-  // Cập nhật ảnh lớn trực tiếp
-  var ind = 0;
-  for (let i = 0; i < detail_image.length; i++) {
-    if (detail_image[i].style.display != "none") {
-      ind = i;
-      break;
+  // Lấy tất cả ảnh nhỏ từ detail-image đang hiển thị
+  var currentImages = [];
+  if (detail_image && detail_image.length > 0) {
+    for (let i = 0; i < detail_image.length; i++) {
+      if (detail_image[i].style.display != "none") {
+        currentImages = detail_image[i].querySelectorAll(".detail-image__item");
+        break;
+      }
     }
   }
-
-  if (main_img[ind] && allImages[currentImageIndex]) {
-    main_img[ind].src = allImages[currentImageIndex].src;
-    updateActiveThumb();
-  }
+  
+  if (currentImages.length === 0) return;
+  
+  // Giảm index xuống 1, quay về cuối nếu âm
+  currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+  
+  // Gọi change_img với ảnh trước đó
+  change_img(currentImages[currentImageIndex]);
 }
-
-// Reinitialize gallery when color changes (wrap existing function)
-(function () {
-  const originalChangeColor = window.change_color;
-  window.change_color = function (a) {
-    if (originalChangeColor) {
-      originalChangeColor.call(this, a);
-    }
-    setTimeout(() => {
-      initImageGallery();
-    }, 100);
-  };
-})();

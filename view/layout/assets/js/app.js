@@ -80,7 +80,10 @@ $(document).on("click", ".wishlist-toggle", function (e) {
     .done(function (res) {
       try {
         if (res && res.success) {
+          // Cập nhật trạng thái active của nút
           $btn.toggleClass("active", !isActive);
+          
+          // Cập nhật số lượng yêu thích ở header
           if (typeof res.count !== "undefined") {
             $(".wishlist-count").text(res.count);
           } else if (
@@ -94,17 +97,22 @@ $(document).on("click", ".wishlist-toggle", function (e) {
             });
           }
 
-          // If we just removed on the wishlist page, remove the card from the DOM
-          if (isActive && $(".wishlist-content").length) {
+          // CHỈ xóa card khỏi DOM nếu:
+          // 1. Đang XÓA (isActive = true)
+          // 2. Đang ở trang wishlist (.wishlist-page tồn tại)
+          if (isActive && $(".wishlist-page").length > 0) {
             var $card = $btn.closest(".product-item");
-            $card.fadeOut(150, function () {
-              $(this).remove();
-              if ($(".wishlist-content .product-item").length === 0) {
-                $(".wishlist-content .container").append(
-                  "<p>Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.</p>"
-                );
-              }
-            });
+            if ($card.length > 0) {
+              $card.fadeOut(150, function () {
+                $(this).remove();
+                // Kiểm tra nếu không còn sản phẩm nào
+                if ($(".wishlist-page .product-item").length === 0) {
+                  $(".wishlist-content .container").html(
+                    "<p>Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.</p>"
+                  );
+                }
+              });
+            }
           }
         } else if (res && res.error === "not_logged_in") {
           window.location.href = "index.php?pg=login";
