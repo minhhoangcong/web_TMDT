@@ -69,6 +69,69 @@
             $orderItems = getdonhangct($orderId);
             include_once "view/order_detail.php";
             break;
+         case 'order_detail_ajax':
+            if (!isset($_GET['id']) || !intval($_GET['id'])) {
+               echo '<div style="text-align: center; padding: 40px; color: red;">ID đơn hàng không hợp lệ</div>';
+               exit();
+            }
+            $orderId = intval($_GET['id']);
+            $order = getdonhangtoid($orderId);
+            if (!$order) {
+               echo '<div style="text-align: center; padding: 40px; color: red;">Không tìm thấy đơn hàng</div>';
+               exit();
+            }
+            // Only allow viewing if it's the logged-in user's order
+            $allow = false;
+            if (isset($_SESSION['iduser']) && $order['iduser'] == $_SESSION['iduser']) $allow = true;
+            if (!$allow) {
+               echo '<div style="text-align: center; padding: 40px; color: red;">Bạn không có quyền xem đơn hàng này</div>';
+               exit();
+            }
+            $orderItems = getdonhangct($orderId);
+            // Chỉ render phần nội dung, không include header/nav
+            ob_start();
+            include_once "view/order_detail.php";
+            $content = ob_get_clean();
+            
+            // Remove các phần không cần thiết bằng regex
+            $content = preg_replace('/<div class="app-fixed">.*?<\/div>/s', '', $content);
+            $content = preg_replace('/<div class="link-mobile">.*?<\/div>/s', '', $content);
+            
+            // Xóa thêm các section header bằng regex nếu có
+            $content = preg_replace('/<section[^>]*class="[^"]*header-bottom[^"]*"[^>]*>.*?<\/section>/s', '', $content);
+            
+            echo '<div class="order-detail-ajax-wrapper">';
+            echo '<style>
+              /* Ẩn mọi phần header/nav/menu BÊN TRONG wrapper */
+              .order-detail-ajax-wrapper .checkout-center-icon,
+              .order-detail-ajax-wrapper .checkout-center-text,
+              .order-detail-ajax-wrapper .print-hide,
+              .order-detail-ajax-wrapper .btn.btn-outline,
+              .order-detail-ajax-wrapper header,
+              .order-detail-ajax-wrapper .header,
+              .order-detail-ajax-wrapper .header-bottom,
+              .order-detail-ajax-wrapper .header-menu,
+              .order-detail-ajax-wrapper ul.header-menu,
+              .order-detail-ajax-wrapper nav,
+              .order-detail-ajax-wrapper section.header-bottom {
+                display: none !important;
+              }
+              .order-detail-ajax-wrapper .checkout {
+                padding-top: 0 !important;
+              }
+              .order-detail-ajax-wrapper .checkout-center {
+                padding-top: 0;
+                margin-bottom: 20px;
+                border: none;
+              }
+              .order-detail-ajax-wrapper .checkout-center > p {
+                margin-top: 0;
+              }
+            </style>';
+            echo $content;
+            echo '</div>';
+            exit();
+            break;
          case 'product':
             if(isset($_GET['tatca']) && $_GET['tatca']){
                unset($_SESSION['filterprice']);

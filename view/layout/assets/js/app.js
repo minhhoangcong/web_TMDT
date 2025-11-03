@@ -159,11 +159,10 @@ $(document).on("click", ".wishlist-addtocart", function (e) {
 
 const tabItems = document.querySelectorAll(".account-link");
 const accountRight = document.querySelector(".account-right");
-const orderHistoryContent = document.querySelector(".order-history");
-const orderHistory = document.getElementById("history-order");
+const orderHistoryContent = document.querySelector(".orders-page");
 const historyLink = document.getElementById("history");
 const myAccount = document.getElementById("myaccount");
-const accountHistory = document.querySelector(".account-history");
+const orderDetailContent = document.querySelector(".order-detail-content");
 
 // Chỉ thêm event listener nếu element tồn tại
 if (tabItems.length > 0) {
@@ -185,9 +184,6 @@ function showTabContent(tabId) {
     case "myaccount":
       showMyAccount();
       break;
-    case "history-order":
-      showHistoryOrder();
-      break;
 
     default:
       console.error("Unhandled tab id: ", tabId);
@@ -196,15 +192,16 @@ function showTabContent(tabId) {
 
 function hideAllTabs() {
   if (accountRight) accountRight.style.display = "none";
-  if (accountHistory) accountHistory.style.display = "none";
   if (orderHistoryContent) orderHistoryContent.style.display = "none";
+  if (orderDetailContent) orderDetailContent.style.display = "none";
 }
+
 if (historyLink) {
   historyLink.addEventListener("click", showHistory);
 }
 function showHistory() {
   hideAllTabs();
-  if (accountHistory) accountHistory.style.display = "inline-flex";
+  if (orderHistoryContent) orderHistoryContent.style.display = "block";
 }
 
 if (myAccount) {
@@ -212,13 +209,5 @@ if (myAccount) {
 }
 function showMyAccount() {
   hideAllTabs();
-  if (accountRight) accountRight.style.display = "inline-flex";
-}
-
-if (orderHistory) {
-  orderHistory.addEventListener("click", showHistoryOrder);
-}
-function showHistoryOrder() {
-  hideAllTabs();
-  if (orderHistoryContent) orderHistoryContent.style.display = "inline-flex";
+  if (accountRight) accountRight.style.display = "flex";
 }
