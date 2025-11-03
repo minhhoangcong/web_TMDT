@@ -403,7 +403,7 @@
                }
                $product_design_user=getproductdesignuser($_POST['id_design']);
                $sp=["id"=>1,"img"=>$product_design_user['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($product_design_user['id_color']),"size"=>getsize($product_design_user['id_size']),"soluong"=>1,"product_design"=>1,"id_product_design"=>$product_design_user['id']];
-               $_SESSION['giohang'][]=$sp;
+               array_unshift($_SESSION['giohang'], $sp);
                add_cart($_SESSION['iduser'], 1, 1, 1, 300000,300000,$product_design_user['img_front'],$product_design_user['id_color'],$product_design_user['id_size'],1,$_POST['id_design']);
             }
             if(isset($_POST['design_upload'])){
@@ -437,7 +437,7 @@
                add_design($_SESSION['id_color_design'], $_SESSION['id_size_design'], $_SESSION['img_front'], $_SESSION['img_back'],300000,'Áo thun tự thiết kế', $_SESSION['iduser']);
                $sp=["id"=>1,"img"=>$_SESSION['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($_SESSION['id_color_design']),"size"=>getsize($_SESSION['id_size_design']),"soluong"=>1,"product_design"=>1,"id_product_design"=>getnewdesign()['id']];
                add_cart($_SESSION['iduser'], 1, 1, $sp['soluong'], $sp['price'],$sp['soluong']*$sp['price'],$sp['img'],$_SESSION['id_color_design'],$_SESSION['id_size_design'],1,getnewdesign()['id']);
-               $_SESSION['giohang'][]=$sp;
+               array_unshift($_SESSION['giohang'], $sp);
                unset($_SESSION['id_color_design']);
                unset($_SESSION['id_size_design']);
                unset($_SESSION['img_front']);
@@ -447,7 +447,7 @@
                add_design($_SESSION['id_color_design'], $_SESSION['id_size_design'], $_SESSION['img_front'], $_SESSION['img_back'],300000,'Áo thun tự thiết kế', $_SESSION['iduser']);
                $sp=["id"=>1,"img"=>$_SESSION['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($_SESSION['id_color_design']),"size"=>getsize($_SESSION['id_size_design']),"soluong"=>1,"product_design"=>1,"id_product_design"=>getnewdesign()['id']];
                add_cart($_SESSION['iduser'], 1, 1, $sp['soluong'], $sp['price'],$sp['soluong']*$sp['price'],$sp['img'],$_SESSION['id_color_design'],$_SESSION['id_size_design'],1,getnewdesign()['id']);
-               $_SESSION['giohang'][]=$sp;
+               array_unshift($_SESSION['giohang'], $sp);
                unset($_SESSION['id_color_design']);
                unset($_SESSION['id_size_design']);
                unset($_SESSION['img_front']);
@@ -586,7 +586,7 @@
                   $i++;
                }
                if($kt==true)
-               $_SESSION['giohang'][]=$sp;
+               array_unshift($_SESSION['giohang'], $sp);
                header('location: index.php?pg=cart');
             }
             break;
@@ -1199,7 +1199,7 @@
                         $sp=["id"=>$id_product,"img"=>$img ,"name"=>$name ,"price"=>$price ,"color"=>$color,"size"=>$size,"soluong"=>$soluong,"product_design"=>$product_design,"id_product_design"=>$id_product_design];
 
                      }
-                     $_SESSION['giohang'][]=$sp;
+                     array_unshift($_SESSION['giohang'], $sp);
                   }
                   unset($_SESSION['id_voucher']);
                      unset($_SESSION['giamgia']);
