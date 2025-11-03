@@ -105,7 +105,8 @@ function change_color(a) {
     if (thumbs && thumbs.length > 0) {
       currentImageIndex = 0;
       // clear active in this block
-      for (let t = 0; t < thumbs.length; t++) thumbs[t].classList.remove("active");
+      for (let t = 0; t < thumbs.length; t++)
+        thumbs[t].classList.remove("active");
       thumbs[0].classList.add("active");
       if (main_img && main_img[ind]) {
         main_img[ind].src = thumbs[0].src;
@@ -165,14 +166,14 @@ var main_img = document.getElementsByClassName("detail-img");
 function change_img(a) {
   // Kiểm tra đầu vào
   if (!a || !a.src) return;
-  
+
   // Tìm khung ảnh lớn nhất (tất cả detail-image)
   var allDetailImages = document.getElementsByClassName("detail-image");
-  
+
   // Tìm block đang hiển thị
   var activeBlock = null;
   var mainImageElement = null;
-  
+
   for (let i = 0; i < allDetailImages.length; i++) {
     var blockStyle = window.getComputedStyle(allDetailImages[i]);
     if (blockStyle.display !== "none") {
@@ -182,7 +183,7 @@ function change_img(a) {
       break;
     }
   }
-  
+
   // ĐỔI ẢNH LỚN - ĐÂY LÀ PHẦN QUAN TRỌNG NHẤT
   if (mainImageElement) {
     mainImageElement.src = a.src;
@@ -191,12 +192,12 @@ function change_img(a) {
     console.error("❌ Không tìm thấy ảnh lớn (.detail-img)!");
     return;
   }
-  
+
   // Lấy tất cả ảnh nhỏ trong block đang hiển thị
   if (!activeBlock) return;
-  
+
   var thumbnails = activeBlock.querySelectorAll(".detail-image__item");
-  
+
   // Xóa active khỏi tất cả ảnh nhỏ và tìm index của ảnh được click
   for (let i = 0; i < thumbnails.length; i++) {
     thumbnails[i].classList.remove("active");
@@ -204,7 +205,7 @@ function change_img(a) {
       currentImageIndex = i;
     }
   }
-  
+
   // Thêm active cho ảnh được click
   a.classList.add("active");
 }
@@ -446,7 +447,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     var thumbs = detail_image[idx].querySelectorAll(".detail-image__item");
     if (thumbs && thumbs.length > 0) {
-      for (let t = 0; t < thumbs.length; t++) thumbs[t].classList.remove("active");
+      for (let t = 0; t < thumbs.length; t++)
+        thumbs[t].classList.remove("active");
       thumbs[0].classList.add("active");
       currentImageIndex = 0;
     }
@@ -464,12 +466,12 @@ function nextImage() {
       }
     }
   }
-  
+
   if (currentImages.length === 0) return;
-  
+
   // Tăng index lên 1, quay về 0 nếu vượt quá
   currentImageIndex = (currentImageIndex + 1) % currentImages.length;
-  
+
   // Gọi change_img với ảnh tiếp theo
   change_img(currentImages[currentImageIndex]);
 }
@@ -485,12 +487,13 @@ function prevImage() {
       }
     }
   }
-  
+
   if (currentImages.length === 0) return;
-  
+
   // Giảm index xuống 1, quay về cuối nếu âm
-  currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
-  
+  currentImageIndex =
+    (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+
   // Gọi change_img với ảnh trước đó
   change_img(currentImages[currentImageIndex]);
 }

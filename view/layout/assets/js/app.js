@@ -82,7 +82,7 @@ $(document).on("click", ".wishlist-toggle", function (e) {
         if (res && res.success) {
           // Cập nhật trạng thái active của nút
           $btn.toggleClass("active", !isActive);
-          
+
           // Cập nhật số lượng yêu thích ở header
           if (typeof res.count !== "undefined") {
             $(".wishlist-count").text(res.count);
