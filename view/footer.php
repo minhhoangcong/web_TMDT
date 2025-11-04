@@ -15,7 +15,7 @@
             <div class="footer-column">
               <div class="footer-logo">
                 <a href="#">
-                  <img src="view/layout/assets/images/logo-footer.svg" alt="" />
+                  <img src="view/layout/assets/images/logo-footer.PNG" alt="UTHShop logo" />
                 </a>
                 <div class="footer-nav">
                   <ul class="footer-menu">

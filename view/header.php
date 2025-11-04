@@ -50,12 +50,12 @@
             </div>
             <div class="header-logo">
               <a href="index.php">
-                <img src="view/layout/assets/images/header-logo.svg" alt="UTHshop logo - Thương hiệu thời trang sinh viên Đại học Giao thông Vận tải TPHCM" />
+                <img src="view/layout/assets/images/header-logo.PNG" alt="UTHshop logo - Thương hiệu thời trang sinh viên Đại học Giao thông Vận tải TPHCM" />
               </a>
             </div>
             <div class="header-logo-mobile">
               <a href="#">
-                <img src="view/layout/assets/images/logo-footer.svg" alt="" />
+                <img src="view/layout/assets/images/logo-footer.PNG" alt="UTHShop logo - Thương hiệu thời trang sinh viên Đại học Giao thông Vận tải TPHCM" />
               </a>
             </div>
             <div class="header-bad">

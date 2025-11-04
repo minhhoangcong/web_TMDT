@@ -71,7 +71,7 @@ body {
 }
 .header {
   background-color: var(--text-heading);
-  padding: 15px 0;
+  padding: 5px 0;
 }
 .header-main {
   display: flex;
@@ -92,13 +92,14 @@ body {
   align-items: center;
 }
 .header-logo img {
-  height: 60px;
+  height: 100px;
   width: auto;
   background: transparent;
   padding: 0;
   border: none;
   mix-blend-mode: normal;
   object-fit: contain;
+  max-height: 80px;
 }
 .header-logo-mobile {
   display: none;
@@ -2975,6 +2976,11 @@ input[type="radio"] {
 }
 .footer-column {
   color: var(--white);
+}
+.footer-logo img {
+  max-width: 120px;
+  width: auto;
+  height: auto;
 }
 .footer-menu {
   margin-top: 30px;
