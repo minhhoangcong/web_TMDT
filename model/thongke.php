@@ -1,5 +1,6 @@
 <?php
     function doanhthu(){
+        // Lấy năm hiện tại tự động (2025, 2026, 2027...)
         $sql="SELECT 
         MONTH(ngaylap) AS thang,
         YEAR(ngaylap) AS nam,
@@ -7,7 +8,7 @@
     FROM 
         donhang
     WHERE
-        ngaylap BETWEEN '2023-01-01' AND '2023-12-31'
+        YEAR(ngaylap) = YEAR(CURDATE())
     GROUP BY
         MONTH(ngaylap), YEAR(ngaylap)
     ORDER BY

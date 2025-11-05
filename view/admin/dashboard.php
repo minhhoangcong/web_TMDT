@@ -218,22 +218,19 @@
                     <script>
                     const xValues2 = ["Tháng 1", "Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"];
                     <?php
-                      $doanhthu=doanhthu();
-                      $i=0;
-                      $htmly='';
+                      $doanhthu = doanhthu();
+                      
+                      // Tạo mảng 12 tháng với giá trị mặc định = 0
+                      $doanhthu_thang = array_fill(1, 12, 0);
+                      
+                      // Điền dữ liệu thực vào các tháng có đơn hàng
                       foreach ($doanhthu as $item) {
-                          $i++;
-                          if($i==1){
-                            $htmly.='const yValues2 = ['.($item['doanhthu_thang']/1000000).',';
-                          }else{
-                            if($i==count($doanhthu)){
-                              $htmly.=($item['doanhthu_thang']/1000000).'];';
-                            }else{
-                              $htmly.=($item['doanhthu_thang']/1000000).',';
-                            }
-                          }
+                          $thang = (int)$item['thang'];
+                          $doanhthu_thang[$thang] = round($item['doanhthu_thang'] / 1000000, 2);
                       }
-                      echo $htmly;
+                      
+                      // Xuất ra mảng JavaScript
+                      echo 'const yValues2 = [' . implode(',', $doanhthu_thang) . '];';
                     ?>
                     const barColors2 = ["rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)", "rgba(0,0,255)"];
 
@@ -251,6 +248,13 @@
                         title: {
                           display: true,
                           text: ""
+                        },
+                        scales: {
+                          yAxes: [{
+                            ticks: {
+                              beginAtZero: true
+                            }
+                          }]
                         }
                       }
                     });
