@@ -424,7 +424,7 @@
             include_once 'product.php';
             break;
           case 'user':
-            $usertable=getusertable();
+            $usertable=getusertable(100000, false); // Chỉ hiển thị user đang hoạt động
             if(isset($_POST['searchuser'])){
               $usertable=searchuser($_POST['keyworduser']);
             }
@@ -448,7 +448,7 @@
               $role=$_POST['role'];
               $kichhoat=$_POST['kichhoat'];
               $_SESSION['adduser']=1;
-              $usertable=getusertable();
+              $usertable=getusertable(100000, true); // Kiểm tra trùng user: cần xem cả user đã xóa
               
               if($useradd==''){
                 $err_useradd="*Bạn chưa nhập tên người dùng";
@@ -510,14 +510,14 @@
               }
               if($err_useradd=='' &&  $err_passadd=='' && $err_emailadd==''){
                 unset($_SESSION['adduser']);
-                $user=getusertable();
+                $user=getusertable(100000, true); // Kiểm tra user tồn tại
                 creatuser($useradd,$passadd, $nameadd,$emailadd,$sdtadd,$gioitinh,$ngaysinhadd,$diachiadd,$role,$img,$kichhoat);
               }
             }
             if(isset($_GET['close']) && $_GET['close']){
               unset($_SESSION['adduser']);
             }
-            $usertable=getusertable();
+            $usertable=getusertable(100000, false); // Hiển thị danh sách: chỉ user đang hoạt động
             include_once "user.php";
             break;
           case 'updateuser':
@@ -546,7 +546,7 @@
               $role=$_POST['role'];
               $kichhoat=$_POST['kichhoat'];
               $_SESSION['edituser']=1;
-              $usertable=getusertable();
+              $usertable=getusertable(100000, true); // Kiểm tra trùng: xem cả user đã xóa
               if($user==''){
                 $err_userup="*Bạn chưa nhập tên người dùng";
               }else{
@@ -614,7 +614,7 @@
                 unset($_SESSION['edituser']);
               }    
             }
-            $usertable=getusertable();
+            $usertable=getusertable(100000, false); // Hiển thị danh sách: chỉ user đang hoạt động
             include_once 'user.php';
             break;
           case 'deluser':
@@ -626,7 +626,7 @@
              }
               deluser($_GET['id']);
             }
-            $usertable=getusertable();
+            $usertable=getusertable(100000, false); // false = chỉ hiển thị user đang hoạt động (ẩn user đã xóa)
             include_once 'user.php';
             break;
           case 'cart':

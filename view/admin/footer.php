@@ -4,7 +4,7 @@
 <footer class="footer">
           <div class="container">
             <div class="footer-logo">
-              <img src="../layout/assets/images/logo-footer.svg" alt="" />
+              <img src="../layout/assets/images/logo-footer-admin.png" alt="UTHShop logo" style="max-width: 120px; height: auto;" />
             </div>
             <div class="footer-copy">@Copyright UTHshop.online since 2025 - Nhóm 5 - ĐH Giao thông Vận tải TP.HCM</div>
           </div>

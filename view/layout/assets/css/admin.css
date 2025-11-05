@@ -302,11 +302,11 @@ body {
   color: white;
 }
 .footer {
-  padding: 50px 0;
+  padding: 25px 0;
   background-color: #222;
 }
 .footer-copy {
-  margin-top: 20px;
+  margin-top: 15px;
   padding-top: 20px;
   border-top: 1px solid #ccc;
   color: var(--white);
