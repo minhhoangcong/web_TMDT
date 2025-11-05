@@ -101,11 +101,6 @@
                     <i class="fa fa-calendar-check-o" aria-hidden="true"></i>Lịch sử mua hàng</a
                   >
                 </li>
-                <li class="contact-list account-list" style="display:none" id="history-order">
-                  <a href="#" class="contact-link account-link" data-tab="2">
-                    <i class="fa fa-product-hunt" aria-hidden="true"></i>Đơn hàng</a
-                  >
-                </li>
                 <li class="contact-list account-list">
                   <a href="index.php?pg=logoutuser" class="contact-link account-link">
                   <i class="fas fa-sign-out-alt"></i>Đăng xuất</a
@@ -179,91 +174,253 @@
               </div>
             </div>
             
-            <div class="account-history tab-content" data-tab="2">
-              <p class="account-history-title">Lịch sử mua hàng</p>
-              <div>Quản lý thông tin mua hàng</div>
+            <div class="account-history tab-content orders-page" data-tab="2">
+              <p class="account-history-title">Đơn hàng của tôi</p>
+              <div style="margin-bottom: 20px;">Xem tất cả đơn hàng và trạng thái mới nhất.</div>
               <table class="history-order" border="1">
                 <thead>
                   <tr>
-                    <th>STT</th>
-                    <th>Mã đơn hàng</th>
-                    <th>Mã khách hàng</th>
-                    <th>Ngày đặt hàng</th>
-                    <th>Thành tiền</th>
-                    <th>Trạng thái</th>
-                    <th>Thao tác</th>
+                    <th style="width: 5%;">STT</th>
+                    <th style="width: 15%;">Mã đơn hàng</th>
+                    <th style="width: 15%;">Ngày đặt</th>
+                    <th style="width: 20%;">Tổng tiền</th>
+                    <th style="width: 20%;">Trạng thái</th>
+                    <th style="width: 15%; text-align: center;">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php
                     if(isset($_SESSION['iduser']) && isset($_SESSION['role']) && $_SESSION['role']==0){
-                     $listdonhang;
                      $html_donhang='';
                      $i=0;
                      foreach ($listdonhang as $item) {
                       $i++;
                       extract($item);
+                      
+                      // Định dạng trạng thái
+                      $status_class = '';
+                      switch($trangthai) {
+                        case 'Đã thanh toán':
+                        case 'Đã giao hàng':
+                          $status_class = 'status-success';
+                          break;
+                        case 'Đang xử lý':
+                        case 'Đang giao':
+                          $status_class = 'status-processing';
+                          break;
+                        case 'Đã hủy':
+                          $status_class = 'status-cancelled';
+                          break;
+                      }
+                      
                       $html_donhang.='<tr>
                       <td>'.$i.'</td>
-                      <td>'.$ma_donhang.'</td>
-                      <td>'.$iduser.'</td>
+                      <td><strong>'.$ma_donhang.'</strong></td>
                       <td>'.$ngaylap.'</td>
-                      <td>'.number_format($tongtien,0,'.',',').'</td>
-                      <td>'.$trangthai.'</td>
-                      <td>
-                        <a href="index.php?pg=account&id='.$id.'" class="del">Hủy</a>
+                      <td><strong style="color: #2563eb;">'.number_format($tongtien,0,'.',',').' đ</strong></td>
+                      <td><span class="order-status '.$status_class.'">'.$trangthai.'</span></td>
+                      <td style="text-align: center;">
+                        <a href="#" class="btn btn-primary view-order-detail" data-order-id="'.$id.'" title="Xem hóa đơn chi tiết">
+                          <i class="fa fa-eye" aria-hidden="true"></i> Xem hóa đơn
+                        </a>
                       </td>
                     </tr>';
                      } 
+                     
+                     if($i == 0) {
+                       $html_donhang = '<tr><td colspan="6" style="text-align: center; padding: 40px;">Bạn chưa có đơn hàng nào</td></tr>';
+                     }
                     }
                     echo $html_donhang;
                   ?>
                 </tbody>
               </table>
             </div>
-            <div class="order-history tab-content" data-tab="2">
-              <p class="account-history-title">ĐƠN HÀNG</p>
-              <div>Quản lý thông tin chi tiết đơn hàng</div>
-              <table class="history-order" border="1">
-                <thead>
-                  <tr>
-                    <th>STT</th>
-                    <th>Mã đơn hàng</th>
-                    <th>Mã sản phẩm</th>
-                    <th>Đơn giá</th>
-                    <th>Số lượng</th>
-                    <th>Thành tiền</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>ZSTYLE120</td>
-                    <td>GUEST123</td>
-                    <td>12-08-2023</td>
-                    <td class="green">Thành công</td>
-                    <td>Xem - Hủy</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>ZSTYLE120</td>
-                    <td>GUEST123</td>
-                    <td>12-08-2023</td>
-                    <td class="green">Thành công</td>
-                    <td>Xem - Hủy</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>ZSTYLE120</td>
-                    <td>GUEST123</td>
-                    <td>12-08-2023</td>
-                    <td class="green">Thành công</td>
-                    <td>Xem - Hủy</td>
-                  </tr>
-                </tbody>
-              </table>
+            
+            <div class="account-history tab-content order-detail-content" data-tab="3" style="display: none;">
+              <div style="margin-bottom: 20px;">
+                <a href="#" class="btn btn-outline back-to-orders">
+                  <i class="fa fa-arrow-left" aria-hidden="true"></i> Quay lại danh sách
+                </a>
+              </div>
+              <div id="order-detail-container">
+                <!-- Chi tiết đơn hàng sẽ được load vào đây -->
+              </div>
             </div>
           </div>
         </div>
       </section>
       </form>
+
+<style>
+/* Styles cho trạng thái đơn hàng */
+.order-status {
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  display: inline-block;
+}
+.status-success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.status-processing {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+.status-cancelled {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* Style cho button xem */
+.history-order .btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s;
+}
+
+.history-order .btn-primary {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+}
+
+.history-order .btn-primary:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.history-order .btn-outline {
+  background-color: white;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+}
+
+.history-order .btn-outline:hover {
+  background-color: #eff6ff;
+}
+
+/* Animation cho loading */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.order-detail-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Header xanh luôn cố định ở trên */
+.header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  background: #2563eb !important;
+}
+
+/* Giảm khoảng cách phần chi tiết đơn hàng */
+.order-detail-content {
+  padding-top: 0 !important;
+  margin-top: -50px !important;
+}
+
+.order-detail-content .checkout {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.order-detail-content .checkout-center {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 15px !important;
+}
+
+.order-detail-content .back-to-orders {
+  margin-bottom: 10px !important;
+}
+
+section.account {
+  padding-top: 10px !important;
+}
+
+/* Print styles */
+@media print {
+  .app-fixed, .link-mobile, .account-left, .back-to-orders, .btn-primary {
+    display: none !important;
+  }
+  .account-history {
+    margin: 0;
+    padding: 20px;
+  }
+  .order-detail-ajax {
+    page-break-inside: avoid;
+  }
+}
+</style>
+
+<script>
+$(document).ready(function() {
+  // Xử lý click nút "Xem hóa đơn"
+  $('.view-order-detail').click(function(e) {
+    e.preventDefault();
+    
+    const orderId = $(this).data('order-id');
+    console.log('Xem chi tiết đơn hàng:', orderId);
+    
+    // Ẩn tab lịch sử mua hàng
+    $('.orders-page').removeClass('active').hide();
+    
+    // Ẩn menu bên trái
+    $('.account-left').fadeOut(300);
+    
+    // Hiển thị tab chi tiết
+    $('.order-detail-content').addClass('active').show();
+    
+    // Load chi tiết đơn hàng
+    $('#order-detail-container').html('<div style="text-align: center; padding: 40px;"><i class="fa fa-spinner fa-spin fa-3x"></i><br><br>Đang tải...</div>');
+    
+    // AJAX load chi tiết
+    $.get('index.php?pg=order_detail_ajax&id=' + orderId, function(data) {
+      // Loại bỏ mọi phần header-bottom, header-menu từ data trước khi insert
+      var $data = $('<div>').html(data);
+      $data.find('.header-bottom, .header-menu, section.header-bottom, ul.header-menu, .header, header, nav').remove();
+      $('#order-detail-container').html($data.html());
+    }).fail(function() {
+      $('#order-detail-container').html('<div style="text-align: center; padding: 40px; color: red;"><i class="fa fa-exclamation-triangle fa-3x"></i><br><br>Không thể tải chi tiết đơn hàng</div>');
+    });
+    
+    // Scroll lên đầu
+    $('html, body').animate({ scrollTop: 0 }, 300);
+  });
+  
+  // Xử lý nút "Quay lại danh sách"
+  $('.back-to-orders').click(function(e) {
+    e.preventDefault();
+    
+    // Hiển thị lại menu bên trái
+    $('.account-left').fadeIn(300);
+    
+    // Ẩn tab chi tiết
+    $('.order-detail-content').removeClass('active').hide();
+    
+    // Hiển thị lại tab lịch sử mua hàng
+    $('.orders-page').addClass('active').show();
+    
+    // Scroll lên đầu
+    $('html, body').animate({ scrollTop: 0 }, 300);
+  });
+});
+</script>

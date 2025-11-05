@@ -69,6 +69,69 @@
             $orderItems = getdonhangct($orderId);
             include_once "view/order_detail.php";
             break;
+         case 'order_detail_ajax':
+            if (!isset($_GET['id']) || !intval($_GET['id'])) {
+               echo '<div style="text-align: center; padding: 40px; color: red;">ID đơn hàng không hợp lệ</div>';
+               exit();
+            }
+            $orderId = intval($_GET['id']);
+            $order = getdonhangtoid($orderId);
+            if (!$order) {
+               echo '<div style="text-align: center; padding: 40px; color: red;">Không tìm thấy đơn hàng</div>';
+               exit();
+            }
+            // Only allow viewing if it's the logged-in user's order
+            $allow = false;
+            if (isset($_SESSION['iduser']) && $order['iduser'] == $_SESSION['iduser']) $allow = true;
+            if (!$allow) {
+               echo '<div style="text-align: center; padding: 40px; color: red;">Bạn không có quyền xem đơn hàng này</div>';
+               exit();
+            }
+            $orderItems = getdonhangct($orderId);
+            // Chỉ render phần nội dung, không include header/nav
+            ob_start();
+            include_once "view/order_detail.php";
+            $content = ob_get_clean();
+            
+            // Remove các phần không cần thiết bằng regex
+            $content = preg_replace('/<div class="app-fixed">.*?<\/div>/s', '', $content);
+            $content = preg_replace('/<div class="link-mobile">.*?<\/div>/s', '', $content);
+            
+            // Xóa thêm các section header bằng regex nếu có
+            $content = preg_replace('/<section[^>]*class="[^"]*header-bottom[^"]*"[^>]*>.*?<\/section>/s', '', $content);
+            
+            echo '<div class="order-detail-ajax-wrapper">';
+            echo '<style>
+              /* Ẩn mọi phần header/nav/menu BÊN TRONG wrapper */
+              .order-detail-ajax-wrapper .checkout-center-icon,
+              .order-detail-ajax-wrapper .checkout-center-text,
+              .order-detail-ajax-wrapper .print-hide,
+              .order-detail-ajax-wrapper .btn.btn-outline,
+              .order-detail-ajax-wrapper header,
+              .order-detail-ajax-wrapper .header,
+              .order-detail-ajax-wrapper .header-bottom,
+              .order-detail-ajax-wrapper .header-menu,
+              .order-detail-ajax-wrapper ul.header-menu,
+              .order-detail-ajax-wrapper nav,
+              .order-detail-ajax-wrapper section.header-bottom {
+                display: none !important;
+              }
+              .order-detail-ajax-wrapper .checkout {
+                padding-top: 0 !important;
+              }
+              .order-detail-ajax-wrapper .checkout-center {
+                padding-top: 0;
+                margin-bottom: 20px;
+                border: none;
+              }
+              .order-detail-ajax-wrapper .checkout-center > p {
+                margin-top: 0;
+              }
+            </style>';
+            echo $content;
+            echo '</div>';
+            exit();
+            break;
          case 'product':
             if(isset($_GET['tatca']) && $_GET['tatca']){
                unset($_SESSION['filterprice']);
@@ -340,7 +403,7 @@
                }
                $product_design_user=getproductdesignuser($_POST['id_design']);
                $sp=["id"=>1,"img"=>$product_design_user['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($product_design_user['id_color']),"size"=>getsize($product_design_user['id_size']),"soluong"=>1,"product_design"=>1,"id_product_design"=>$product_design_user['id']];
-               $_SESSION['giohang'][]=$sp;
+               array_unshift($_SESSION['giohang'], $sp);
                add_cart($_SESSION['iduser'], 1, 1, 1, 300000,300000,$product_design_user['img_front'],$product_design_user['id_color'],$product_design_user['id_size'],1,$_POST['id_design']);
             }
             if(isset($_POST['design_upload'])){
@@ -374,7 +437,7 @@
                add_design($_SESSION['id_color_design'], $_SESSION['id_size_design'], $_SESSION['img_front'], $_SESSION['img_back'],300000,'Áo thun tự thiết kế', $_SESSION['iduser']);
                $sp=["id"=>1,"img"=>$_SESSION['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($_SESSION['id_color_design']),"size"=>getsize($_SESSION['id_size_design']),"soluong"=>1,"product_design"=>1,"id_product_design"=>getnewdesign()['id']];
                add_cart($_SESSION['iduser'], 1, 1, $sp['soluong'], $sp['price'],$sp['soluong']*$sp['price'],$sp['img'],$_SESSION['id_color_design'],$_SESSION['id_size_design'],1,getnewdesign()['id']);
-               $_SESSION['giohang'][]=$sp;
+               array_unshift($_SESSION['giohang'], $sp);
                unset($_SESSION['id_color_design']);
                unset($_SESSION['id_size_design']);
                unset($_SESSION['img_front']);
@@ -384,7 +447,7 @@
                add_design($_SESSION['id_color_design'], $_SESSION['id_size_design'], $_SESSION['img_front'], $_SESSION['img_back'],300000,'Áo thun tự thiết kế', $_SESSION['iduser']);
                $sp=["id"=>1,"img"=>$_SESSION['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($_SESSION['id_color_design']),"size"=>getsize($_SESSION['id_size_design']),"soluong"=>1,"product_design"=>1,"id_product_design"=>getnewdesign()['id']];
                add_cart($_SESSION['iduser'], 1, 1, $sp['soluong'], $sp['price'],$sp['soluong']*$sp['price'],$sp['img'],$_SESSION['id_color_design'],$_SESSION['id_size_design'],1,getnewdesign()['id']);
-               $_SESSION['giohang'][]=$sp;
+               array_unshift($_SESSION['giohang'], $sp);
                unset($_SESSION['id_color_design']);
                unset($_SESSION['id_size_design']);
                unset($_SESSION['img_front']);
@@ -447,13 +510,22 @@
                $_SESSION['giohang']=[];
             }   
             if(isset($_POST['soluongmoi'])){
-               $soluong=$_POST['soluongmoi'];
-               $ind=$_POST['ind'];
-               if($soluong==0)
-                  array_splice($_SESSION['giohang'],$ind,1);
-               else
-                  $_SESSION['giohang'][$ind]['soluong']=$soluong;
-               header('location: index.php?pg=cart');
+               $soluong=intval($_POST['soluongmoi']);
+               $ind=intval($_POST['ind']);
+               
+               // Kiểm tra index hợp lệ
+               if($ind >= 0 && isset($_SESSION['giohang'][$ind])){
+                  if($soluong==0) {
+                     array_splice($_SESSION['giohang'],$ind,1);
+                  } else {
+                     $_SESSION['giohang'][$ind]['soluong']=$soluong;
+                  }
+               }
+               
+               // Trả về JSON thay vì redirect để tránh reload trang
+               header('Content-Type: application/json');
+               echo json_encode(['success' => true, 'message' => 'Cập nhật thành công']);
+               exit();
             }
             if(isset($_GET['delcart']) && ($_GET['delcart']==true)){
                unset($_SESSION['giohang']);
@@ -514,7 +586,7 @@
                   $i++;
                }
                if($kt==true)
-               $_SESSION['giohang'][]=$sp;
+               array_unshift($_SESSION['giohang'], $sp);
                header('location: index.php?pg=cart');
             }
             break;
@@ -1127,7 +1199,7 @@
                         $sp=["id"=>$id_product,"img"=>$img ,"name"=>$name ,"price"=>$price ,"color"=>$color,"size"=>$size,"soluong"=>$soluong,"product_design"=>$product_design,"id_product_design"=>$id_product_design];
 
                      }
-                     $_SESSION['giohang'][]=$sp;
+                     array_unshift($_SESSION['giohang'], $sp);
                   }
                   unset($_SESSION['id_voucher']);
                      unset($_SESSION['giamgia']);

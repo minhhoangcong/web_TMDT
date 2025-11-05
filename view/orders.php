@@ -48,10 +48,12 @@ function status_badge_class($st){
                 <tr>
                   <td><strong><?=htmlspecialchars($o['ma_donhang'])?></strong></td>
                   <td><?=htmlspecialchars($o['ngaylap'])?></td>
-                  <td><?=number_format($o['tongtien'],0,'',',')?>đ</td>
+                  <td><strong style="color: #2563eb;"><?=number_format($o['tongtien'],0,'',',')?>đ</strong></td>
                   <td><span class="<?=status_badge_class($o['trangthai'])?>"><?=htmlspecialchars($o['trangthai'])?></span></td>
-                  <td>
-                    <a class="btn btn-outline" href="index.php?pg=order_detail&id=<?=$o['id']?>"><i class="fa fa-eye" aria-hidden="true"></i> Xem</a>
+                  <td style="text-align: center;">
+                    <a class="btn btn-primary" href="index.php?pg=order_detail&id=<?=$o['id']?>" title="Xem hóa đơn chi tiết">
+                      <i class="fa fa-eye" aria-hidden="true"></i> Xem hóa đơn
+                    </a>
                   </td>
                 </tr>
               <?php }} else { ?>

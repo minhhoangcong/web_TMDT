@@ -64,7 +64,7 @@ try {
         }
     }
     if (!$merged) {
-        $_SESSION['giohang'][] = $sp;
+        array_unshift($_SESSION['giohang'], $sp);
     }
 
     // Calculate updated cart count (sum of quantities)

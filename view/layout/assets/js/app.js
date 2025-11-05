@@ -80,7 +80,10 @@ $(document).on("click", ".wishlist-toggle", function (e) {
     .done(function (res) {
       try {
         if (res && res.success) {
+          // Cập nhật trạng thái active của nút
           $btn.toggleClass("active", !isActive);
+
+          // Cập nhật số lượng yêu thích ở header
           if (typeof res.count !== "undefined") {
             $(".wishlist-count").text(res.count);
           } else if (
@@ -94,17 +97,22 @@ $(document).on("click", ".wishlist-toggle", function (e) {
             });
           }
 
-          // If we just removed on the wishlist page, remove the card from the DOM
-          if (isActive && $(".wishlist-content").length) {
+          // CHỈ xóa card khỏi DOM nếu:
+          // 1. Đang XÓA (isActive = true)
+          // 2. Đang ở trang wishlist (.wishlist-page tồn tại)
+          if (isActive && $(".wishlist-page").length > 0) {
             var $card = $btn.closest(".product-item");
-            $card.fadeOut(150, function () {
-              $(this).remove();
-              if ($(".wishlist-content .product-item").length === 0) {
-                $(".wishlist-content .container").append(
-                  "<p>Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.</p>"
-                );
-              }
-            });
+            if ($card.length > 0) {
+              $card.fadeOut(150, function () {
+                $(this).remove();
+                // Kiểm tra nếu không còn sản phẩm nào
+                if ($(".wishlist-page .product-item").length === 0) {
+                  $(".wishlist-content .container").html(
+                    "<p>Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.</p>"
+                  );
+                }
+              });
+            }
           }
         } else if (res && res.error === "not_logged_in") {
           window.location.href = "index.php?pg=login";
@@ -151,11 +159,10 @@ $(document).on("click", ".wishlist-addtocart", function (e) {
 
 const tabItems = document.querySelectorAll(".account-link");
 const accountRight = document.querySelector(".account-right");
-const orderHistoryContent = document.querySelector(".order-history");
-const orderHistory = document.getElementById("history-order");
+const orderHistoryContent = document.querySelector(".orders-page");
 const historyLink = document.getElementById("history");
 const myAccount = document.getElementById("myaccount");
-const accountHistory = document.querySelector(".account-history");
+const orderDetailContent = document.querySelector(".order-detail-content");
 
 // Chỉ thêm event listener nếu element tồn tại
 if (tabItems.length > 0) {
@@ -177,9 +184,6 @@ function showTabContent(tabId) {
     case "myaccount":
       showMyAccount();
       break;
-    case "history-order":
-      showHistoryOrder();
-      break;
 
     default:
       console.error("Unhandled tab id: ", tabId);
@@ -188,15 +192,16 @@ function showTabContent(tabId) {
 
 function hideAllTabs() {
   if (accountRight) accountRight.style.display = "none";
-  if (accountHistory) accountHistory.style.display = "none";
   if (orderHistoryContent) orderHistoryContent.style.display = "none";
+  if (orderDetailContent) orderDetailContent.style.display = "none";
 }
+
 if (historyLink) {
   historyLink.addEventListener("click", showHistory);
 }
 function showHistory() {
   hideAllTabs();
-  if (accountHistory) accountHistory.style.display = "inline-flex";
+  if (orderHistoryContent) orderHistoryContent.style.display = "block";
 }
 
 if (myAccount) {
@@ -204,13 +209,5 @@ if (myAccount) {
 }
 function showMyAccount() {
   hideAllTabs();
-  if (accountRight) accountRight.style.display = "inline-flex";
-}
-
-if (orderHistory) {
-  orderHistory.addEventListener("click", showHistoryOrder);
-}
-function showHistoryOrder() {
-  hideAllTabs();
-  if (orderHistoryContent) orderHistoryContent.style.display = "inline-flex";
+  if (accountRight) accountRight.style.display = "flex";
 }

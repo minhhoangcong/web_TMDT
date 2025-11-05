@@ -189,6 +189,11 @@ body {
   display: flex;
   justify-content: center;
 }
+.dashboard-menu-list:first-child img {
+  max-width: 80px;
+  width: auto;
+  height: auto;
+}
 .dashboard-right {
   width: 100%;
   min-height: 100vh;
@@ -344,7 +349,7 @@ body {
   border: 1px solid var(--text-heading);
   text-align: center;
 }
-td img{
+td img {
   height: 50px;
   width: auto;
   object-fit: contain;
@@ -599,7 +604,6 @@ select {
   color: white;
 }
 
-
 .dropdown {
   position: relative;
   width: 340px;
@@ -610,7 +614,7 @@ select {
   --border: #eee;
 }
 
-.modal-form-item input{
+.modal-form-item input {
   padding-left: 15px;
 }
 
@@ -702,16 +706,16 @@ select {
   opacity: 1;
   visibility: visible;
 }
-input[type="date"]{
+input[type="date"] {
   padding-right: 12px;
 }
-input[type="file"]{
-  all:initial;
+input[type="file"] {
+  all: initial;
 }
-.modal-form-item img{
+.modal-form-item img {
   height: 50px;
 }
-.input-image{
+.input-image {
   width: 340px;
   display: flex;
   justify-content: space-between;
@@ -733,7 +737,7 @@ input[type="file"]{
 .dashboard-menu::-webkit-scrollbar-track {
   background-color: #ccc;
 }
-.chunhieu{
+.chunhieu {
   width: 150px;
 }
 .modaladmin {
