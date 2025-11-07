@@ -4,7 +4,8 @@
 
 
   function getlogin($user,$pass){
-    $sql="SELECT * FROM users WHERE user=? AND pass=?";
+    // CHỈ CHO PHÉP USER ĐANG HOẠT ĐỘNG (kichhoat=1) đăng nhập
+    $sql="SELECT * FROM users WHERE user=? AND pass=? AND kichhoat=1";
     return pdo_query_one($sql, $user, $pass);
    }
 

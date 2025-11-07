@@ -29,6 +29,19 @@
     include_once "model/global.php";
     include_once "model/design.php";
     include_once "model/soluongtonkho.php";
+    
+    // KIỂM TRA USER ĐĂNG NHẬP CÒN ACTIVE HAY KHÔNG
+    // Nếu user bị xóa (kichhoat=0) → Tự động đăng xuất
+    if(isset($_SESSION['iduser']) && $_SESSION['iduser']){
+        $current_user = getuser($_SESSION['iduser']);
+        if(!is_array($current_user) || (isset($current_user['kichhoat']) && $current_user['kichhoat']==0)){
+            // User đã bị xóa hoặc vô hiệu hóa → Đăng xuất
+            session_unset();
+            session_destroy();
+            header('Location: index.php?pg=login');
+            exit();
+        }
+    }
     include_once "model/news.php";
    include_once "model/wishlist.php";
  
