@@ -56,7 +56,22 @@
     // check form update user
     if(isset($_SESSION['update_id'])  && $_SESSION['update_id'] && !isset($_SESSION['edituser'])){
       $activeedit='';
-      extract($user_detail);
+      // Kiểm tra $user_detail có hợp lệ trước khi extract
+      if(is_array($user_detail)){
+        extract($user_detail);
+      }else{
+        // Nếu không có, khởi tạo giá trị mặc định
+        $name='';
+        $user='';
+        $pass='';
+        $email='';
+        $sdt='';
+        $gioitinh=0;
+        $ngaysinh='';
+        $diachi='';
+        $role=0;
+        $kichhoat=1;
+      }
       $nameup=$name;
       $userup=$user;
       $passup=$pass;
@@ -94,7 +109,14 @@
     }
     
     if(isset($_SESSION['update_id'])  && $_SESSION['update_id'] && isset($_SESSION['edituser'])){
-      extract($user_detail);
+      // Kiểm tra $user_detail trước khi extract
+      if(is_array($user_detail)){
+        extract($user_detail);
+      }else{
+        // Fallback nếu không có dữ liệu
+        $name=''; $user=''; $pass=''; $email=''; $sdt='';
+        $gioitinh=0; $ngaysinh=''; $diachi=''; $role=0; $kichhoat=1; $img='';
+      }
       $nameup=$name;
       $userup=$user;
       $passup=$pass;

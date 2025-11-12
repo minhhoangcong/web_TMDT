@@ -1,14 +1,3 @@
--- Wishlist table for user favorites
-CREATE TABLE IF NOT EXISTS wishlist (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  product_id INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE,
-  UNIQUE KEY uq_user_product (user_id, product_id)
-);
-
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
@@ -1170,6 +1159,19 @@ INSERT INTO `voucher` (`id`, `ma_voucher`, `giamgia`, `ngaybatdau`, `ngayketthuc
 (7, 'het', 20.00, '2023-11-26', '2023-12-05', 500000.00),
 (8, 'dieukien', 10.00, '2023-11-26', '2023-12-28', 500000.00);
 
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `wishlist`
+--
+
+CREATE TABLE `wishlist` (
+  `id` int(11) NOT NULL,
+  `user_id` int(6) NOT NULL,
+  `product_id` int(5) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 --
 -- Chỉ mục cho các bảng đã đổ
 --
@@ -1293,6 +1295,15 @@ ALTER TABLE `voucher`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Chỉ mục cho bảng `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_user_product` (`user_id`,`product_id`),
+  ADD KEY `fk_wishlist_user` (`user_id`),
+  ADD KEY `fk_wishlist_product` (`product_id`);
+
+--
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
 
@@ -1393,6 +1404,12 @@ ALTER TABLE `voucher`
   MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT cho bảng `wishlist`
+--
+ALTER TABLE `wishlist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Các ràng buộc cho các bảng đã đổ
 --
 
@@ -1462,6 +1479,13 @@ ALTER TABLE `soluongtonkho`
   ADD CONSTRAINT `fk_soluongtonkho_color` FOREIGN KEY (`id_color`) REFERENCES `color` (`id`),
   ADD CONSTRAINT `fk_soluongtonkho_product` FOREIGN KEY (`id_product`) REFERENCES `product` (`id`),
   ADD CONSTRAINT `fk_soluongtonkho_size` FOREIGN KEY (`id_size`) REFERENCES `size` (`id`);
+
+--
+-- Các ràng buộc cho bảng `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD CONSTRAINT `fk_wishlist_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_wishlist_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -524,6 +524,7 @@
             $err_userup='';
             $err_passup='';
             $err_emailup='';
+            $user_detail = null; // Khởi tạo mặc định để tránh lỗi undefined
             if(isset($_GET['id']) && $_GET['id']){
               $_SESSION['update_id']=$_GET['id'];
               $user_detail=getuser($_SESSION['update_id']);
