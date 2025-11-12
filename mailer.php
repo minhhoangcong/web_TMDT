@@ -41,7 +41,7 @@ if (isset($_POST["sendmail"]) && isset($_SESSION['giohang'])) {
     }
  
     //Recipients
-    $mail->setFrom('zstyleshopvn@gmail.com', 'ZStyle' );  // Sender Email and name
+    $mail->setFrom('uthshop.group5@gmail.com', 'ZStyle' );  // Sender Email and name
     $mail->addAddress($_POST["emaildat"], $_POST["tendat"]);     //Add a recipient email   // reply to sender email
  
     //Content
@@ -233,7 +233,7 @@ if (isset($_POST["sendmail"]) && isset($_SESSION['giohang'])) {
             ZStyle Shop <br>
             Website: https://zstyle.online/ <br>
             Địa chỉ: Tầng 12, tòa T, Công viên phần mềm Quang Trung <br>
-            Email: zstyleshopvn@gmail.com <br>
+            Email: uthshop.group5@gmail.com <br>
             Hotline: 19006789 <br>
             </div>
     </body>
@@ -359,7 +359,7 @@ if (isset($_POST["guima"])) {
         }
      
         //Recipients
-        $mail->setFrom('zstyleshopvn@gmail.com', 'ZStyle' );  // Sender Email and name
+        $mail->setFrom('uthshop.group5@gmail.com', 'ZStyle' );  // Sender Email and name
         $mail->addAddress($_POST["emailxn"]);     //Add a recipient email   // reply to sender email
         $_SESSION['emailxn']=$_POST["emailxn"];
         $_SESSION['username']=getusertoemail($_SESSION['emailxn'])['user'];
@@ -490,7 +490,7 @@ if (isset($_POST["guima"])) {
                 ZStyle Shop <br>
                 Website: https://zstyle.online/ <br>
                 Địa chỉ: Tầng 12, tòa T, Công viên phần mềm Quang Trung <br>
-                Email: zstyleshopvn@gmail.com <br>
+                Email: uthshop.group5@gmail.com <br>
                 Hotline: 19006789 <br>
             </div>
         </body>
