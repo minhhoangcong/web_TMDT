@@ -146,6 +146,10 @@
     <script src="view/layout/assets/js/design.js"></script>
     <script src="view/layout/assets/js/product.js"></script>
     <script src="view/layout/assets/js/login.js"></script>
+    
+    <!-- AI Chatbot -->
+    <script src="view/layout/assets/js/chatbot.js"></script>
+    
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
       <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     

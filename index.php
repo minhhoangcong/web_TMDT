@@ -417,7 +417,8 @@
                $product_design_user=getproductdesignuser($_POST['id_design']);
                $sp=["id"=>1,"img"=>$product_design_user['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($product_design_user['id_color']),"size"=>getsize($product_design_user['id_size']),"soluong"=>1,"product_design"=>1,"id_product_design"=>$product_design_user['id']];
                array_unshift($_SESSION['giohang'], $sp);
-               add_cart($_SESSION['iduser'], 1, 1, 1, 300000,300000,$product_design_user['img_front'],$product_design_user['id_color'],$product_design_user['id_size'],1,$_POST['id_design']);
+               // FIX: Dùng NULL cho giỏ hàng tạm (chưa checkout)
+               add_cart($_SESSION['iduser'], NULL, 1, 1, 300000,300000,$product_design_user['img_front'],$product_design_user['id_color'],$product_design_user['id_size'],1,$_POST['id_design']);
             }
             if(isset($_POST['design_upload'])){
                $img=$_FILES['img_design']['name'];
@@ -449,7 +450,8 @@
             if(isset($_POST['addcart_btn_con']) && isset($_SESSION['iduser']) && isset($_SESSION['img_front']) && isset($_SESSION['role']) &&  $_SESSION['role']==0){
                add_design($_SESSION['id_color_design'], $_SESSION['id_size_design'], $_SESSION['img_front'], $_SESSION['img_back'],300000,'Áo thun tự thiết kế', $_SESSION['iduser']);
                $sp=["id"=>1,"img"=>$_SESSION['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($_SESSION['id_color_design']),"size"=>getsize($_SESSION['id_size_design']),"soluong"=>1,"product_design"=>1,"id_product_design"=>getnewdesign()['id']];
-               add_cart($_SESSION['iduser'], 1, 1, $sp['soluong'], $sp['price'],$sp['soluong']*$sp['price'],$sp['img'],$_SESSION['id_color_design'],$_SESSION['id_size_design'],1,getnewdesign()['id']);
+               // FIX: Dùng NULL cho giỏ hàng tạm
+               add_cart($_SESSION['iduser'], NULL, 1, $sp['soluong'], $sp['price'],$sp['soluong']*$sp['price'],$sp['img'],$_SESSION['id_color_design'],$_SESSION['id_size_design'],1,getnewdesign()['id']);
                array_unshift($_SESSION['giohang'], $sp);
                unset($_SESSION['id_color_design']);
                unset($_SESSION['id_size_design']);
@@ -459,7 +461,8 @@
             if(isset($_POST['addcart_btn_cart']) && isset($_SESSION['iduser']) && isset($_SESSION['img_front']) && isset($_SESSION['role']) &&  $_SESSION['role']==0){
                add_design($_SESSION['id_color_design'], $_SESSION['id_size_design'], $_SESSION['img_front'], $_SESSION['img_back'],300000,'Áo thun tự thiết kế', $_SESSION['iduser']);
                $sp=["id"=>1,"img"=>$_SESSION['img_front'] ,"name"=>'Áo thun tự thiết kế' ,"price"=>300000 ,"color"=>getcolor($_SESSION['id_color_design']),"size"=>getsize($_SESSION['id_size_design']),"soluong"=>1,"product_design"=>1,"id_product_design"=>getnewdesign()['id']];
-               add_cart($_SESSION['iduser'], 1, 1, $sp['soluong'], $sp['price'],$sp['soluong']*$sp['price'],$sp['img'],$_SESSION['id_color_design'],$_SESSION['id_size_design'],1,getnewdesign()['id']);
+               // FIX: Dùng NULL cho giỏ hàng tạm
+               add_cart($_SESSION['iduser'], NULL, 1, $sp['soluong'], $sp['price'],$sp['soluong']*$sp['price'],$sp['img'],$_SESSION['id_color_design'],$_SESSION['id_size_design'],1,getnewdesign()['id']);
                array_unshift($_SESSION['giohang'], $sp);
                unset($_SESSION['id_color_design']);
                unset($_SESSION['id_size_design']);
@@ -892,6 +895,10 @@
                      } elseif (isset($_SESSION['giohang']) && is_array($_SESSION['giohang'])) {
                         $checkoutItems = $_SESSION['giohang'];
                      }
+                     
+                     // === FIX: Tạo đơn hàng TRƯỚC khi add cart ===
+                     $iddonhang = getiddonhang(); // Tạo đơn hàng mới ngay từ đầu
+                     
                      if(isset($_SESSION['iduser']) && count($checkoutItems)>0){
                         $tongtien=0;
                         $_SESSION['id_cart']=[];
@@ -900,9 +907,10 @@
                            $tongtien+=$soluong*$price;
                            $id=intval($id);
                            if($product_design==0){
-                              add_cart($_SESSION['iduser'], 1, $id, $soluong, $price,$soluong*$price,$img,getidsize($size),getidcolor($color),0,1);
+                              // Dùng $iddonhang thật thay vì hardcode 1
+                              add_cart($_SESSION['iduser'], $iddonhang, $id, $soluong, $price,$soluong*$price,$img,getidsize($size),getidcolor($color),0,1);
                            }else{
-                              add_cart($_SESSION['iduser'], 1, 1, $soluong, $price,$soluong*$price,$img,getidsize($size),getidcolor($color),1,$id_product_design);
+                              add_cart($_SESSION['iduser'], $iddonhang, 1, $soluong, $price,$soluong*$price,$img,getidsize($size),getidcolor($color),1,$id_product_design);
                            }
                            array_push($_SESSION['id_cart'],getidcartmoi());
                         }
@@ -910,10 +918,12 @@
                      if(isset($_SESSION['giamgia']) && $_SESSION['giamgia']>0){
                         unset($_SESSION['id_voucher']);
                      }
-                     $iddonhang=getiddonhang();
+                     
+                     // Không cần getiddonhang() nữa vì đã tạo ở trên
                      if(isset($_SESSION['id_cart']) && isset($_SESSION['iduser']) && count($_SESSION['id_cart'])>0){
                         foreach ($_SESSION['id_cart'] as $item) {
-                           update_cart_ma_donhang($item,$iddonhang);
+                           // Không cần update_cart_ma_donhang nữa vì đã đúng từ đầu
+                           // update_cart_ma_donhang($item,$iddonhang); // XÓA dòng này
                            extract(getcartthanhtoan($item));
                            if($product_design==0){
                               $soluongkho=getsoluongtonkhothat($id_product,$id_color,$id_size);
@@ -1529,13 +1539,15 @@
                   extract($item);
                   $id=intval($id);
                   if($product_design==0){
-                     add_cart($_SESSION['iduser'], 1, $id, $soluong, $price,$soluong*$price,$img,getidsize($size),getidcolor($color),0,1);
+                     // FIX: Dùng NULL cho giỏ hàng tạm (chưa checkout)
+                     add_cart($_SESSION['iduser'], NULL, $id, $soluong, $price,$soluong*$price,$img,getidsize($size),getidcolor($color),0,1);
                      $id_color=getidcolor($color);
                      $id_size=getidsize($size);
                      $soluongkho=getsoluongtonkhothat($id,$id_color,$id_size);
                      update_soluongtonkho($id,$id_color,$id_size,$soluongkho-$soluong);
                   }else{
-                     add_cart($_SESSION['iduser'], 1, 1, $soluong, $price,$soluong*$price,$img,getidsize($size),getidcolor($color),1,$id_product_design);
+                     // FIX: Dùng NULL cho giỏ hàng tạm
+                     add_cart($_SESSION['iduser'], NULL, 1, $soluong, $price,$soluong*$price,$img,getidsize($size),getidcolor($color),1,$id_product_design);
                   }
                }
             }
