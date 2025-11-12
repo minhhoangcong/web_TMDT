@@ -5,7 +5,7 @@
   bottom: 20px;
   right: 20px;
   z-index: 99999;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Chat Icon (Button mở chat) */
@@ -30,7 +30,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
   }
   50% {
@@ -94,8 +95,13 @@
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
 
 #uth-chat-close {
@@ -238,7 +244,9 @@
 }
 
 @keyframes typing {
-  0%, 60%, 100% {
+  0%,
+  60%,
+  100% {
     transform: translateY(0);
   }
   30% {
@@ -334,7 +342,7 @@
     bottom: 10px;
     right: 10px;
   }
-  
+
   #uth-chatbot-widget {
     bottom: 10px;
     right: 10px;
