@@ -1188,23 +1188,23 @@
                   $errpassword='*Bạn chưa nhập mật khẩu';
                }else{
                   // Cho phép đăng nhập với mật khẩu ngắn (tài khoản cũ), chỉ kiểm tra đúng/sai
-                  if(is_array(getlogin($_SESSION['usernamelogin'],$_SESSION['passwordlogin'])) && getrole($_SESSION['usernamelogin'],$_SESSION['passwordlogin'])==0){
-   
-                  }else{
+                  $test_login = getlogin($_SESSION['usernamelogin'], $_SESSION['passwordlogin']);
+                  if(!$test_login || !is_array($test_login)){
                      $errpassword='*Mật khẩu không đúng';
                   }
                }
                
                $username=$_POST['username'];
                $password=$_POST['password'];
-               if(is_array(getlogin($username,$password)) && getrole($username,$password)==0){
+               $user_data = getlogin($username,$password);
+               if(is_array($user_data) && isset($user_data['role']) && $user_data['role']==0){
                   // Regenerate session id on successful login (prevent fixation)
                   if (function_exists('session_regenerate_id')) { session_regenerate_id(true); }
                   unset($_SESSION['usernamelogin']);
                   unset($_SESSION['passwordlogin']);
                   $_SESSION['username']=$username;
                   $_SESSION['password']=$password;
-                  $_SESSION['iduser']=getlogin($username,$password)['id'];
+                  $_SESSION['iduser']=$user_data['id'];
                   $_SESSION['loginuser']=0;
                   $_SESSION['role']=0;
                   $cart=getcartuser($_SESSION['iduser']);
@@ -1228,11 +1228,13 @@
                      unset($_SESSION['giamgia']);
                   header('location: index.php?pg=account');
                }else{
-                  
-                  if(getrole($username,$password)==1){
+                  // Thử đăng nhập admin
+                  if($user_data && isset($user_data['role']) && $user_data['role']==1){
                      if (function_exists('session_regenerate_id')) { session_regenerate_id(true); }
                      $_SESSION['role']=1;
                      $_SESSION['loginuser']=0;
+                     $_SESSION['username']=$username;
+                     $_SESSION['password']=$password;
                      header('location: view/admin/index.php');
                   }else{
                      $_SESSION['loginuser']=-1;

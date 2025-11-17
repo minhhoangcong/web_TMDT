@@ -5,8 +5,94 @@
 
   function getlogin($user,$pass){
     // CHỈ CHO PHÉP USER ĐANG HOẠT ĐỘNG (kichhoat=1) đăng nhập
-    $sql="SELECT * FROM users WHERE user=? AND pass=? AND kichhoat=1";
-    return pdo_query_one($sql, $user, $pass);
+    // Hỗ trợ cả plaintext và MD5
+    $sql="SELECT * FROM users WHERE user=? AND kichhoat=1";
+    $row = pdo_query_one($sql, $user);
+    
+    if (!$row || !is_array($row)) return false;
+    
+    $stored = $row['pass'];
+    
+    // Kiểm tra plaintext
+    if ($pass === $stored) return $row;
+    
+    // Kiểm tra MD5
+    if (md5($pass) === $stored) return $row;
+    
+    // Không khớp
+    return false;
+   }
+
+   // ============ HÀM MỚI: ĐĂNG NHẬP BẢO MẬT ============
+   // Hỗ trợ cả password cũ (plain/MD5/SHA1/custom) và password mới (Bcrypt)
+   // Tự động upgrade password cũ → mới khi user đăng nhập thành công
+   function getlogin_secure($user, $pass){
+      // Bước 1: Lấy thông tin user từ DB (chỉ cần username)
+      $sql = "SELECT * FROM users WHERE user=? AND kichhoat=1";
+      $row = pdo_query_one($sql, $user);
+      
+      if (!$row || !is_array($row)) return false; // User không tồn tại
+      
+      // Bước 2: Kiểm tra password
+      $stored_pass = $row['pass'];
+      
+      // Kiểm tra xem đây là password đã hash (Bcrypt) hay chưa
+      $info = password_get_info($stored_pass);
+      
+      if ($info['algo'] !== 0) {
+          // Đây là password đã hash bằng Bcrypt → Dùng password_verify
+          if (password_verify($pass, $stored_pass)) {
+              return $row; // ✅ Đăng nhập thành công
+          }
+      } else {
+          // Đây là password cũ - Thử TẤT CẢ các phương pháp có thể
+          $password_match = false;
+          
+          // 1. So sánh trực tiếp (Plain text)
+          if ($pass === $stored_pass) {
+              $password_match = true;
+          }
+          
+          // 2. So sánh MD5
+          if (!$password_match && md5($pass) === $stored_pass) {
+              $password_match = true;
+          }
+          
+          // 3. So sánh SHA1 (40 ký tự)
+          if (!$password_match && sha1($pass) === $stored_pass) {
+              $password_match = true;
+          }
+          
+          // 4. So sánh SHA1 + MD5 kết hợp
+          if (!$password_match && sha1(md5($pass)) === $stored_pass) {
+              $password_match = true;
+          }
+          
+          // 5. So sánh MD5 + SHA1 kết hợp
+          if (!$password_match && md5(sha1($pass)) === $stored_pass) {
+              $password_match = true;
+          }
+          
+          // 6. Thử crypt() với salt từ stored password
+          if (!$password_match && strlen($stored_pass) >= 13) {
+              $salt = substr($stored_pass, 0, 2);
+              if (crypt($pass, $salt) === $stored_pass) {
+                  $password_match = true;
+              }
+          }
+          
+          if ($password_match) {
+              // ✅ Đăng nhập thành công với password cũ
+              // → Tự động UPGRADE sang Bcrypt hash
+              $new_hash = password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]);
+              $update_sql = "UPDATE users SET pass=? WHERE id=?";
+              pdo_execute($update_sql, $new_hash, $row['id']);
+              
+              return $row;
+          }
+      }
+      
+      return false; // ❌ Sai mật khẩu
    }
 
    function getrole($user,$pass){
@@ -15,8 +101,24 @@
     return -1;
    }
 
+   // ============ HÀM MỚI: LẤY ROLE AN TOÀN ============
+   function getrole_secure($user, $pass){
+    $row = getlogin_secure($user, $pass);
+    if (is_array($row)) return isset($row['role']) ? intval($row['role']) : -1;
+    return -1;
+   }
+
    function getidusercu($user,$pass){
     $row = getlogin($user, $pass);
+    if(is_array($row)){
+      return isset($row['id']) ? intval($row['id']) : -1;
+    }else
+      return -1;
+    }
+
+   // ============ HÀM MỚI: LẤY ID USER AN TOÀN ============
+   function getidusercu_secure($user, $pass){
+    $row = getlogin_secure($user, $pass);
     if(is_array($row)){
       return isset($row['id']) ? intval($row['id']) : -1;
     }else
@@ -46,18 +148,67 @@ function creatpass() {
    return $username;
  }
 function creatuser($user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat){
+  // Tự động hash MD5 nếu password chưa được hash (độ dài != 32)
+  if (strlen($pass) !== 32) {
+    $pass = md5($pass);
+  }
   $sql = "INSERT INTO users (user,pass, name,email,sdt,gioitinh,ngaysinh,diachi,role,img,kichhoat)
-  VALUES (?,?,?,?,?,?,?,?,?,?,?)";      
+  VALUES (?,?,?,?,?,?,?,?,?,?,?)";
   pdo_execute($sql, $user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat);
 }
 
-function update_user($id,$user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat){
+// ============ HÀM MỚI: TẠO USER BẢO MẬT ============
+// Luôn hash password bằng Bcrypt trước khi lưu vào DB
+function creatuser_secure($user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat){
+  // Hash password với Bcrypt (cost=12 → mạnh hơn mặc định)
+  $hashed_pass = password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]);
+  
+  $sql = "INSERT INTO users (user,pass, name,email,sdt,gioitinh,ngaysinh,diachi,role,img,kichhoat)
+  VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+  pdo_execute($sql, $user, $hashed_pass, $name, $email, $sdt, $gioitinh, $ngaysinh, $diachi, $role, $img, $kichhoat);
+}function update_user($id,$user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat){
+  // Nếu có password mới và chưa hash (độ dài != 32) → Hash MD5
+  if (!empty($pass) && strlen($pass) !== 32) {
+    $pass = md5($pass);
+  }
+  $sql = "UPDATE users SET user=?,pass=?,name=?,email=?,sdt=?,gioitinh=?, ngaysinh=?, diachi=?, role=?, img=?, kichhoat=? WHERE id=?";
+  pdo_execute($sql, $user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat,$id);
+}
+
+// ============ HÀM MỚI: CẬP NHẬT USER BẢO MẬT ============
+// Hash password nếu có thay đổi, giữ nguyên nếu không đổi
+function update_user_secure($id,$user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat){
+  // Lấy password hiện tại từ DB
+  $current_user = getuser($id);
+  
+  // Nếu password mới khác password cũ → Hash lại
+  if ($pass !== $current_user['pass']) {
+      // Kiểm tra xem password mới đã là hash chưa
+      if (password_get_info($pass)['algo'] === 0) {
+          // Chưa hash → Hash nó
+          $pass = password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]);
+      }
+      // Nếu đã là hash → Giữ nguyên (trường hợp admin cập nhật thông tin khác)
+  }
+  
   $sql = "UPDATE users SET user=?,pass=?,name=?,email=?,sdt=?,gioitinh=?, ngaysinh=?, diachi=?, role=?, img=?, kichhoat=? WHERE id=?";
   pdo_execute($sql, $user,$pass, $name,$email,$sdt,$gioitinh,$ngaysinh,$diachi,$role,$img,$kichhoat,$id);
 }
 function changepassword($email, $password){
+  // Tự động hash MD5 nếu password chưa hash (độ dài != 32)
+  if (strlen($password) !== 32) {
+    $password = md5($password);
+  }
   $sql = "UPDATE users SET pass=? WHERE email=?";
   pdo_execute($sql, $password, $email);
+}
+
+// ============ HÀM MỚI: ĐỔI MẬT KHẨU BẢO MẬT ============
+// Hash password mới trước khi cập nhật
+function changepassword_secure($email, $new_password){
+  $hashed = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 12]);
+  $sql = "UPDATE users SET pass=? WHERE email=?";
+  pdo_execute($sql, $hashed, $email);
 }
 function deluser($id){
    // ẨN USER thay vì XÓA (Soft Delete - Chuyên nghiệp hơn)
