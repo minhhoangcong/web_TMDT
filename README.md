@@ -1,7 +1,7 @@
 # UTHshop - Cửa hàng Thương mại Điện tử về Thời trang Áo
 
 <p align="center">
-  <img src="screenshot/logo_zstyle_resized.png" alt="UTHshop Logo" height="50px"/>
+  <img src="screenshot/logo-uth.png" alt="UTHshop Logo" height="50px"/>
 </p>
 
 Chào mừng bạn đến với **UTHshop**, một nền tảng thương mại điện tử được xây dựng để mang đến những sản phẩm áo thun và thời trang chất lượng cho mọi người. Dự án này là một ứng dụng web full-stack được xây dựng bằng PHP, được thiết kế để sử dụng với XAMPP, và có đầy đủ các chức năng cho cả khách hàng và quản trị viên.
