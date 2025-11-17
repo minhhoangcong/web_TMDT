@@ -3230,6 +3230,14 @@ input[type="radio"] {
 }
 .design-upload {
   display: flex;
+  align-items: center;
+}
+.design-upload input[type="file"] {
+  max-width: 200px;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .design-upload i {
   color: var(--primary-color);
