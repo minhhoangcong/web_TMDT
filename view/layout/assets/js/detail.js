@@ -16,45 +16,47 @@ var addtocart_elements = document.getElementsByClassName("addtocart");
 // Intercept form submit and use AJAX instead
 if (addtocart_elements.length > 0) {
   var addtocartForm = addtocart_elements[0];
-  addtocartForm.addEventListener('submit', function(e) {
+  addtocartForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    
+
     var formData = new FormData(this);
     var $btn = $(this).find('button[name="addtocart"]');
-    
+
     // Disable button and show loading
-    $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Đang thêm...');
-    
+    $btn
+      .prop("disabled", true)
+      .html('<i class="fa fa-spinner fa-spin"></i> Đang thêm...');
+
     $.ajax({
-      url: 'ajax/add_to_cart.php',
-      type: 'POST',
+      url: "ajax/add_to_cart.php",
+      type: "POST",
       data: formData,
       processData: false,
       contentType: false,
-      dataType: 'json',
-      success: function(response) {
+      dataType: "json",
+      success: function (response) {
         if (response.success) {
           // Show success toast
-          Toast.success(response.message || 'Đã thêm vào giỏ hàng!');
-          
+          Toast.success(response.message || "Đã thêm vào giỏ hàng!");
+
           // Update cart badge with animation
-          if (response.cartCount && $('.cart-count').length) {
-            $('.cart-count').text(response.cartCount).addClass('updated');
-            setTimeout(function() {
-              $('.cart-count').removeClass('updated');
+          if (response.cartCount && $(".cart-count").length) {
+            $(".cart-count").text(response.cartCount).addClass("updated");
+            setTimeout(function () {
+              $(".cart-count").removeClass("updated");
             }, 500);
           }
         } else {
-          Toast.error(response.message || 'Có lỗi xảy ra');
+          Toast.error(response.message || "Có lỗi xảy ra");
         }
       },
-      error: function() {
-        Toast.error('Không thể kết nối server');
+      error: function () {
+        Toast.error("Không thể kết nối server");
       },
-      complete: function() {
+      complete: function () {
         // Re-enable button
-        $btn.prop('disabled', false).html('Thêm vào giỏ hàng');
-      }
+        $btn.prop("disabled", false).html("Thêm vào giỏ hàng");
+      },
     });
   });
 }

@@ -85,9 +85,9 @@ $(document).on("click", ".wishlist-toggle", function (e) {
 
           // Cập nhật số lượng yêu thích ở header với animation
           if (typeof res.count !== "undefined") {
-            $(".wishlist-count").text(res.count).addClass('updated');
-            setTimeout(function() {
-              $('.wishlist-count').removeClass('updated');
+            $(".wishlist-count").text(res.count).addClass("updated");
+            setTimeout(function () {
+              $(".wishlist-count").removeClass("updated");
             }, 500);
           } else if (
             window.WISHLIST_ENDPOINTS &&
@@ -95,19 +95,19 @@ $(document).on("click", ".wishlist-toggle", function (e) {
           ) {
             $.getJSON(window.WISHLIST_ENDPOINTS.count, function (r) {
               if (r && typeof r.count !== "undefined") {
-                $(".wishlist-count").text(r.count).addClass('updated');
-                setTimeout(function() {
-                  $('.wishlist-count').removeClass('updated');
+                $(".wishlist-count").text(r.count).addClass("updated");
+                setTimeout(function () {
+                  $(".wishlist-count").removeClass("updated");
                 }, 500);
               }
             });
           }
-          
+
           // Show toast notification
           if (isActive) {
-            Toast.success('Đã xóa khỏi yêu thích');
+            Toast.success("Đã xóa khỏi yêu thích");
           } else {
-            Toast.success('Đã thêm vào yêu thích');
+            Toast.success("Đã thêm vào yêu thích");
           }
 
           // CHỈ xóa card khỏi DOM nếu:
@@ -145,46 +145,48 @@ $(document).on("click", ".wishlist-addtocart", function (e) {
   var $btn = $(this);
   var pid = parseInt($btn.data("product-id"), 10);
   if (!pid || isNaN(pid)) return;
-  
+
   // Show loading state
   var originalText = $btn.text();
-  $btn.prop("disabled", true).html('<i class="fa fa-spinner fa-spin"></i> Đang thêm...');
-  
+  $btn
+    .prop("disabled", true)
+    .html('<i class="fa fa-spinner fa-spin"></i> Đang thêm...');
+
   $.post("wishlist_add_to_cart.php", { product_id: pid })
     .done(function (res) {
       if (res && res.success) {
         // Show toast notification
-        Toast.success('Đã thêm vào giỏ hàng!');
-        
+        Toast.success("Đã thêm vào giỏ hàng!");
+
         // Update header cart badge with animation
         if (typeof res.cartCount !== "undefined") {
-          $(".cart-count").text(res.cartCount).addClass('updated');
-          setTimeout(function() {
-            $('.cart-count').removeClass('updated');
+          $(".cart-count").text(res.cartCount).addClass("updated");
+          setTimeout(function () {
+            $(".cart-count").removeClass("updated");
           }, 500);
         } else if (window.CART_COUNT_ENDPOINT) {
           $.getJSON(window.CART_COUNT_ENDPOINT, function (r) {
             if (r && typeof r.cartCount !== "undefined") {
-              $(".cart-count").text(r.cartCount).addClass('updated');
-              setTimeout(function() {
-                $('.cart-count').removeClass('updated');
+              $(".cart-count").text(r.cartCount).addClass("updated");
+              setTimeout(function () {
+                $(".cart-count").removeClass("updated");
               }, 500);
             }
           });
         }
-        
+
         // Update button state
         $btn.addClass("added").html('<i class="fa fa-check"></i> Đã thêm');
         setTimeout(function () {
           $btn.prop("disabled", false).removeClass("added").text(originalText);
         }, 1500);
       } else {
-        Toast.error('Không thể thêm vào giỏ hàng');
+        Toast.error("Không thể thêm vào giỏ hàng");
         $btn.prop("disabled", false).text(originalText);
       }
     })
     .fail(function () {
-      Toast.error('Lỗi kết nối server');
+      Toast.error("Lỗi kết nối server");
       $btn.prop("disabled", false).text(originalText);
     });
 });

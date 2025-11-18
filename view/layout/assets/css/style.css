@@ -177,8 +177,13 @@ body {
 
 /* Animation khi badge update */
 @keyframes cartBounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.3); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
 }
 
 .cart-count.updated,
