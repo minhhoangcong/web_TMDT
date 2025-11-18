@@ -155,7 +155,7 @@
                 </div>
               </div>
               <div class="deal-content">
-                <div class="deal-title">$name</div>
+                <div class="deal-title">'.$name.'</div>
                 <div class="deal-price">'.number_format($product['price'],0,'',',').'đ
                 '.sale($product).'
                 </div>
