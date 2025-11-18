@@ -538,10 +538,13 @@
                   }
                }
                
+               // Xóa output buffer để tránh HTML bị echo trước JSON
+               if(ob_get_length()) ob_clean();
+               
                // Trả về JSON thay vì redirect để tránh reload trang
                header('Content-Type: application/json');
                echo json_encode(['success' => true, 'message' => 'Cập nhật thành công']);
-               exit();
+               exit(); // QUAN TRỌNG: Dừng ngay để không render HTML
             }
             if(isset($_GET['delcart']) && ($_GET['delcart']==true)){
                unset($_SESSION['giohang']);

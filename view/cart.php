@@ -109,7 +109,7 @@
                                 <input class="price" type="hidden" value="'.$price.'">
                                   </div>
                                   <div class="cart-body-del">
-                                  <a href="index.php?pg=cart&id='.$j.'"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                  <a href="index.php?pg=cart&id='.$j.'" class="delete-item" data-cart-index="'.$j.'"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                   </div>
                                 </div>
                               </div>
@@ -149,7 +149,7 @@
                                     <input class="price" type="hidden" value="'.$price.'">
                                       </div>
                                       <div class="cart-body-del">
-                                      <a href="index.php?pg=cart&id='.$j.'"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                      <a href="index.php?pg=cart&id='.$j.'" class="delete-item" data-cart-index="'.$j.'"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                       </div>
                                     </div>
                                   </div>
@@ -524,6 +524,73 @@
                 
                 // Cập nhật input khác cùng sản phẩm
                 $('.soluong[data-index="'+cartIndex+'"]').not($this).val(newVal);
+            });
+
+            // ========== XÓA 1 SẢN PHẨM (ICON THÙNG RÁC) ==========
+            $(document).on('click', '.delete-item', function(e){
+              e.preventDefault();
+              e.stopPropagation();
+              
+              console.log('🗑️ Click xóa sản phẩm'); // Debug
+              
+              var $row = $(this).closest('.cart-product');
+              if ($row.length === 0) {
+                console.error('Không tìm thấy .cart-product');
+                return;
+              }
+
+              // Lấy index
+              var ind = parseInt($row.attr('data-cart-index'), 10);
+              if (isNaN(ind)) {
+                ind = parseInt($row.find('.index').first().val(), 10);
+              }
+              console.log('Index:', ind); // Debug
+
+              // HIỆN TOAST NGAY LẬP TỨC
+              if (window.Toast) {
+                Toast.success('Đã xóa khỏi giỏ hàng');
+              } else {
+                console.error('Toast không tồn tại!');
+              }
+
+              // Xóa hàng khỏi DOM ngay (để user thấy feedback)
+              $row.fadeOut(300, function(){
+                $(this).remove();
+              });
+
+              // Gửi yêu cầu xóa lên server và reload sau 800ms
+              $.ajax({
+                url: 'index.php?pg=cart',
+                type: 'POST',
+                data: { soluongmoi: 0, ind: ind },
+                dataType: 'json',
+                success: function(response){
+                  console.log('✅ Xóa thành công trên server:', response);
+                  // Reload sau 800ms để toast kịp hiển thị
+                  setTimeout(function(){ location.reload(); }, 800);
+                },
+                error: function(xhr, status, error){
+                  console.error('❌ Lỗi xóa trên server:', status, error);
+                  // Reload để đồng bộ
+                  setTimeout(function(){ location.reload(); }, 800);
+                }
+              });
+            });
+
+            // ========== XÓA TẤT CẢ SẢN PHẨM ==========
+            $(document).on('click', '.cart-auth-del a', function(e){
+              // Link mặc định: index.php?pg=cart&delcart=true
+              e.preventDefault();
+              // Xóa toàn bộ các dòng sản phẩm
+              $('.cart-product').remove();
+              tong = 0;
+              $(".cart-content__price").html('0đ');
+              $(".cart-count").text(0).addClass('updated');
+              setTimeout(function(){ $('.cart-count').removeClass('updated'); }, 500);
+
+              $.get('index.php?pg=cart&delcart=true')
+                .done(function(){ if (window.Toast) Toast.success('Đã xóa tất cả sản phẩm khỏi giỏ hàng'); })
+                .fail(function(){ if (window.Toast) Toast.error('Không thể xóa tất cả, sẽ tải lại'); location.reload(); });
             });
         });
     </script>

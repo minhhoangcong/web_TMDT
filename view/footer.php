@@ -137,6 +137,7 @@
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="view/layout/assets/js/toast.js"></script>
     <script src="view/layout/assets/js/navigation.js"></script>
     <script src="view/layout/assets/js/app.js"></script>
     <script src="view/layout/assets/js/menu-mobile.js"></script>

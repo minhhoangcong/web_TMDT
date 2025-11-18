@@ -172,7 +172,20 @@ body {
   border-radius: 20px;
   padding: 0 6px;
   margin-left: 4px;
+  transition: all 0.3s ease;
 }
+
+/* Animation khi badge update */
+@keyframes cartBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+.cart-count.updated,
+.wishlist-count.updated {
+  animation: cartBounce 0.5s ease;
+}
+
 .header-link {
   color: var(--white);
   font-size: 16px;

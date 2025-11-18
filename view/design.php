@@ -659,7 +659,7 @@
           uploadForm.addEventListener('submit', function(e) {
             if (!fileInput.files || !fileInput.files[0]) {
               e.preventDefault();
-              alert('Vui lòng chọn một ảnh để upload!');
+              Toast.warning('Vui lòng chọn một ảnh để upload!');
               return false;
             }
             console.log('Uploading file:', fileInput.files[0].name);
