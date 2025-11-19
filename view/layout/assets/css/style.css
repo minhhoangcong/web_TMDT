@@ -3444,7 +3444,7 @@ input[type="radio"] {
 }
 
 .recently-viewed-heading::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -10px;
   left: 50%;
@@ -3530,11 +3530,11 @@ input[type="radio"] {
     gap: 15px;
     padding: 0 15px;
   }
-  
+
   .recently-viewed-heading {
     font-size: 22px;
   }
-  
+
   .recently-viewed-image {
     height: 150px;
   }
