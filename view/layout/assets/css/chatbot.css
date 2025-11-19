@@ -2,7 +2,8 @@
 
 #uth-chatbot-widget {
   position: fixed;
-  bottom: 20px;
+  bottom: 30%;
+  transform: translateY(30%);
   right: 20px;
   z-index: 99999;
   font-family: "Poppins", sans-serif;
@@ -344,7 +345,8 @@
   }
 
   #uth-chatbot-widget {
-    bottom: 10px;
+    bottom: 50%;
+    transform: translateY(50%);
     right: 10px;
   }
 }

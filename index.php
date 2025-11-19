@@ -1602,6 +1602,18 @@
         include_once "view/home.php";
       
    }
+?>
 
+<!-- Recently Viewed Products Section -->
+<section class="recently-viewed-section" style="display: none;">
+  <div class="container">
+    <h2 class="recently-viewed-heading">Sản phẩm đã xem</h2>
+    <div id="recently-viewed-list" class="recently-viewed-list">
+      <!-- Sản phẩm sẽ được render bởi JavaScript -->
+    </div>
+  </div>
+</section>
+
+<?php
     include_once "view/footer.php";
 ?>

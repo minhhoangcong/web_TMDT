@@ -148,6 +148,12 @@
     <script src="view/layout/assets/js/product.js"></script>
     <script src="view/layout/assets/js/login.js"></script>
     
+    <!-- Recently Viewed Products -->
+    <script src="view/layout/assets/js/recently-viewed.js"></script>
+    
+    <!-- Scroll to Top Button -->
+    <script src="view/layout/assets/js/scroll-to-top.js"></script>
+    
     <!-- AI Chatbot -->
     <script src="view/layout/assets/js/chatbot.js"></script>
     
